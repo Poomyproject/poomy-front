@@ -1,16 +1,17 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
 
-const NamesetScreen = ({ navigation }) => {
+const PreferPlaceScreen = ({ navigation }) => {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>nameset</Text>
+      <Text>prefer</Text>
       <Button
         title="Go to Next Page"
-        onPress={() => navigation.navigate('PreferSelect')} 
+        onPress={() => navigation.navigate('MainTab')} 
       />
+
     </View>
   );
 };
 
-export default NamesetScreen;
+export default PreferPlaceScreen;
