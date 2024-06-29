@@ -26,10 +26,11 @@ export default function App() {
         <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Terms" component={TermsScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="Nameset" component={NamesetScreen} />
-        <Stack.Screen name="PreferSelect" component={PreferSelectScreen}/>
-        <Stack.Screen name="PreferPlace" component={PerferPlaceScreen}/>
+        <Stack.Screen name="Nameset" component={NamesetScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="PreferSelect" component={PreferSelectScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="PreferPlace" component={PerferPlaceScreen}options={{ headerShown: false }}/>
         <Stack.Screen name="MainTab" component={MainTabNavigator} options={{ headerShown: false }} />
+        <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
