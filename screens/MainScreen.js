@@ -6,7 +6,7 @@ const logoSize = width * 0.3; // 화면 너비의 40%를 로고 크기로 설정
 
 const MainScreen = () => {
     return (
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContainer}>
             <Image source={require('../assets/main_logo.png')} style={styles.logo} />
             <TouchableOpacity
                 style={styles.searchContainer}
@@ -44,13 +44,145 @@ const MainScreen = () => {
                 </View>
             </ScrollView>
 
+            <TouchableOpacity style={styles.rightIconContainer}>
+                <View style={styles.sectionTitle_sec_view}>
+                   <Text style={styles.sectionTitle_sec}>오늘은 크리스마스, </Text>
+                   <Text style={styles.sectionTitle_sec_color}>#홍대 </Text>
+                   <Text style={styles.sectionTitle_sec}>로가자! </Text>
+                </View>
+                <Text style={styles.rightText}>더 보기</Text>
+                <Image source={require('../assets/right.png')} style={styles.rightIcon} />
+            </TouchableOpacity>
+
+            <ScrollView horizontal={true} style={styles.placeContainer}>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/newsletter.png')} style={styles.newsletterImage} />
+                </View>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/newsletter.png')} style={styles.newsletterImage} />
+                </View>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/newsletter.png')} style={styles.newsletterImage} />
+                </View>
+            </ScrollView>
+
+            <TouchableOpacity style={styles.rightIconContainer}>
+                <Text style={styles.sectionTitle}>키워드 검색</Text>
+            </TouchableOpacity>
+
+            <View style={styles.keword_view}>
+                <View style={styles.keword}>
+                    <Text style={styles.keword_text}>#온화한</Text>
+                    <Text style={styles.keword_text}>#화려한</Text>
+                    <Text style={styles.keword_text}>#세련된</Text>
+                    <Text style={styles.keword_text}>#모던한</Text>
+                </View>
+
+                <View style={styles.keword}>
+                    <Text style={styles.keword_text}>#클래식한</Text>
+                    <Text style={styles.keword_text}>#도시적인</Text>
+                    <Text style={styles.keword_text}>#아기자기한</Text>
+                </View>
+            </View>
+
+            <TouchableOpacity style={styles.rightIconContainer}>
+                <View style={styles.sectionTitle_sec_view}>
+                   <Text style={styles.sectionTitle_sec}>다꾸템 건질 </Text>
+                   <Text style={styles.sectionTitle_sec_color}>#화려한 </Text>
+                   <Text style={styles.sectionTitle_sec}>소품샵 </Text>
+                </View>
+                <Text style={styles.rightText}>더 보기</Text>
+                <Image source={require('../assets/right.png')} style={styles.rightIcon} />
+            </TouchableOpacity>
+
+            <ScrollView horizontal={true} style={styles.placeContainer}>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                </View>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                </View>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                </View>
+            </ScrollView>
+
+            <TouchableOpacity style={styles.rightIconContainer}>
+                <View style={styles.sectionTitle_sec_view}>
+                   <Text style={styles.sectionTitle_sec}>피규어 건질 </Text>
+                   <Text style={styles.sectionTitle_sec_color}>#아기자기한 </Text>
+                   <Text style={styles.sectionTitle_sec}>소품샵 </Text>
+                </View>
+                <Text style={styles.rightText}>더 보기</Text>
+                <Image source={require('../assets/right.png')} style={styles.rightIcon} />
+            </TouchableOpacity>
+
+            <ScrollView horizontal={true} style={styles.placeContainer}>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                </View>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                </View>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                </View>
+            </ScrollView>
+
+            <TouchableOpacity style={styles.rightIconContainer}>
+                <View style={styles.sectionTitle_sec_view}>
+                   <Text style={styles.sectionTitle_sec}>뉴스레터 </Text>
+                </View>
+                <Text style={styles.rightText}>더 보기</Text>
+                <Image source={require('../assets/right.png')} style={styles.rightIcon} />
+            </TouchableOpacity>
+
+            <View>
+                <Text style={{marginTop:'8%', fontSize:'18%', color:'#444444'}}>우리들의 PICK</Text>
+                <Text style={{marginTop:'1%', fontSize:'13%', color:'#888888',}}>이거부터저거까지 다 만나보세요. 이게 강남 소품샵이야</Text>
+                <Text style={{marginTop:'1%', fontSize:'13%', color:'#888888',}}>근데 강남이 아닐수도..하여튼 우리가 직접 찾아가 봤습니다!!씨몬.</Text>
+                <Image source={require('../assets/last_newletter.png')} style={{alignItems: 'center', marginTop:'3%'}} />
+            </View>
+
+            <View>
+                <Text style={{marginTop:'8%', fontSize:'18%', color:'#444444'}}>소품샵 Road 추천</Text>
+                <Text style={{marginTop:'1%', fontSize:'13%', color:'#888888',}}>이거부터저거까지 다 만나보세요. 이게 강남 소품샵이야</Text>
+                <Text style={{marginTop:'1%', fontSize:'13%', color:'#888888',}}>근데 강남이 아닐수도..하여튼 우리가 직접 찾아가 봤습니다!!씨몬.</Text>
+                <Image source={require('../assets/last_newletter.png')} style={{alignItems: 'center', marginTop:'3%'}} />
+            </View>
+
+            <View style={{padding:40,}}>
+            </View>
+
+
+
+            {/* <View horizontal={true} style={styles.placeContainer}>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/last_newletter.png')} style={styles.last_new_Image} />
+                </View>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/last_newletter.png')} style={styles.last_new_Image} />
+                </View>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/last_newletter.png')} style={styles.last_new_Image} />
+                </View>
+            </View> */}
+
+            
+
+            
+            
+            
+
         </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
+    scrollView: {
+        backgroundColor: 'white', //여기바꾸면 뒷배경 바뀜
+    },
     scrollContainer: {
-        flexGrow: 1,
         alignItems: 'center',
         backgroundColor: 'white',
     },
@@ -88,23 +220,40 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: '#444444',
-        marginLeft: 8, 
         width: '80%', 
+      },
+      sectionTitle_sec: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#444444',
+      },
+      sectionTitle_sec_color: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#1FAA67',
+      },
+      sectionTitle_sec_view: {
+        width: '80%',
+        flexDirection: 'row', 
       },
       rightText: {
         color: '#444444', 
-        marginTop: 7, 
+        marginTop: 5, 
+      },
+      rightText_sec: {
+        color: '#444444', 
+        marginTop: 10, 
       },
       rightIcon: {
         width: 24,
         height: 24,
-        marginTop: 4, 
+        marginTop: 1, 
 
       },
       placeContainer: {
         flexDirection: 'row', 
         alignSelf: 'flex-start',
-        marginTop: 35,
+        marginTop: 30,
       }, 
       placeText: {
         marginTop: 15,
@@ -115,6 +264,37 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         alignSelf: 'flex-start'
       },
+      newsletterImage: {
+        width: 210, 
+        height: 170, 
+    },
+    keword:{
+        flexDirection: 'row',
+        marginLeft:'8%',
+        marginTop:'3%'
+    },
+    keword_view:{
+        alignSelf: 'flex-start'
+    },
+    keword_text:{
+        alignSelf: 'flex-start', 
+        padding: 10, // 텍스트 주위의 여백
+        paddingHorizontal: 15,
+        borderWidth: 1, // 테두리 두께
+        borderColor: '#79CCA4', // 테두리 색상
+        color: '#666666',
+        borderRadius: 20, // 테두리 모서리 둥글게 하기
+        textAlign: 'center', // 텍스트 가운데 정렬 (필요시)
+        marginHorizontal:5,
+    },
+    shopImage:{
+        width: 130, 
+        height: 180, 
+    },
+    last_new_Image:{
+        width: 140, 
+        height: 140, 
+    }
 });
 
 export default MainScreen;
