@@ -53,7 +53,7 @@ const PreferPlaceScreen = ({ navigation }) => {
         </View>
         <TouchableOpacity
           style={[styles.button, isButtonDisabled ? styles.buttonDisabled : styles.buttonEnabled]}
-          onPress={() => navigation.navigate('Main')}
+          onPress={() => navigation.navigate('Welcome')}
           disabled={isButtonDisabled}
         >
           <Text style={styles.buttonText}>다음</Text>

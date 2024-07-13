@@ -14,6 +14,7 @@ import PerferPlaceScreen from './screens/PreferPlaceScreen';
 import MainScreen from './screens/MainScreen'; 
 import FavoritesScreen from './screens/FavoritesScreen'; 
 import MyPageScreen from './screens/MyPageScreen'; 
+import WelcomeScreen from './screens/WelcomeScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -31,6 +32,7 @@ export default function App() {
         <Stack.Screen name="PreferPlace" component={PerferPlaceScreen}options={{ headerShown: false }}/>
         <Stack.Screen name="MainTab" component={MainTabNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Welcome" component={WelcomeScreen} options={{headerShown:false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
