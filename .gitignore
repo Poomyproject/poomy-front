@@ -36,4 +36,5 @@ yarn-error.*
 
 /android
 /ios
-/env
+/.env
+API_BASE_URL=http://3.37.42.138:8080
