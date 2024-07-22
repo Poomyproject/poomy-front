@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.24.8",
+    "@react-native-async-storage/async-storage": "^1.24.0",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-native-google-signin/google-signin": "^12.2.1",
     "@react-navigation/bottom-tabs": "^6.5.20",
@@ -20,7 +21,10 @@
     "expo-status-bar": "~1.12.1",
     "react": "18.2.0",
     "react-native": "0.74.1",
+<<<<<<< Updated upstream
     "react-native-config": "^1.5.2",
+=======
+>>>>>>> Stashed changes
     "react-native-dotenv": "^3.4.11",
     "react-native-gesture-handler": "^2.16.2",
     "react-native-reanimated": "^3.11.0",

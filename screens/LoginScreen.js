@@ -3,13 +3,30 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-na
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { API_BASE_URL, GOOGLE_IOS_CLIENT_ID } from '@env';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Axios 인스턴스 생성
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
+    'X-Requested-With': 'XMLHttpRequest',
   },
 });
+
+// Axios 요청 인터셉터 설정
+api.interceptors.request.use(
+  async (config) => {
+    const token = await AsyncStorage.getItem('accessToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 console.log('API_BASE_URL:', API_BASE_URL);
 console.log('GOOGLE_IOS_CLIENT_ID:', GOOGLE_IOS_CLIENT_ID);
@@ -59,17 +76,24 @@ const LoginScreen = ({ navigation }) => {
       const response = await axios.post(url, { idToken }, {
         headers: {
           'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
         },
+        withCredentials: true,
       });
 
       console.log('Post response:', response.data);
 
-      if (response.data.success) {
-        const accessToken = response.headers['accessToken'];
-        console.log('Access Token:', accessToken);
+      // 응답 헤더에서 accessToken 추출
+      const accessToken = response.headers['accesstoken'];
+      console.log('Access Token:', accessToken);
+
+      if (accessToken) {
+        await AsyncStorage.setItem('accessToken', accessToken);
+        await setAuthHeader(); // Update the auth header for future requests
         return true;
       } else {
-        Alert.alert('Error', '로그인 실패: ' + response.data.response.message);
+        console.error('Access Token is undefined');
+        Alert.alert('Error', 'Access Token is undefined');
         return false;
       }
     } catch (error) {
@@ -77,6 +101,15 @@ const LoginScreen = ({ navigation }) => {
       console.error('Error details:', error.toJSON ? error.toJSON() : error);
       Alert.alert('Error', '로그인 실패');
       return false;
+    }
+  };
+
+  const setAuthHeader = async () => {
+    const token = await AsyncStorage.getItem('accessToken');
+    if (token) {
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    } else {
+      delete api.defaults.headers.common['Authorization'];
     }
   };
 
