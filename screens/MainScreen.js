@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView, ViewComponent } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 const logoSize = width * 0.3; // 화면 너비의 40%를 로고 크기로 설정
@@ -15,9 +15,6 @@ const MainScreen = () => {
                 <Text style={styles.searchText}>내가찾는 소품샵이름을 검색해보세요</Text>
                 <Image source={require('../assets/search.png')} style={styles.searchIcon} />
             </TouchableOpacity>
-            <View >
-
-            </View>
 
             <TouchableOpacity style={styles.rightIconContainer}>
                 <Text style={styles.sectionTitle}>지역별 추천</Text>
@@ -25,8 +22,16 @@ const MainScreen = () => {
                 <Image source={require('../assets/right.png')} style={styles.rightIcon} />
             </TouchableOpacity>
 
-            <ScrollView horizontal={true} style={styles.placeContainer}>
+            <ScrollView horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
                 <View style={{alignItems: 'center',marginLeft: 30 }}>
+                    <Image source={require('../assets/area.png')} />
+                    <Text style={styles.placeText}>홍대</Text>
+                </View>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/area.png')} />
+                    <Text style={styles.placeText}>홍대</Text>
+                </View>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
                     <Image source={require('../assets/area.png')} />
                     <Text style={styles.placeText}>홍대</Text>
                 </View>
@@ -54,7 +59,13 @@ const MainScreen = () => {
                 <Image source={require('../assets/right.png')} style={styles.rightIcon} />
             </TouchableOpacity>
 
-            <ScrollView horizontal={true} style={styles.placeContainer}>
+            <ScrollView horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/newsletter.png')} style={styles.newsletterImage} />
+                </View>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/newsletter.png')} style={styles.newsletterImage} />
+                </View>
                 <View style={{alignItems: 'center',marginLeft: 20}}>
                     <Image source={require('../assets/newsletter.png')} style={styles.newsletterImage} />
                 </View>
@@ -66,22 +77,37 @@ const MainScreen = () => {
                 </View>
             </ScrollView>
 
-            <TouchableOpacity style={styles.rightIconContainer}>
+            <View style={styles.rightIconContainer}>
                 <Text style={styles.sectionTitle}>키워드 검색</Text>
-            </TouchableOpacity>
+            </View>
 
             <View style={styles.keword_view}>
+                <View style={{marginTop:'5%'}}/>
                 <View style={styles.keword}>
-                    <Text style={styles.keword_text}>#온화한</Text>
-                    <Text style={styles.keword_text}>#화려한</Text>
-                    <Text style={styles.keword_text}>#세련된</Text>
-                    <Text style={styles.keword_text}>#모던한</Text>
+                    <TouchableOpacity>
+                        <Text style={styles.keword_text}>#온화한</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={styles.keword_text}>#화려한</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={styles.keword_text}>#세련된</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={styles.keword_text}>#모던한</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.keword}>
-                    <Text style={styles.keword_text}>#클래식한</Text>
-                    <Text style={styles.keword_text}>#도시적인</Text>
-                    <Text style={styles.keword_text}>#아기자기한</Text>
+                    <TouchableOpacity>
+                        <Text style={styles.keword_text}>#클래식한</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={styles.keword_text}>#도시적인</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={styles.keword_text}>#아기자기한</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
 
@@ -92,10 +118,16 @@ const MainScreen = () => {
                    <Text style={styles.sectionTitle_sec}>소품샵 </Text>
                 </View>
                 <Text style={styles.rightText}>더 보기</Text>
-                <Image source={require('../assets/right.png')} style={styles.rightIcon} />
+                <Image source={require('../assets/right.png')} style={styles.rightIcon}/>
             </TouchableOpacity>
 
-            <ScrollView horizontal={true} style={styles.placeContainer}>
+            <ScrollView horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                </View>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                </View>
                 <View style={{alignItems: 'center',marginLeft: 20}}>
                     <Image source={require('../assets/shop.png')} style={styles.shopImage} />
                 </View>
@@ -117,7 +149,13 @@ const MainScreen = () => {
                 <Image source={require('../assets/right.png')} style={styles.rightIcon} />
             </TouchableOpacity>
 
-            <ScrollView horizontal={true} style={styles.placeContainer}>
+            <ScrollView horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                </View>
+                <View style={{alignItems: 'center',marginLeft: 20}}>
+                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                </View>
                 <View style={{alignItems: 'center',marginLeft: 20}}>
                     <Image source={require('../assets/shop.png')} style={styles.shopImage} />
                 </View>
@@ -151,29 +189,7 @@ const MainScreen = () => {
                 <Image source={require('../assets/last_newletter.png')} style={{alignItems: 'center', marginTop:'3%'}} />
             </View>
 
-            <View style={{padding:40,}}>
-            </View>
-
-
-
-            {/* <View horizontal={true} style={styles.placeContainer}>
-                <View style={{alignItems: 'center',marginLeft: 20}}>
-                    <Image source={require('../assets/last_newletter.png')} style={styles.last_new_Image} />
-                </View>
-                <View style={{alignItems: 'center',marginLeft: 20}}>
-                    <Image source={require('../assets/last_newletter.png')} style={styles.last_new_Image} />
-                </View>
-                <View style={{alignItems: 'center',marginLeft: 20}}>
-                    <Image source={require('../assets/last_newletter.png')} style={styles.last_new_Image} />
-                </View>
-            </View> */}
-
-            
-
-            
-            
-            
-
+            <View style={{padding:'5%',}}/>
         </ScrollView>
     );
 };
@@ -270,7 +286,7 @@ const styles = StyleSheet.create({
     },
     keword:{
         flexDirection: 'row',
-        marginLeft:'8%',
+        marginLeft:'7%',
         marginTop:'3%'
     },
     keword_view:{
@@ -283,9 +299,10 @@ const styles = StyleSheet.create({
         borderWidth: 1, // 테두리 두께
         borderColor: '#79CCA4', // 테두리 색상
         color: '#666666',
-        borderRadius: 20, // 테두리 모서리 둥글게 하기
+        borderRadius: 19, // 테두리 모서리 둥글게 하기
         textAlign: 'center', // 텍스트 가운데 정렬 (필요시)
         marginHorizontal:5,
+        fontSize:'12%'
     },
     shopImage:{
         width: 130, 
