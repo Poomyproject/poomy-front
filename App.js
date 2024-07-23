@@ -15,9 +15,12 @@ import PerferPlaceScreen from './screens/PreferPlaceScreen';
 import MainScreen from './screens/MainScreen';
 import FavoritesScreen from './screens/FavoritesScreen';
 import MyPageScreen from './screens/MyPageScreen';
+import SearchScreen from './screens/SearchScreen';
 
+// 스택 네비게이터와 탭 네비게이터를 위한 생성
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const SearchStack = createStackNavigator();
 
 const MainTabNavigator = () => {
   return (
@@ -30,12 +33,12 @@ const MainTabNavigator = () => {
           tabBarLabel: '찜',
           tabBarIcon: ({ color, size }) => (
             <Image 
-              source={require('./assets/ic_todo.png')} // 로컬 이미지 파일 경로
-              style={{ width: size, height: size, tintColor: color }} // 크기와 색상 설정
+              source={require('./assets/ic_todo.png')}
+              style={{ width: size, height: size, tintColor: color }}
             />
           ),
         }} 
-        />
+      />
       <Tab.Screen
         name="Main"
         component={MainScreen}
@@ -44,8 +47,8 @@ const MainTabNavigator = () => {
           tabBarLabel: '홈',
           tabBarIcon: ({ color, size }) => (
             <Image 
-              source={require('./assets/ic_home.png')} // 로컬 이미지 파일 경로
-              style={{ width: size, height: size, tintColor: color }} // 크기와 색상 설정
+              source={require('./assets/ic_home.png')}
+              style={{ width: size, height: size, tintColor: color }}
             />
           ),
         }}
@@ -58,13 +61,22 @@ const MainTabNavigator = () => {
           tabBarLabel: '마이페이지',
           tabBarIcon: ({ color, size }) => (
             <Image 
-              source={require('./assets/ic_mypage.png')} // 로컬 이미지 파일 경로
-              style={{ width: size, height: size, tintColor: color }} // 크기와 색상 설정
+              source={require('./assets/ic_mypage.png')}
+              style={{ width: size, height: size, tintColor: color }}
             />
           ),
         }} 
-        />
+      />
     </Tab.Navigator>
+  );
+};
+
+// SearchStackNavigator 설정
+const SearchStackNavigator = () => {
+  return (
+    <SearchStack.Navigator>
+      <SearchStack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
+    </SearchStack.Navigator>
   );
 };
 
@@ -80,6 +92,7 @@ export default function App() {
         <Stack.Screen name="PreferSelect" component={PreferSelectScreen} options={{ headerShown: false }} />
         <Stack.Screen name="PreferPlace" component={PerferPlaceScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MainTab" component={MainTabNavigator} options={{ headerShown: false }} />
+        <Stack.Screen name="SearchStack" component={SearchStackNavigator} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
