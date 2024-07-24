@@ -16,6 +16,10 @@ import MainScreen from './screens/MainScreen';
 import FavoritesScreen from './screens/FavoritesScreen';
 import MyPageScreen from './screens/MyPageScreen';
 import SearchScreen from './screens/SearchScreen';
+import MypageEditScreen from './screens/MypageEditScreen';
+import SettingScreen from './screens/SettingScreen';
+import AnnounceScreen from './screens/AnnounceScreen';
+import InquiryScreen from './screens/InquiryScrren';
 
 // 스택 네비게이터와 탭 네비게이터를 위한 생성
 const Stack = createStackNavigator();
@@ -83,7 +87,7 @@ const SearchStackNavigator = () => {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="PreferPlace"> 
+      <Stack.Navigator initialRouteName="Splash"> 
         <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
@@ -93,6 +97,10 @@ export default function App() {
         <Stack.Screen name="PreferPlace" component={PerferPlaceScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MainTab" component={MainTabNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="SearchStack" component={SearchStackNavigator} options={{ headerShown: false }} />
+        <Stack.Screen name="MypageEdit" component={MypageEditScreen} options={{ headerShown:true}}/>
+        <Stack.Screen name="Setting" component={SettingScreen} options={{headerTitle:'환경설정'}}/>
+        <Stack.Screen name="Inquiry" component={InquiryScreen} options={{headerTitle:'문의사항'}}/>
+        <Stack.Screen name="Announce" component={AnnounceScreen} options={{headerTitle:'공지사항'}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
