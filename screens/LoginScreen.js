@@ -4,6 +4,7 @@ import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-si
 import { API_BASE_URL, GOOGLE_IOS_CLIENT_ID } from '@env';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import colors from '../config/colors';
 
 // Axios 인스턴스 생성
 const api = axios.create({
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#1FAA67',
+    backgroundColor: colors.Green900,
   },
   image: {
     width: 168,
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
   button: {
     width: 350,
     height: 48,
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.Ivory100,
     marginTop: 40,
     alignSelf: 'center',
     justifyContent: 'center',
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   buttonText: {
-    color: '#000000',
+    color: colors.Gray900,
     fontSize: 15,
   },
 });

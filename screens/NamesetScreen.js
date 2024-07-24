@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import colors from '../config/colors';
 
 const NamesetScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -39,7 +40,7 @@ const NamesetScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.content}>
-        <Image source={require('../assets/progress_bar.png')} style={styles.image}></Image>
+        <Image source={require('../assets/progress_bar.png')} style={styles.image} />
         <Text style={styles.text}>사용하실 이름을 {'\n'}입력해주세요.</Text>
         <View style={styles.inputContainer}>
           <TextInput
@@ -50,7 +51,7 @@ const NamesetScreen = ({ navigation }) => {
             value={name}
             onChangeText={validateName}
             placeholder="5자 이내로 입력해 주세요"
-            placeholderTextColor="gray"
+            placeholderTextColor={!isTouched ? colors.Gray400 : (isLengthValid && isContentValid ? colors.Gray400: colors.Gray400)}
             onBlur={() => setIsTouched(true)}
           />
           {name.length > 0 && (
@@ -82,7 +83,8 @@ const NamesetScreen = ({ navigation }) => {
           disabled={!isAllChecked}
           onPress={() => navigation.navigate('PreferSelect')}
         >
-          <Text style={styles.buttonText}>다음</Text>
+          <Text style={[styles.buttonText, isAllChecked ? styles.buttonTextActive : styles.buttonTextInactive]}>
+          다음</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -94,6 +96,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     paddingTop: 60, 
+    backgroundColor:colors.Ivory100,
   },
   header: {
     flexDirection: 'row',
@@ -121,15 +124,13 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     marginBottom: 40,
   },
-
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderColor: 'gray',
+    borderColor: colors.Gray300,
     marginBottom: 20,
   },
-
   input: {
     flex: 1,
     height: 40,
@@ -137,25 +138,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500"
   },
-
   clearButton: {
     padding: 5,
   },
-
   clearIcon: {
     width: 24,
     height: 24,
   },
   default: {
-    borderBottomColor: 'gray',
+    borderBottomColor: colors.Gray400,
   },
   valid: {
-    borderBottomColor: 'green',
+    borderBottomColor: colors.Green900,
   },
   invalid: {
-    borderBottomColor: 'red',
+    borderBottomColor: colors.Error,
   },
-
   validationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -170,36 +168,38 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   defaultText: {
-    color: 'gray',
+    color: colors.Gray400,
   },
   validText: {
-    color: 'green',
+    color: colors.Green900,
   },
   invalidText: {
-    color: 'red',
+    color: colors.Error,
   },
-
   button: {
     width: 350,
     height: 48,
-    backgroundColor: '#1FAA67',
     position: 'absolute',
     bottom: 94,
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8, // 둥근 모서리
-    },
-    
+  },
   buttonInactive: {
-    backgroundColor: '#ccc',
+    backgroundColor: colors.Gray100,
   },
   buttonActive: {
-    backgroundColor: '#1FAA67',
+    backgroundColor: colors.Green900,
   },
   buttonText: {
-    color: '#ffffff',
     fontSize: 15,
+  },
+  buttonTextActive: {
+    color: colors.Ivory100, // 활성화 상태의 버튼 텍스트 색상
+  },
+  buttonTextInactive: {
+    color: colors.Gray500, // 비활성화 상태의 버튼 텍스트 색상
   },
 });
 
