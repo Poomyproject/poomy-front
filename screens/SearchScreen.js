@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, FlatList, Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { TextInput, FlatList, Text, View, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 import { stores, searchRankings } from './storesData';
 
 const SearchScreen = () => {
@@ -38,42 +38,75 @@ const SearchScreen = () => {
                     <Image source={require('../assets/search_img.png')} style={styles.searchImg} />
                 </TouchableOpacity>
 
-
-                <View horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
-                    <View style={{ alignItems: 'center' }} />
-                    <TouchableOpacity>
-                        <Text style={styles.keword_text}>아기자기한</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text style={styles.keword_text}>모던</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text style={styles.keword_text}>빈티지</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text style={styles.keword_text}>럭셔리</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text style={styles.keword_text}>테마별</Text>
-                    </TouchableOpacity>
-                </View>
-
-
             </View>
+            {!isSearchResultsVisible && (
+                <>
+                    <View style={styles.rightIconContainer}>
+                        <Text style={styles.sectionTitle}>추천 키워드</Text>
+                    </View>
+                    <View horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
+                        <TouchableOpacity>
+                            <Text style={styles.keywordText}>아기자기한</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Text style={styles.keywordText}>모던</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Text style={styles.keywordText}>빈티지</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Text style={styles.keywordText}>럭셔리</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Text style={styles.keywordText}>테마별</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.rightIconContainer}>
+                        <Text style={styles.sectionTitle}>인기 검색어</Text>
+                    </View>
+                </>
+            )}
             {isSearchResultsVisible ? (
                 <FlatList
                     data={filteredStores}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
-                        <Text style={styles.itemText}>{item.name}</Text>
+                        <>
+                            <View style={{ flexDirection: 'row', }} >
+                                <Image source={item.image} style={styles.storeImg} />
+                                <View style={{ width: '55%' }}>
+                                    <Text style={styles.storeName}>{item.name}</Text>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: '3%' }}>
+                                        <Text style={styles.storeInfo}>{item.category}</Text>
+                                        <View style={{ marginLeft: '3%' }} />
+                                        <Text style={styles.storeInfo}>{item.location}</Text>
+                                    </View>
+                                    <View style={{ flexDirection: 'row', marginTop: '5%' }}>
+                                        <Image source={require('../assets/map-pin.png')} style={styles.pinImg} />
+                                        <View style={{ marginLeft: '5%' }} />
+                                        <Text>{item.address}</Text>
+                                    </View>
+                                </View>
+                                <TouchableOpacity style={{marginTop:'13%'}}>
+                                    <Image source={require('../assets/heart.png')} style={styles.heartImg}/>
+                                </TouchableOpacity>
+                            </View>
+                        </>
+
                     )}
                 />
             ) : (
                 <FlatList
                     data={searchRankings}
-                    keyExtractor={(item, index) => index.toString()}
+                    keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => (
-                        <Text style={styles.itemText}>{item}</Text>
+                        <>
+                            <View style={{ flexDirection: 'row', padding: 13 }}>
+                                <Text style={styles.number}>{item.id}</Text>
+                                <Text style={styles.serachRankText}>{item.name}</Text>
+                            </View>
+                            <View style={styles.separator} />
+                        </>
                     )}
                 />
             )}
@@ -125,10 +158,28 @@ const styles = StyleSheet.create({
     itemText: {
         padding: 10,
     },
-    keword_text: {
+    number: {
+        fontSize: 20,
+        fontWeight: 1000,
+        color: '#1FAA67',
+        marginLeft: 13,
+    },
+    serachRankText: {
+        fontSize: 15,
+        color: '#C0C0C0',
+        marginLeft: 23,
+        marginTop: 1,
+    },
+    separator: {
+        borderBottomWidth: 1, // 선의 두께
+        borderColor: '#DADADA', // 선의 색상
+        opacity: 0.5,
+        marginHorizontal: 20,
+    },
+    keywordText: {
         alignSelf: 'flex-start',
         padding: 5, // 텍스트 주위의 여백
-        paddingHorizontal: 13,
+        paddingHorizontal: 12,
         borderWidth: 1, // 테두리 두께
         borderColor: '#79CCA4', // 테두리 색상
         color: '#666666',
@@ -136,15 +187,60 @@ const styles = StyleSheet.create({
         textAlign: 'center', // 텍스트 가운데 정렬 (필요시)
         marginHorizontal: 5,
         fontSize: '14%',
+        marginTop: '2%',
         // fontWeight: 'bold',
     },
     placeContainer: {
         flexDirection: 'row',
         alignSelf: 'flex-start',
-        marginTop: 20,
         height: 50,
         // backgroundColor:'black',
+        marginLeft: '2%',
     },
+    rightIconContainer: {
+        flexDirection: 'row',
+        marginTop: 20,
+        marginBottom: 20,
+        alignSelf: 'flex-start',
+        marginLeft: '3%',
+    },
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#444444',
+        width: '80%',
+    },
+    storeImg: {
+        width: 95,
+        height: 95,
+        margin: '5%'
+    },
+    heartImg: {
+        width: 23,
+        height: 23,
+    },
+    pinImg: {
+        width: 17,
+        height: 17,
+    },
+    storeInfo: {
+        alignSelf: 'flex-start',
+        padding: 5, // 텍스트 주위의 여백
+        paddingHorizontal: 15,
+        borderWidth: 1, // 테두리 두께
+        borderColor: '#79CCA4', // 테두리 색상
+        color: '#666666',
+        borderRadius: 13, // 테두리 모서리 둥글게 하기
+        textAlign: 'center', // 텍스트 가운데 정렬 (필요시)
+        fontSize: 13,
+        marginTop: '2%',
+    },
+    storeName: {
+        marginTop: '10%',
+        fontSize: 16,
+        // fontWeight: 'bold',
+
+    }
 });
 
 export default SearchScreen;
