@@ -20,6 +20,8 @@ import MypageEditScreen from './screens/MypageEditScreen';
 import SettingScreen from './screens/SettingScreen';
 import AnnounceScreen from './screens/AnnounceScreen';
 import InquiryScreen from './screens/InquiryScrren';
+import TermsDetail from './screens/TermsDetailScreen'
+import TermsDetailScreen from './screens/TermsDetailScreen';
 
 // 스택 네비게이터와 탭 네비게이터를 위한 생성
 const Stack = createStackNavigator();
@@ -101,6 +103,7 @@ export default function App() {
         <Stack.Screen name="Setting" component={SettingScreen} options={{headerTitle:'환경설정'}}/>
         <Stack.Screen name="Inquiry" component={InquiryScreen} options={{headerTitle:'문의사항'}}/>
         <Stack.Screen name="Announce" component={AnnounceScreen} options={{headerTitle:'공지사항'}}/>
+        <Stack.Screen name="TermsDetail" component={TermsDetailScreen} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

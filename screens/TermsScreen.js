@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import colors from '../config/colors';
 
 const TermsScreen = ({ navigation }) => {
   const [isChecked1, setIsChecked1] = useState(false);
@@ -33,32 +34,51 @@ const TermsScreen = ({ navigation }) => {
         시작하기 전,{'\n'}서비스 이용에 동의해주세요.
       </Text>
 
+      <View style = {[styles.boxContainer,{marginVertical:15}]}>
       <TouchableOpacity style={styles.checkBoxContainer} onPress={handleCheckAll}>
         <View style={[styles.checkBox, isAllChecked && styles.checkedBox]} />
-        <Text style={styles.checkBoxText}>필수약관 모두 동의</Text>
       </TouchableOpacity>
+      <Text style={[styles.checkBoxText,{fontWeight:600}]}>필수 약관 모두 동의</Text>
+      </View>
 
+      <View style = {styles.totalContainer}>
       <TouchableOpacity style={styles.checkBoxContainer} onPress={handleCheck1}>
         <View style={[styles.checkBox, isChecked1 && styles.checkedBox]} />
-        <Text style={styles.checkBoxText}>(필수)Pommy(푸미) 이용약관</Text>
       </TouchableOpacity>
+      <Text style={styles.checkBoxText}>(필수) Pommy(푸미) 이용약관</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('TermsDetail')} style = {{marginLeft:'auto'}}>
+          <Image source={require('../assets/right_black.png')} style={styles.right} />
+      </TouchableOpacity>
+      </View>
 
+      <View style = {styles.totalContainer}>
       <TouchableOpacity style={styles.checkBoxContainer} onPress={handleCheck2}>
         <View style={[styles.checkBox, isChecked2 && styles.checkedBox]} />
-        <Text style={styles.checkBoxText}>(필수)Pommy(푸미) 개인정보 수집 및 이...</Text>
+        <Text style={styles.checkBoxText}>(필수) Pommy(푸미) 개인정보 수집 및 이...</Text>
       </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('TermsDetail')} style = {{marginLeft:'auto'}}>
+          <Image source={require('../assets/right_black.png')} style={styles.right} />
+        </TouchableOpacity>
+      </View>
 
+      <View style = {styles.totalContainer}>
       <TouchableOpacity style={styles.checkBoxContainer} onPress={handleCheck3}>
-        <View style={[styles.checkBox, isChecked3 && styles.checkedBox]} />
-        <Text style={styles.checkBoxText}>(필수)위치정보 이용동의 및 위치기반서비...</Text>
+      <View style={[styles.checkBox, isChecked3 && styles.checkedBox]} />
       </TouchableOpacity>
+      <Text style={styles.checkBoxText}>(필수) 위치정보 이용동의 및 위치기반서비...</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('TermsDetail')} style = {{marginLeft:'auto'}}>
+          <Image source={require('../assets/right_black.png')} style={styles.right} />
+      </TouchableOpacity>
+      </View>
 
       <TouchableOpacity
         style={[styles.button, isAllChecked ? styles.buttonActive : styles.buttonInactive]}
         disabled={!isAllChecked}
         onPress={() => navigation.navigate('Nameset')}
       >
-        <Text style={styles.buttonText}>다음</Text>
+        <Text style={[styles.buttonText, isAllChecked ? styles.buttonTextActive : styles.buttonTextInactive]}>
+          다음
+        </Text>
       </TouchableOpacity>
     </View>
   );
@@ -69,37 +89,64 @@ const styles = StyleSheet.create ({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
+    backgroundColor: colors.Ivory100,
   },
   text: {
-    color: '#000000',
+    color: colors.Black,
     fontSize: 24,
     position: 'absolute',
     top: 150,
     left: 24,
     fontWeight: 'bold',
   },
+
+  boxContainer: {
+    width: 350,  // 원하는 너비
+    height: 56, // 원하는 높이
+    borderColor: colors.Gray100, // 테두리 색상
+    borderWidth: 2, // 테두리 두께
+    borderRadius: 10, // 둥근 모서리
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'transparent', // 내부는 투명하게
+  },
+
+  totalContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 5,
+  },
+
   checkBoxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 10,
+    marginLeft : 10,
   },
+
   checkBox: {
-    width: 24,
-    height: 24,
+    width: 19,
+    height: 19,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#000',
+    borderColor: colors.Gray400,
     marginRight: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
   checkedBox: {
-    backgroundColor: '#1FAA67', // 체크된 상태의 색상
-    borderColor: '#1FAA67', // 체크된 상태의 경계 색상
+    backgroundColor: colors.Green900, // 체크된 상태의 색상
+    borderColor: colors.Green900, // 체크된 상태의 경계 색상
   },
   checkBoxText: {
     fontSize: 16,
+    color: colors.Gray700
   },
+
+  right:{
+    marginLeft: 'auto',
+  },
+
   button: {
     marginTop: 30,
     padding: 15,
@@ -107,15 +154,19 @@ const styles = StyleSheet.create ({
     alignItems: 'center',
   },
   buttonInactive: {
-    backgroundColor: '#ccc',
+    backgroundColor: colors.Gray100,
   },
   buttonActive: {
-    backgroundColor: '#1FAA67',
+    backgroundColor: colors.Green900,
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 15,
+  },
+  buttonTextActive: {
+    color: colors.Ivory100, // 활성화 상태의 버튼 텍스트 색상
+  },
+  buttonTextInactive: {
+    color: colors.Gray500, // 비활성화 상태의 버튼 텍스트 색상
   },
 });
 

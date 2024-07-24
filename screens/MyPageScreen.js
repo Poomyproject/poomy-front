@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import colors from '../config/colors';
 
 const MyPageScreen = () => {
   const navigation = useNavigation(); // useNavigation 훅을 사용하여 네비게이션 객체를 가져옵니다
@@ -50,28 +51,28 @@ const MyPageScreen = () => {
           <View style={[{ marginTop: -40 }]}>
             <TouchableOpacity style={styles.buttonBox} onPress={goToSetting}>
               <Text style={styles.buttonText}>환경설정</Text>
-              <Image source={require('../assets/left_black.png')} style={styles.buttonImage} />
+              <Image source={require('../assets/right_black.png')} style={styles.buttonImage} />
             </TouchableOpacity>
             <View style={styles.line}></View>
           </View>
           <TouchableOpacity style={styles.buttonBox} onPress={goToAnnouce}>
             <Text style={styles.buttonText}>공지사항</Text>
-            <Image source={require('../assets/left_black.png')} style={styles.buttonImage} />
+            <Image source={require('../assets/right_black.png')} style={styles.buttonImage} />
           </TouchableOpacity>
           <View style={styles.line}></View>
           <TouchableOpacity style={styles.buttonBox} onPress={goToInquiry}>
             <Text style={styles.buttonText}>문의사항</Text>
-            <Image source={require('../assets/left_black.png')} style={styles.buttonImage} />
+            <Image source={require('../assets/right_black.png')} style={styles.buttonImage} />
           </TouchableOpacity>
           <View style={styles.line}></View>
           <TouchableOpacity style={[styles.buttonBox, { marginTop: 60 }]}>
             <Text style={styles.buttonText}>로그아웃</Text>
-            <Image source={require('../assets/left_black.png')} style={styles.buttonImage} />
+            <Image source={require('../assets/right_black.png')} style={styles.buttonImage} />
           </TouchableOpacity>
           <View style={styles.line}></View>
           <TouchableOpacity style={styles.buttonBox}>
             <Text style={styles.buttonText}>탈퇴</Text>
-            <Image source={require('../assets/left_black.png')} style={styles.buttonImage} />
+            <Image source={require('../assets/right_black.png')} style={styles.buttonImage} />
           </TouchableOpacity>
           <View style={styles.line}></View>
         </View>
@@ -83,7 +84,7 @@ const MyPageScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: colors.Ivory100,
   },
   headerContainer: {
     flex: 0.18,
@@ -143,18 +144,18 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: '200',
-    color: "#666666",
+    color: colors.Gray700,
     marginLeft: 8,
   },
   verticalLine: {
     width: 1,
     height: '40%',
-    backgroundColor: "#D4D4D4",
+    backgroundColor: colors.Gray200,
     marginRight: 40,
   },
   textWithBorder: {
     borderWidth: 1,
-    borderColor: '#79CCA4',
+    borderColor: colors.Green500,
     padding: 6,
     margin: 5,
     borderRadius: 16,
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
   line: {
     height: 1,
     width: '100%',
-    backgroundColor: '#f1f1f1',
+    backgroundColor: colors.Gray100,
     marginLeft: -10,
   },
 });

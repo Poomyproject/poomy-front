@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import colors from '../config/colors';
 
 const PreferSelectScreen = ({ navigation }) => {
   return (
@@ -58,14 +59,14 @@ const styles = StyleSheet.create({
   },
   details:{
     fontSize : 16,
-    color : '#666666',
+    color : colors.Gray700,
     fontWeight : '400',
   },
 
   button: {
     width: 350,
     height: 48,
-    backgroundColor: '#1FAA67',
+    backgroundColor: colors.Green900,
     position: 'absolute',
     bottom: 94,
     alignSelf: 'center',
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
     borderRadius: 8, // 둥근 모서리
     },
   buttonText: {
-    color: '#ffffff',
+    color: colors.Ivory100,
     fontSize: 15,
   },
 });
