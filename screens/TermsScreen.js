@@ -47,7 +47,7 @@ const TermsScreen = ({ navigation }) => {
         <View style={[styles.checkBox, isChecked1 && styles.checkedBox]} />
       </TouchableOpacity>
       <Text style={styles.checkBoxText}>(필수) Pommy(푸미) 이용약관</Text>
-      <TouchableOpacity onPress={() => navigation.navigate('TermsDetail')} style = {{marginLeft:'auto'}}>
+      <TouchableOpacity onPress={() => navigation.navigate('TermsDetail1')} style = {{marginLeft:'auto'}}>
           <Image source={require('../assets/right_black.png')} style={styles.right} />
       </TouchableOpacity>
       </View>
@@ -57,7 +57,7 @@ const TermsScreen = ({ navigation }) => {
         <View style={[styles.checkBox, isChecked2 && styles.checkedBox]} />
         <Text style={styles.checkBoxText}>(필수) Pommy(푸미) 개인정보 수집 및 이...</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('TermsDetail')} style = {{marginLeft:'auto'}}>
+      <TouchableOpacity onPress={() => navigation.navigate('TermsDetail2')} style = {{marginLeft:'auto'}}>
           <Image source={require('../assets/right_black.png')} style={styles.right} />
         </TouchableOpacity>
       </View>
@@ -67,7 +67,7 @@ const TermsScreen = ({ navigation }) => {
       <View style={[styles.checkBox, isChecked3 && styles.checkedBox]} />
       </TouchableOpacity>
       <Text style={styles.checkBoxText}>(필수) 위치정보 이용동의 및 위치기반서비...</Text>
-      <TouchableOpacity onPress={() => navigation.navigate('TermsDetail')} style = {{marginLeft:'auto'}}>
+      <TouchableOpacity onPress={() => navigation.navigate('TermsDetail3')} style = {{marginLeft:'auto'}}>
           <Image source={require('../assets/right_black.png')} style={styles.right} />
       </TouchableOpacity>
       </View>
