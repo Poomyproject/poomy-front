@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import colors from '../config/colors';
+import { fonts } from '../config/fonts'; 
+
 
 const PreferSelectScreen = ({ navigation }) => {
   return (
@@ -30,7 +32,10 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     paddingTop: 60, 
+    fontFamily : 'Pretendard-Medium',
+    backgroundColor : colors.Ivory100,
   },
+
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -52,15 +57,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   text: {
-    fontSize: 24,
-    fontWeight: '600',
+    ...fonts.Heading1,
     textAlign: 'left',
     marginBottom: 10,
   },
+
   details:{
     fontSize : 16,
     color : colors.Gray700,
-    fontWeight : '400',
+    ...fonts.Body2,
   },
 
   button: {
@@ -77,6 +82,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: colors.Ivory100,
     fontSize: 15,
+    fontFamily : 'Pretendard-Medium',
   },
 });
 

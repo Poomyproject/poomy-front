@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import colors from '../config/colors';
+import { fonts } from '../config/fonts'; 
 
 const TermsScreen = ({ navigation }) => {
   const [isChecked1, setIsChecked1] = useState(false);
@@ -38,7 +39,7 @@ const TermsScreen = ({ navigation }) => {
       <TouchableOpacity style={styles.checkBoxContainer} onPress={handleCheckAll}>
         <View style={[styles.checkBox, isAllChecked && styles.checkedBox]} />
       </TouchableOpacity>
-      <Text style={[styles.checkBoxText,{fontWeight:600}]}>필수 약관 모두 동의</Text>
+      <Text style={[styles.checkBoxText,{fontFamily:'Pretendard-Semibold'},{fontSize:16}]}>필수 약관 모두 동의</Text>
       </View>
 
       <View style = {styles.totalContainer}>
@@ -91,13 +92,13 @@ const styles = StyleSheet.create ({
     padding: 20,
     backgroundColor: colors.Ivory100,
   },
+
   text: {
     color: colors.Black,
-    fontSize: 24,
+    ...fonts.Heading1,
     position: 'absolute',
     top: 150,
     left: 24,
-    fontWeight: 'bold',
   },
 
   boxContainer: {
@@ -125,10 +126,10 @@ const styles = StyleSheet.create ({
   },
 
   checkBox: {
-    width: 19,
-    height: 19,
+    width: 18,
+    height: 18,
     borderRadius: 12,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: colors.Gray400,
     marginRight: 10,
     justifyContent: 'center',
@@ -139,7 +140,7 @@ const styles = StyleSheet.create ({
     borderColor: colors.Green900, // 체크된 상태의 경계 색상
   },
   checkBoxText: {
-    fontSize: 16,
+    ...fonts.Body4,
     color: colors.Gray700
   },
 
@@ -160,6 +161,7 @@ const styles = StyleSheet.create ({
     backgroundColor: colors.Green900,
   },
   buttonText: {
+    fontFamily:'Pretendard-Medium',
     fontSize: 15,
   },
   buttonTextActive: {

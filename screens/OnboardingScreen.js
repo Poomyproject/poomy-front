@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Swiper from 'react-native-swiper';
 import colors from '../config/colors';
+import { fonts } from '../config/fonts'; 
+
 
 const OnboardingScreen = ({ navigation }) => {
   const [index, setIndex] = useState(0);
@@ -70,12 +72,12 @@ const styles = StyleSheet.create({
   },
   text: {
   color: colors.Black,
-  fontSize: 24,
-  fontWeight: 'bold',
+  ...fonts.Heading1,
   position: 'absolute', // Absolute positioning
   textAlign: 'left',
   marginTop: 42,
   marginHorizontal: 20,
+  ...fonts.Heading1,
   },
   highlight: {
   color: colors.Green900,

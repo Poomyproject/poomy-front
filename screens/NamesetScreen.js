@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import colors from '../config/colors';
+import { fonts } from '../config/fonts'; // fonts 임포트
+
 
 const NamesetScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -119,8 +121,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   text: {
-    fontSize: 24,
-    fontWeight: '600',
+    ...fonts.Heading1,
     textAlign: 'left',
     marginBottom: 40,
   },
@@ -166,15 +167,19 @@ const styles = StyleSheet.create({
   },
   validationText: {
     fontSize: 14,
+    ...fonts.Body4,
   },
   defaultText: {
     color: colors.Gray400,
+    ...fonts.Body4,
   },
   validText: {
     color: colors.Green900,
+    ...fonts.Body4,
   },
   invalidText: {
     color: colors.Error,
+    ...fonts.Body4,
   },
   button: {
     width: 350,

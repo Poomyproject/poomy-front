@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import colors from '../config/colors';
+import { fonts } from '../config/fonts'; 
+
 
 const PreferPlaceScreen = ({ navigation }) => {
   const [selectedTags, setSelectedTags] = useState([]);
 
   const tags = [
-    '홍대', '이태원', '신사', '승리단길', '영등포', '명동',
+    '홍대', '이태원', '신사', '송리단길', '영등포', '명동',
     '종로', '북촌 한옥마을', '혜화', '강남', '신촌', '성수',
   ];
 
@@ -29,7 +31,7 @@ const PreferPlaceScreen = ({ navigation }) => {
       </View>
       <View style={styles.content}>
         <Image source={require('../assets/progress_bar2.png')} style={styles.image} />
-        <Text style={styles.text}>관심있는 장소를 선택해주세요</Text>
+        <Text style={styles.text}>관심있는 장소를 선택해주세요.</Text>
         <Text style={styles.details}>당신의 주요 활동지가 어디인가요? (최대 2개)</Text>
         <View style={styles.tagsContainer}>
           {tags.map((tag) => (
@@ -94,15 +96,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   text: {
-    fontSize: 24,
-    fontWeight: '600',
+    ...fonts.Heading1,
     textAlign: 'left',
     marginBottom: 10,
   },
+
   details: {
-    fontSize: 16,
+    ...fonts.Body2,
     color: colors.Gray700,
-    fontWeight: '400',
     marginBottom: 20,
   },
 
@@ -121,6 +122,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderWidth: 1, // 태그의 테두리 두께 설정
   },
+
   selectedTag: {
     backgroundColor: colors.Green900,
     borderColor: colors.Green900, // 선택된 상태의 태그 테두리 색상
@@ -131,9 +133,11 @@ const styles = StyleSheet.create({
   },
   selectedTagText: {
     color: colors.Ivory100,
+    ...fonts.Body2,
   },
   unselectedTagText: {
     color: colors.Gray700,
+    ...fonts.Body2,
   },
   button: {
     width: 350,
@@ -153,6 +157,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 15,
+    fontFamily: 'Pretendard-Medium'
   },
   buttonTextActive: {
     color: colors.Ivory100, // 활성화 상태의 버튼 텍스트 색상
