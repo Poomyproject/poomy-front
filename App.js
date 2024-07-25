@@ -1,7 +1,7 @@
 // App.js
 import 'react-native-gesture-handler';
 import React from 'react';
-import { Image } from 'react-native'; 
+import { Image, StyleSheet ,TouchableOpacity } from 'react-native'; 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -19,9 +19,11 @@ import SearchScreen from './screens/SearchScreen';
 import MypageEditScreen from './screens/MypageEditScreen';
 import SettingScreen from './screens/SettingScreen';
 import AnnounceScreen from './screens/AnnounceScreen';
-import InquiryScreen from './screens/InquiryScrren';
-import TermsDetail from './screens/TermsDetailScreen'
-import TermsDetailScreen from './screens/TermsDetailScreen';
+import InquiryScreen from './screens/InquiryScreen';
+import TermsDetailScreen1 from './screens/TermsDetailScreen1';
+import TermsDetailScreen2 from './screens/TermsDetailScreen2';
+import TermsDetailScreen3 from './screens/TermsDetailScreen3';
+
 
 // 스택 네비게이터와 탭 네비게이터를 위한 생성
 const Stack = createStackNavigator();
@@ -30,7 +32,7 @@ const SearchStack = createStackNavigator();
 
 const MainTabNavigator = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator initialRouteName="Main">
       <Tab.Screen 
         name="Favorites" 
         component={FavoritesScreen}
@@ -100,11 +102,71 @@ export default function App() {
         <Stack.Screen name="MainTab" component={MainTabNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="SearchStack" component={SearchStackNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="MypageEdit" component={MypageEditScreen} options={{ headerShown:true}}/>
-        <Stack.Screen name="Setting" component={SettingScreen} options={{headerTitle:'환경설정'}}/>
-        <Stack.Screen name="Inquiry" component={InquiryScreen} options={{headerTitle:'문의사항'}}/>
-        <Stack.Screen name="Announce" component={AnnounceScreen} options={{headerTitle:'공지사항'}}/>
-        <Stack.Screen name="TermsDetail" component={TermsDetailScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Setting" component={SettingScreen} options={({ navigation }) => ({
+          headerTitle: '환경설정',
+          headerLeft: () => (
+            <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
+              <Image source={require('./assets/left.png')} style = {{height:24, width : 24}}/>
+            </TouchableOpacity>
+           ),
+          })}/>
+        <Stack.Screen name="Inquiry" component={InquiryScreen} options={({ navigation }) => ({
+          headerTitle: '문의사항',
+          headerLeft: () => (
+            <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
+              <Image source={require('./assets/left.png')} style = {{height:24, width : 24}}/>
+            </TouchableOpacity>
+           ),
+          })}/>
+        <Stack.Screen
+        name="Announce"
+        component={AnnounceScreen}
+        options={({ navigation }) => ({
+          headerTitle: '공지사항',
+          headerLeft: () => (
+            <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
+              <Image source={require('./assets/left.png')} style = {{height:24, width : 24}}/>
+            </TouchableOpacity>
+           ),
+          })}
+        />
+        <Stack.Screen name= "TermsDetail1" component={TermsDetailScreen1} options={({ navigation }) => ({
+          headerTitle: ' ',
+          headerLeft: () => (
+            <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
+              <Image source={require('./assets/left.png')} style = {{height:24, width : 24}}/>
+            </TouchableOpacity>
+           ),
+          })}/>
+        <Stack.Screen name= "TermsDetail2" component={TermsDetailScreen2} options={({ navigation }) => ({
+          headerTitle: ' ',
+          headerLeft: () => (
+            <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
+              <Image source={require('./assets/left.png')} style = {{height:24, width : 24}}/>
+            </TouchableOpacity>
+           ),
+          })}/>
+          <Stack.Screen name= "TermsDetail3" component={TermsDetailScreen3} options={({ navigation }) => ({
+          headerTitle: ' ',
+          headerLeft: () => (
+            <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
+              <Image source={require('./assets/left.png')} style = {{height:24, width : 24}}/>
+            </TouchableOpacity>
+           ),
+          })}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconButton: {
+    marginLeft : 10 ,
+  },
+
+});

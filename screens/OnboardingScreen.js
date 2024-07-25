@@ -70,28 +70,33 @@ const styles = StyleSheet.create({
   alignItems: 'center',
   backgroundColor: colors.Ivory100,
   },
+
   text: {
   color: colors.Black,
   ...fonts.Heading1,
-  position: 'absolute', // Absolute positioning
+  position: 'absolute',
   textAlign: 'left',
   marginTop: 42,
   marginHorizontal: 20,
-  ...fonts.Heading1,
   },
+
   highlight: {
   color: colors.Green900,
+  ...fonts.Heading1,
   },
+
   textPosition: {
   top: 102,
   left: 20,
   },
+
   image: {
   width: 390,
   height: 380,
   position: 'absolute',
   marginTop: 42,
   },
+
   buttonContainer: {
   padding: 20,
   backgroundColor: colors.Ivory100,
