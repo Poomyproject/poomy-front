@@ -5,6 +5,7 @@ import { API_BASE_URL, GOOGLE_IOS_CLIENT_ID } from '@env';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../config/colors';
+import fonts from '../config/fonts'; 
 
 // Axios 인스턴스 생성
 const api = axios.create({

@@ -216,6 +216,7 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         marginTop: height * 0.05,
     },
+    
     searchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -225,6 +226,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.Ivory900,
         borderRadius: 10,
     },
+
     searchText: {
         flex: 1,
         color: colors.Gray300,
