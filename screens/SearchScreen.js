@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     separator: {
         borderBottomWidth: 1, // 선의 두께
         borderColor: colors.Gray100, // 선의 색상
-        opacity: 0.5,
+        opacity: 0.7,
         marginHorizontal: 20,
     },
 
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
         padding: 5, // 텍스트 주위의 여백
         paddingHorizontal: 12,
         borderWidth: 1, // 테두리 두께
-        borderColor: colors.Gray500, // 테두리 색상
+        borderColor: colors.Green500, // 테두리 색상
         color: colors.Gray700,
         borderRadius: 13, // 테두리 모서리 둥글게 하기
         textAlign: 'center', // 텍스트 가운데 정렬 (필요시)
