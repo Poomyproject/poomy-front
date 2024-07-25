@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Swiper from 'react-native-swiper';
+import colors from '../config/colors';
+import { fonts } from '../config/fonts'; 
+
 
 const OnboardingScreen = ({ navigation }) => {
   const [index, setIndex] = useState(0);
@@ -56,6 +59,7 @@ const OnboardingScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
   flex: 1,
+  backgroundColor:colors.Ivory100,
   },
   swiper: {
   flex: 1,
@@ -64,19 +68,19 @@ const styles = StyleSheet.create({
   flex: 1,
   justifyContent: 'center',
   alignItems: 'center',
-  backgroundColor: '#ffffff'
+  backgroundColor: colors.Ivory100,
   },
   text: {
-  color: '#000000',
-  fontSize: 24,
-  fontWeight: 'bold',
+  color: colors.Black,
+  ...fonts.Heading1,
   position: 'absolute', // Absolute positioning
   textAlign: 'left',
   marginTop: 42,
   marginHorizontal: 20,
+  ...fonts.Heading1,
   },
   highlight: {
-  color: '#1FAA67', // 포인트로 사용할 색상
+  color: colors.Green900,
   },
   textPosition: {
   top: 102,
@@ -90,13 +94,13 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
   padding: 20,
-  backgroundColor: '#9DD6EB',
+  backgroundColor: colors.Ivory100,
   },
   
   button: {
   width: 350,
   height: 48,
-  backgroundColor: '#1FAA67',
+  backgroundColor: colors.Green900,
   position: 'absolute',
   bottom: 94,
   alignSelf: 'center',
@@ -106,13 +110,13 @@ const styles = StyleSheet.create({
   },
   
   buttonText: {
-  color: '#ffffff',
+  color: colors.Ivory100,
   fontSize: 15,
   
   },
   
   dot: {
-  backgroundColor: '#D4D4D4',
+  backgroundColor: colors.Gray200,
   width: 8,
   height: 8,
   borderRadius: 4,
@@ -120,7 +124,7 @@ const styles = StyleSheet.create({
   marginHorizontal: 3,
   },
   activeDot: {
-  backgroundColor: '#666666',
+  backgroundColor: colors.Gray700,
   width: 8,
   height: 8,
   borderRadius: 4,
@@ -129,6 +133,4 @@ const styles = StyleSheet.create({
   }
   });
   
-  
-
 export default OnboardingScreen;

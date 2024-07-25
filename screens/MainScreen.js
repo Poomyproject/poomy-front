@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView, ViewComponent } from 'react-native';
+import colors from '../config/colors';
 
 const { width, height } = Dimensions.get('window');
 const logoSize = width * 0.3; // 화면 너비의 40%를 로고 크기로 설정
@@ -215,18 +216,20 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         marginTop: height * 0.05,
     },
+    
     searchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         height: 50,
         paddingHorizontal: 15,
         width: '90%',
-        backgroundColor: '#F8F7F2',
+        backgroundColor: colors.Ivory900,
         borderRadius: 10,
     },
+
     searchText: {
         flex: 1,
-        color: '#C0C0C0',
+        color: colors.Gray300,
         padding: 10,
     },
     searchIcon: {
@@ -242,19 +245,19 @@ const styles = StyleSheet.create({
     sectionTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#444444',
+        color: colors.Gray900,
         width: '80%',
         marginLeft: 5,
     },
     sectionTitle_sec: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#444444',
+        color: colors.Gray900,
     },
     sectionTitle_sec_color: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#1FAA67',
+        color: colors.Green900,
     },
     sectionTitle_sec_view: {
         width: '80%',
@@ -262,11 +265,11 @@ const styles = StyleSheet.create({
         marginLeft: 5,
     },
     rightText: {
-        color: '#444444',
+        color: colors.Gray900,
         marginTop: 5,
     },
     rightText_sec: {
-        color: '#444444',
+        color: colors.Gray900,
         marginTop: 10,
     },
     rightIcon: {
@@ -282,13 +285,13 @@ const styles = StyleSheet.create({
     newletterMainText: {
         marginTop: '15%',
         fontSize: 15,
-        color: '#444444',
+        color: colors.Gray900,
         fontWeight: 'bold',
     },
     newletterDetailText: {
         marginTop: '3%',
         fontSize: '13%',
-        color: '#888888',
+        color: colors.Gray500,
         lineHeight: 20, // 줄 간격을 조절하여 텍스트가 읽기 쉽게 함
         textAlign: 'left',
         width:260
@@ -300,7 +303,7 @@ const styles = StyleSheet.create({
     },
     placeText: {
         marginTop: 15,
-        color: '#454C53',
+        color: colors.Gray700,
     },
     recommandContainer: {
         flexDirection: 'row',
@@ -324,8 +327,8 @@ const styles = StyleSheet.create({
         padding: 10, // 텍스트 주위의 여백
         paddingHorizontal: 15,
         borderWidth: 1, // 테두리 두께
-        borderColor: '#79CCA4', // 테두리 색상
-        color: '#666666',
+        borderColor: colors.Green500, // 테두리 색상
+        color: colors.Gray700,
         borderRadius: 19, // 테두리 모서리 둥글게 하기
         textAlign: 'center', // 텍스트 가운데 정렬 (필요시)
         marginHorizontal: 5,

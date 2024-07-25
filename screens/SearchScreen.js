@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextInput, FlatList, Text, View, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 import { stores, searchRankings } from './storesData';
+import colors from '../config/colors';
 
 const SearchScreen = () => {
     const [searchText, setSearchText] = useState('');
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 10,
-        backgroundColor: 'white',
+        backgroundColor: colors.Ivory100,
     },
     leftarrow: {
         height: 30,
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,      // 모서리 둥글게 하기
         alignItems: 'center',
         width: '80%',
-        backgroundColor: '#F8F7F2',
+        backgroundColor: colors.Ivory900,
         borderRadius: 10,
     },
     searchButton: {
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
         height: 40,
     },
     searchButtonText: {
-        color: '#fff',
+        color: colors.Gray300,
     },
     itemText: {
         padding: 10,
@@ -161,28 +162,30 @@ const styles = StyleSheet.create({
     number: {
         fontSize: 20,
         fontWeight: 1000,
-        color: '#1FAA67',
+        color: colors.Green900,
         marginLeft: 13,
     },
     serachRankText: {
         fontSize: 15,
-        color: '#C0C0C0',
+        color: colors.Gray300,
         marginLeft: 23,
         marginTop: 1,
     },
+
     separator: {
         borderBottomWidth: 1, // 선의 두께
-        borderColor: '#DADADA', // 선의 색상
+        borderColor: colors.Gray100, // 선의 색상
         opacity: 0.5,
         marginHorizontal: 20,
     },
+
     keywordText: {
         alignSelf: 'flex-start',
         padding: 5, // 텍스트 주위의 여백
         paddingHorizontal: 12,
         borderWidth: 1, // 테두리 두께
-        borderColor: '#79CCA4', // 테두리 색상
-        color: '#666666',
+        borderColor: colors.Gray500, // 테두리 색상
+        color: colors.Gray700,
         borderRadius: 13, // 테두리 모서리 둥글게 하기
         textAlign: 'center', // 텍스트 가운데 정렬 (필요시)
         marginHorizontal: 5,
@@ -207,7 +210,7 @@ const styles = StyleSheet.create({
     sectionTitle: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#444444',
+        color: colors.Gray900,
         width: '80%',
     },
     storeImg: {
@@ -228,8 +231,8 @@ const styles = StyleSheet.create({
         padding: 5, // 텍스트 주위의 여백
         paddingHorizontal: 15,
         borderWidth: 1, // 테두리 두께
-        borderColor: '#79CCA4', // 테두리 색상
-        color: '#666666',
+        borderColor: colors.Green500, // 테두리 색상
+        color: colors.Gray700,
         borderRadius: 13, // 테두리 모서리 둥글게 하기
         textAlign: 'center', // 텍스트 가운데 정렬 (필요시)
         fontSize: 13,

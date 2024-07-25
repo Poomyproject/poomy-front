@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import colors from '../config/colors';
+import { fonts } from '../config/fonts'; 
+
 
 const PreferSelectScreen = ({ navigation }) => {
   return (
@@ -29,7 +32,10 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     paddingTop: 60, 
+    fontFamily : 'Pretendard-Medium',
+    backgroundColor : colors.Ivory100,
   },
+
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -51,21 +57,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   text: {
-    fontSize: 24,
-    fontWeight: '600',
+    ...fonts.Heading1,
     textAlign: 'left',
     marginBottom: 10,
   },
+
   details:{
     fontSize : 16,
-    color : '#666666',
-    fontWeight : '400',
+    color : colors.Gray700,
+    ...fonts.Body2,
   },
 
   button: {
     width: 350,
     height: 48,
-    backgroundColor: '#1FAA67',
+    backgroundColor: colors.Green900,
     position: 'absolute',
     bottom: 94,
     alignSelf: 'center',
@@ -74,8 +80,9 @@ const styles = StyleSheet.create({
     borderRadius: 8, // 둥근 모서리
     },
   buttonText: {
-    color: '#ffffff',
+    color: colors.Ivory100,
     fontSize: 15,
+    fontFamily : 'Pretendard-Medium',
   },
 });
 

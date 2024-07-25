@@ -2,10 +2,10 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import colors from '../config/colors';
 
-const SettingScreen = () => {
+const TermsDetailScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>환경설정 화면</Text>
+      <Text style={styles.title}>약관 디테일</Text>
     </View>
   );
 };
@@ -23,4 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SettingScreen;
+export default TermsDetailScreen;

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import colors from '../config/colors';
+import { fonts } from '../config/fonts'; 
+
 
 const PreferPlaceScreen = ({ navigation }) => {
   const [selectedTags, setSelectedTags] = useState([]);
 
   const tags = [
-    '홍대', '이태원', '신사', '승리단길', '영등포', '명동',
+    '홍대', '이태원', '신사', '송리단길', '영등포', '명동',
     '종로', '북촌 한옥마을', '혜화', '강남', '신촌', '성수',
   ];
 
@@ -28,7 +31,7 @@ const PreferPlaceScreen = ({ navigation }) => {
       </View>
       <View style={styles.content}>
         <Image source={require('../assets/progress_bar2.png')} style={styles.image} />
-        <Text style={styles.text}>관심있는 장소를 선택해주세요</Text>
+        <Text style={styles.text}>관심있는 장소를 선택해주세요.</Text>
         <Text style={styles.details}>당신의 주요 활동지가 어디인가요? (최대 2개)</Text>
         <View style={styles.tagsContainer}>
           {tags.map((tag) => (
@@ -56,7 +59,9 @@ const PreferPlaceScreen = ({ navigation }) => {
           onPress={() => navigation.navigate('MainTab', { screen: 'Main' })}
           disabled={isButtonDisabled}
         >
-          <Text style={styles.buttonText}>다음</Text>
+          <Text style={[styles.buttonText, isButtonDisabled ? styles.buttonTextInactive : styles.buttonTextActive]}>
+            다음
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -68,6 +73,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     paddingTop: 60, 
+    backgroundColor: colors.Ivory100,
   },
   header: {
     flexDirection: 'row',
@@ -90,41 +96,48 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   text: {
-    fontSize: 24,
-    fontWeight: '600',
+    ...fonts.Heading1,
     textAlign: 'left',
     marginBottom: 10,
   },
+
   details: {
-    fontSize: 16,
-    color: '#666666',
-    fontWeight: '400',
+    ...fonts.Body2,
+    color: colors.Gray700,
     marginBottom: 20,
   },
+
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     marginBottom: 20,
   },
+  
   tag: {
     borderRadius: 20,
     paddingVertical: 5,
     paddingHorizontal: 10,
     marginVertical: 5,
     marginHorizontal: 5,
+    borderWidth: 1, // 태그의 테두리 두께 설정
   },
+
   selectedTag: {
-    backgroundColor: '#1FAA67',
+    backgroundColor: colors.Green900,
+    borderColor: colors.Green900, // 선택된 상태의 태그 테두리 색상
   },
   unselectedTag: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: colors.Ivory100,
+    borderColor: colors.Gray100, // 비선택 상태의 태그 테두리 색상
   },
   selectedTagText: {
-    color: '#ffffff',
+    color: colors.Ivory100,
+    ...fonts.Body2,
   },
   unselectedTagText: {
-    color: '#000000',
+    color: colors.Gray700,
+    ...fonts.Body2,
   },
   button: {
     width: 350,
@@ -137,14 +150,20 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   buttonEnabled: {
-    backgroundColor: '#1FAA67',
+    backgroundColor: colors.Green900,
   },
   buttonDisabled: {
-    backgroundColor: '#ccc',
+    backgroundColor: colors.Gray100,
   },
   buttonText: {
-    color: '#ffffff',
     fontSize: 15,
+    fontFamily: 'Pretendard-Medium'
+  },
+  buttonTextActive: {
+    color: colors.Ivory100, // 활성화 상태의 버튼 텍스트 색상
+  },
+  buttonTextInactive: {
+    color: colors.Gray500, // 비활성화 상태의 버튼 텍스트 색상
   },
 });
 
