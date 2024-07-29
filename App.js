@@ -19,6 +19,9 @@ import SearchScreen from './screens/SearchScreen';
 import MypageEditScreen from './screens/MypageEditScreen';
 import SettingScreen from './screens/SettingScreen';
 import AnnounceScreen from './screens/AnnounceScreen';
+import TermsDetail from './screens/TermsDetailScreen'
+import TermsDetailScreen from './screens/TermsDetailScreen';
+import { Toast, toastConfig } from './screens/Toast'; 
 import InquiryScreen from './screens/InquiryScreen';
 import TermsDetailScreen1 from './screens/TermsDetailScreen1';
 import TermsDetailScreen2 from './screens/TermsDetailScreen2';
@@ -91,7 +94,7 @@ const SearchStackNavigator = () => {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splash"> 
+      <Stack.Navigator initialRouteName="MainTab"> 
         <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
@@ -155,6 +158,7 @@ export default function App() {
            ),
           })}/>
       </Stack.Navigator>
+      <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
     </NavigationContainer>
   );
 }
