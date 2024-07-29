@@ -19,8 +19,6 @@ import SearchScreen from './screens/SearchScreen';
 import MypageEditScreen from './screens/MypageEditScreen';
 import SettingScreen from './screens/SettingScreen';
 import AnnounceScreen from './screens/AnnounceScreen';
-import TermsDetail from './screens/TermsDetailScreen'
-import TermsDetailScreen from './screens/TermsDetailScreen';
 import { Toast, toastConfig } from './screens/Toast'; 
 import InquiryScreen from './screens/InquiryScreen';
 import TermsDetailScreen1 from './screens/TermsDetailScreen1';
