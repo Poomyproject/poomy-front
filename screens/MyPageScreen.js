@@ -1,13 +1,15 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity , Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../config/colors';
 
+
 const MyPageScreen = () => {
-  const navigation = useNavigation(); // useNavigation 훅을 사용하여 네비게이션 객체를 가져옵니다
+  const navigation = useNavigation(); 
 
   const goToSetting = () => {
-    navigation.navigate('Setting'); // 'Setting' 화면으로 이동
+    navigation.navigate('Setting');
   };
 
   const goToAnnouce = () => {
@@ -17,6 +19,41 @@ const MyPageScreen = () => {
   const goToInquiry = () => {
     navigation.navigate('Inquiry')
   };
+
+  const handleLogout = async () => {
+    try {
+      // AsyncStorage에서 accessToken 제거
+      await AsyncStorage.removeItem('accessToken');
+
+      // 로그인 화면으로 이동
+      navigation.replace('Login');
+    } catch (error) {
+      console.error('로그아웃 오류:', error);
+      Alert.alert('로그아웃 오류', '로그아웃 중 문제가 발생했습니다.');
+    }
+  };
+
+
+  const confirmLogout = () => {
+    Alert.alert(
+      '로그아웃',
+      '로그아웃하시겠습니까?',
+      [
+        {
+          text: '아니오',
+          onPress: () => console.log('로그아웃 취소됨'),
+          style: 'cancel',
+        },
+        {
+          text: '확인',
+          onPress: handleLogout,
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+
 
   return (
     <View style={styles.container}>
@@ -65,9 +102,9 @@ const MyPageScreen = () => {
             <Image source={require('../assets/right_black.png')} style={styles.buttonImage} />
           </TouchableOpacity>
           <View style={styles.line}></View>
-          <TouchableOpacity style={[styles.buttonBox, { marginTop: 60 }]}>
+          <TouchableOpacity style={[styles.buttonBox, { marginTop: 60 }]} onPress={confirmLogout}>
             <Text style={styles.buttonText}>로그아웃</Text>
-            <Image source={require('../assets/right_black.png')} style={styles.buttonImage} />
+            <Image source={require('../assets/right_black.png')} style={styles.buttonImage}  />
           </TouchableOpacity>
           <View style={styles.line}></View>
           <TouchableOpacity style={styles.buttonBox}>
