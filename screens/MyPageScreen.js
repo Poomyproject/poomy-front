@@ -3,10 +3,15 @@ import { View, Text, Image, StyleSheet, TouchableOpacity , Alert } from 'react-n
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../config/colors';
+import MypageEditScreen from './MypageEditScreen';
 
 
 const MyPageScreen = () => {
   const navigation = useNavigation(); 
+
+  const goToMypageEdit = () => {
+    navigation.navigate('MypageEdit');
+  };
 
   const goToSetting = () => {
     navigation.navigate('Setting');
@@ -66,6 +71,9 @@ const MyPageScreen = () => {
         <View style={[styles.profile, { marginTop: -60 }]}>
           <Image source={require('../assets/profile.png')} style={styles.profileImage} />
           <Text style={styles.profileText}>이름님,{'\n'}행운을 빌어요!</Text>
+          <TouchableOpacity onPress={goToMypageEdit}>
+      <Image source={require('../assets/edit.png')} style={styles.editImage} />
+    </TouchableOpacity>
         </View>
         <View style={styles.preferContainer}>
           <View style={styles.preferBox}>
@@ -161,11 +169,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
   },
+   editImage : {
+    marginTop : -25,
+    marginRight : 15, 
+   },
   preferContainer: {
     flex: 0.4,
     marginTop: 40,
     alignItems: 'left',
   },
+
   preferBox: {
     flex: 0.3,
     flexDirection: 'row',
@@ -173,10 +186,12 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: -30,
   },
+
   preferIcon: {
     width: 24,
     height: 24,
   },
+
   preferText: {
     flex: 1,
     fontSize: 16,
@@ -184,12 +199,14 @@ const styles = StyleSheet.create({
     color: colors.Gray700,
     marginLeft: 8,
   },
+  
   verticalLine: {
     width: 1,
     height: '40%',
     backgroundColor: colors.Gray200,
     marginRight: 40,
   },
+
   textWithBorder: {
     borderWidth: 1,
     borderColor: colors.Green500,
@@ -203,7 +220,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 10,
-    width: 350,
+    width: 380,
   },
   buttonText: {
     fontSize: 16,

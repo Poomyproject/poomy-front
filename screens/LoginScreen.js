@@ -71,7 +71,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handlePostRequest = async (idToken) => {
     try {
-      const url = `${API_BASE_URL}/api/users/login/google`;
+      const url = `${API_BASE_URL}/api/users/login/google`; //로그인 api
       console.log('Sending POST request to:', url);
       console.log('Request body:', { idToken });
 

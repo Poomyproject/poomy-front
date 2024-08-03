@@ -1,7 +1,7 @@
 // App.js
 import 'react-native-gesture-handler';
 import React from 'react';
-import { Image, StyleSheet ,TouchableOpacity } from 'react-native'; 
+import { Image, StyleSheet ,TouchableOpacity,Text } from 'react-native'; 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -24,14 +24,48 @@ import InquiryScreen from './screens/InquiryScreen';
 import TermsDetailScreen1 from './screens/TermsDetailScreen1';
 import TermsDetailScreen2 from './screens/TermsDetailScreen2';
 import TermsDetailScreen3 from './screens/TermsDetailScreen3';
+import WelcomeScreen from './screens/WelcomeScreen';
+import colors from './config/colors';
+import { fonts } from './config/fonts';
 import KeywardRecmdScreen from './screens/KeywardRecmdScreen';
 
 
-// 스택 네비게이터와 탭 네비게이터를 위한 생성
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const SearchStack = createStackNavigator();
 const KeywardStack = createStackNavigator();
+const MypageStack = createStackNavigator();
+
+
+const MypageStackScreen = () => {
+  return (
+    <MypageStack.Navigator>
+      <MypageStack.Screen 
+        name="MyPage"
+        component={MyPageScreen}
+        options={{ headerShown: false }}
+      />
+      <MypageStack.Screen 
+        name="MypageEdit"
+        component={MypageEditScreen}
+        options={({ navigation }) => ({
+          headerTitle: '마이페이지 수정',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.navigate('MyPage')}>
+              <Image source={require('./assets/left.png')} style={{ height:24, width: 24 }}/>
+            </TouchableOpacity>
+          ),
+          headerRight: () => (
+            <TouchableOpacity onPress={() => navigation.navigate('MyPage')}>
+              <Text style ={{marginRight:20, color : colors.Green900 , ...fonts.Body2}}>완료</Text>
+            </TouchableOpacity>
+          ),
+          
+        })}
+      />
+    </MypageStack.Navigator>
+  );
+};
 
 const MainTabNavigator = () => {
   return (
@@ -66,7 +100,7 @@ const MainTabNavigator = () => {
       />
       <Tab.Screen 
         name="MyPage" 
-        component={MyPageScreen}
+        component={MypageStackScreen}
         options={{
           headerShown: false,
           tabBarLabel: '마이페이지',
@@ -118,6 +152,7 @@ export default function App() {
         <Stack.Screen name="PreferPlace" component={PerferPlaceScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MainTab" component={MainTabNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="SearchStack" component={SearchStackNavigator} options={{ headerShown: false }} />
+        <Stack.Screen name="Welcome" component={WelcomeScreen} options={{headerShown: false}}/>
         <Stack.Screen name="KeywardStack" component={KeywardStackNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="MypageEdit" component={MypageEditScreen} options={{ headerShown:true}}/>
         <Stack.Screen name="Setting" component={SettingScreen} options={({ navigation }) => ({
