@@ -49,7 +49,6 @@ const MainScreen = ({ navigation }) => {
                         <Text style={styles.sectionTitle_sec_color}>#홍대 </Text>
                         <Text style={styles.sectionTitle_sec}>로가자! </Text>
                     </View>
-                    <Text style={styles.rightText}>더 보기</Text>
                     <Image source={require('../assets/right.png')} style={styles.rightIcon} />
                 </TouchableOpacity>
 
@@ -105,7 +104,6 @@ const MainScreen = ({ navigation }) => {
                     <View style={styles.sectionTitle_sec_view}>
                         <Text style={styles.sectionTitle_sec}>뉴스레터 </Text>
                     </View>
-                    <Text style={styles.rightText}>더 보기</Text>
                     <Image source={require('../assets/right.png')} style={styles.rightIcon} />
                 </TouchableOpacity>
 
@@ -141,7 +139,6 @@ const MainScreen = ({ navigation }) => {
                         <Text style={styles.sectionTitle_sec_color}>#화려한 </Text>
                         <Text style={styles.sectionTitle_sec}>소품샵 </Text>
                     </View>
-                    <Text style={styles.rightText}>더 보기</Text>
                     <Image source={require('../assets/right.png')} style={styles.rightIcon} />
                 </TouchableOpacity>
 
@@ -170,7 +167,6 @@ const MainScreen = ({ navigation }) => {
                         <Text style={styles.sectionTitle_sec_color}>#아기자기한 </Text>
                         <Text style={styles.sectionTitle_sec}>소품샵 </Text>
                     </View>
-                    <Text style={styles.rightText}>더 보기</Text>
                     <Image source={require('../assets/right.png')} style={styles.rightIcon} />
                 </TouchableOpacity>
 
@@ -263,7 +259,7 @@ const styles = StyleSheet.create({
         color: colors.Green900,
     },
     sectionTitle_sec_view: {
-        width: '80%',
+        width: '90%',
         flexDirection: 'row',
         marginLeft: 5,
     },
