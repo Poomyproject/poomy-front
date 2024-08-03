@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextInput, FlatList, Text, View, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
 import { stores, searchRankings } from './storesData';
+import Toast from 'react-native-toast-message';
 import colors from '../config/colors';
 
 const SearchScreen = () => {
@@ -23,6 +24,14 @@ const SearchScreen = () => {
         setIsSearchResultsVisible(true);
     };
 
+    //필터 info 토스트
+    const showToast = () => {
+        Toast.show({
+          type: 'success',
+          text1: 'POOMY가 소품샵에 직접 방문하여 선정한 키워드들이에요',
+        });
+      };
+
     return (
         <View style={styles.container}>
             <View style={styles.searchContainer}>
@@ -43,7 +52,11 @@ const SearchScreen = () => {
             {!isSearchResultsVisible && (
                 <>
                     <View style={styles.rightIconContainer}>
-                        <Text style={styles.sectionTitle}>추천 키워드</Text>
+                        <Text style={styles.poomyTitle}>POOMY</Text>
+                        <Text style={styles.sectionTitle}>의 추천 키워드</Text>
+                        <TouchableOpacity onPress={showToast}>
+                            <Image source={require('../assets/alert-circle.png')} style={styles.infoIcon}/>
+                        </TouchableOpacity>
                     </View>
                     <View horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
                         <TouchableOpacity>
@@ -121,6 +134,10 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: colors.Ivory100,
     },
+    searchImg: {
+        width: 30,
+        height: 30,
+      },
     leftarrow: {
         height: 30,
         width: 30,
@@ -175,7 +192,7 @@ const styles = StyleSheet.create({
     separator: {
         borderBottomWidth: 1, // 선의 두께
         borderColor: colors.Gray100, // 선의 색상
-        opacity: 0.5,
+        opacity: 0.7,
         marginHorizontal: 20,
     },
 
@@ -184,7 +201,7 @@ const styles = StyleSheet.create({
         padding: 5, // 텍스트 주위의 여백
         paddingHorizontal: 12,
         borderWidth: 1, // 테두리 두께
-        borderColor: colors.Gray500, // 테두리 색상
+        borderColor: colors.Green500, // 테두리 색상
         color: colors.Gray700,
         borderRadius: 13, // 테두리 모서리 둥글게 하기
         textAlign: 'center', // 텍스트 가운데 정렬 (필요시)
@@ -207,11 +224,15 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         marginLeft: '3%',
     },
+    poomyTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: colors.Green900,
+    },
     sectionTitle: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: 'bold',
         color: colors.Gray900,
-        width: '80%',
     },
     storeImg: {
         width: 95,
@@ -239,11 +260,16 @@ const styles = StyleSheet.create({
         marginTop: '2%',
     },
     storeName: {
-        marginTop: '10%',
+        marginTop: '11%',
         fontSize: 16,
-        // fontWeight: 'bold',
+        fontWeight: 'bold',
 
-    }
+    },
+    infoIcon:{
+        width:20,
+        height:20,
+        marginLeft:6,
+    },
 });
 
 export default SearchScreen;
