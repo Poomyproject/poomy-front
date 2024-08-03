@@ -3,202 +3,199 @@ import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView
 import colors from '../config/colors';
 
 const { width, height } = Dimensions.get('window');
-const logoSize = width * 0.3; // 화면 너비의 40%를 로고 크기로 설정
 
 const MainScreen = ({ navigation }) => {
     return (
-        <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContainer}>
-            <Image source={require('../assets/main_logo.png')} style={styles.logo} />
-            <TouchableOpacity
-                style={styles.searchContainer}
-                onPress={() => navigation.navigate('SearchStack', { screen: 'Search' })}>
-                <Text style={styles.searchText}>내가찾는 소품샵 이름을 검색해보세요</Text>
-                <Image source={require('../assets/search.png')} style={styles.searchIcon} />
-            </TouchableOpacity>
+        <View style={{backgroundColor:'white', marginTop:10,}}>
+            <Image source={require('../assets/MainLogo.png')} style={styles.logo} />
+            <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContainer}>
+                <TouchableOpacity
+                    style={styles.searchContainer}
+                    onPress={() => navigation.navigate('SearchStack', { screen: 'Search' })}>
+                    <Text style={styles.searchText}>내가찾는 소품샵 이름을 검색해보세요</Text>
+                    <Image source={require('../assets/search.png')} style={styles.searchIcon} />
+                </TouchableOpacity>
 
-            <View style={styles.rightIconContainer}>
-                <Text style={styles.sectionTitle}>분위기 추천</Text>
-            </View>
+                <View style={styles.rightIconContainer}>
+                    <Text style={styles.sectionTitle}>분위기 추천</Text>
+                </View>
 
-            <ScrollView horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
-                <View style={{ alignItems: 'center', marginLeft: 25 }}>
-                    <Image source={require('../assets/Rectangle1.png')} />
-                    <Text style={styles.placeText}>아기자기한</Text>
+                <ScrollView horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
+                    <View style={{ alignItems: 'center', marginLeft: 25 }}>
+                        <Image source={require('../assets/Rectangle1.png')} />
+                        <Text style={styles.placeText}>아기자기한</Text>
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/Rectangle1.png')} />
+                        <Text style={styles.placeText}>모던</Text>
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/Rectangle1.png')} />
+                        <Text style={styles.placeText}>빈티지</Text>
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/Rectangle1.png')} />
+                        <Text style={styles.placeText}>럭셔리</Text>
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/Rectangle1.png')} />
+                        <Text style={styles.placeText}>테마별</Text>
+                    </View>
+                </ScrollView>
+
+                <TouchableOpacity style={styles.rightIconContainer}>
+                    <View style={styles.sectionTitle_sec_view}>
+                        <Text style={styles.sectionTitle_sec}>오늘은 크리스마스, </Text>
+                        <Text style={styles.sectionTitle_sec_color}>#홍대 </Text>
+                        <Text style={styles.sectionTitle_sec}>로가자! </Text>
+                    </View>
+                    <Text style={styles.rightText}>더 보기</Text>
+                    <Image source={require('../assets/right.png')} style={styles.rightIcon} />
+                </TouchableOpacity>
+
+                <ScrollView horizontal={true} style={styles.placeContainer2} showsHorizontalScrollIndicator={false}>
+                    <View style={{ alignItems: 'center', marginLeft: 25 }}>
+                        <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
+                    </View>
+                </ScrollView>
+
+                <View style={styles.LocationRcmd}>
+                    <Text style={styles.sectionTitle}>지역별 추천</Text>
                 </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/Rectangle1.png')} />
-                    <Text style={styles.placeText}>모던</Text>
+
+                <ScrollView horizontal={true} style={styles.placeContainer3} showsHorizontalScrollIndicator={false}>
+                    <View style={{ marginLeft: 25 }} />
+                    <TouchableOpacity
+                    onPress={() => navigation.navigate('KeywardStack', { screen: 'Keyward' })}>
+                        <Text style={styles.keword_text}>홍대</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={styles.keword_text}>이태원</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={styles.keword_text}>신사</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={styles.keword_text}>송리단길</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={styles.keword_text}>북촌 한옥마을</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text style={styles.keword_text}>혜화</Text>
+                    </TouchableOpacity>
+                </ScrollView>
+
+                <TouchableOpacity style={styles.rightIconContainer}>
+                    <View style={styles.sectionTitle_sec_view}>
+                        <Text style={styles.sectionTitle_sec}>뉴스레터 </Text>
+                    </View>
+                    <Text style={styles.rightText}>더 보기</Text>
+                    <Image source={require('../assets/right.png')} style={styles.rightIcon} />
+                </TouchableOpacity>
+
+                <View style={{ flexDirection: 'row' }}>
+                    <Image source={require('../assets/Rectangle1.png')} style={styles.newletter} />
+                    <View style={{ marginLeft: 15 }}>
+                        <Text style={styles.newletterMainText}>우리들의 PICK</Text>
+                        <Text style={styles.newletterDetailText}>이거부터저거까지 다 만나보세 다 만나보세요. 이게 강남 소품샵이야 룰루루루루루루루루루루</Text>
+                    </View>
                 </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/Rectangle1.png')} />
-                    <Text style={styles.placeText}>빈티지</Text>
+                <View style={{ flexDirection: 'row' }}>
+                    <Image source={require('../assets/Rectangle1.png')} style={styles.newletter} />
+                    <View style={{ marginLeft: 15 }}>
+                        <Text style={styles.newletterMainText}>우리들의 PICK</Text>
+                        <Text style={styles.newletterDetailText}>이거부터저거까지 다 만나보세 다 만나보세요. 이게 강남 소품샵이야 룰루루루루루루루루루루</Text>
+                    </View>
                 </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/Rectangle1.png')} />
-                    <Text style={styles.placeText}>럭셔리</Text>
+                <View style={{ flexDirection: 'row' }}>
+                    <Image source={require('../assets/Rectangle1.png')} style={styles.newletter} />
+                    <View style={{ marginLeft: 15 }}>
+                        <Text style={styles.newletterMainText}>우리들의 PICK</Text>
+                        <Text style={styles.newletterDetailText}>이거부터저거까지 다 만나보세 다 만나보세요. 이게 강남 소품샵이야 룰루루루루루루루루루루</Text>
+                    </View>
                 </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/Rectangle1.png')} />
-                    <Text style={styles.placeText}>테마별</Text>
-                </View>
+
+
+
+
+                <View style={{ marginTop: 17 }} />
+                <TouchableOpacity style={styles.rightIconContainer}>
+                    <View style={styles.sectionTitle_sec_view}>
+                        <Text style={styles.sectionTitle_sec}>다꾸템 건질 </Text>
+                        <Text style={styles.sectionTitle_sec_color}>#화려한 </Text>
+                        <Text style={styles.sectionTitle_sec}>소품샵 </Text>
+                    </View>
+                    <Text style={styles.rightText}>더 보기</Text>
+                    <Image source={require('../assets/right.png')} style={styles.rightIcon} />
+                </TouchableOpacity>
+
+                <ScrollView horizontal={true} style={styles.placeContainer4} showsHorizontalScrollIndicator={false}>
+                    <View style={{ alignItems: 'center', marginLeft: 30 }}>
+                        <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                    </View>
+                </ScrollView>
+
+
+                <TouchableOpacity style={styles.rightIconContainer}>
+                    <View style={styles.sectionTitle_sec_view}>
+                        <Text style={styles.sectionTitle_sec}>피규어 건질 </Text>
+                        <Text style={styles.sectionTitle_sec_color}>#아기자기한 </Text>
+                        <Text style={styles.sectionTitle_sec}>소품샵 </Text>
+                    </View>
+                    <Text style={styles.rightText}>더 보기</Text>
+                    <Image source={require('../assets/right.png')} style={styles.rightIcon} />
+                </TouchableOpacity>
+
+                <ScrollView horizontal={true} style={styles.placeContainer4} showsHorizontalScrollIndicator={false}>
+                    <View style={{ alignItems: 'center', marginLeft: 30 }}>
+                        <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
+                        <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                    </View>
+                </ScrollView>
+
+
+                <View style={{ padding: '20%', }} />
             </ScrollView>
-
-            <TouchableOpacity style={styles.rightIconContainer}>
-                <View style={styles.sectionTitle_sec_view}>
-                    <Text style={styles.sectionTitle_sec}>오늘은 크리스마스, </Text>
-                    <Text style={styles.sectionTitle_sec_color}>#홍대 </Text>
-                    <Text style={styles.sectionTitle_sec}>로가자! </Text>
-                </View>
-                <Text style={styles.rightText}>더 보기</Text>
-                <Image source={require('../assets/right.png')} style={styles.rightIcon} />
-            </TouchableOpacity>
-
-            <ScrollView horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
-                <View style={{ alignItems: 'center', marginLeft: 25 }}>
-                    <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
-                </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
-                </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
-                </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
-                </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
-                </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
-                </View>
-            </ScrollView>
-
-            <TouchableOpacity style={styles.rightIconContainer}>
-                <Text style={styles.sectionTitle}>지역별 추천</Text>
-                <Text style={styles.rightText}>더 보기</Text>
-                <Image source={require('../assets/right.png')} style={styles.rightIcon} />
-            </TouchableOpacity>
-
-            <ScrollView horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
-                <View style={{ marginLeft: 25 }} />
-                <TouchableOpacity>
-                    <Text style={styles.keword_text}>홍대</Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Text style={styles.keword_text}>이태원</Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Text style={styles.keword_text}>신사</Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Text style={styles.keword_text}>영등포</Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Text style={styles.keword_text}>북촌 한옥마을</Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Text style={styles.keword_text}>북촌 한옥마을</Text>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Text style={styles.keword_text}>북촌 한옥마을</Text>
-                </TouchableOpacity>
-            </ScrollView>
-
-            <TouchableOpacity style={styles.rightIconContainer}>
-                <View style={styles.sectionTitle_sec_view}>
-                    <Text style={styles.sectionTitle_sec}>뉴스레터 </Text>
-                </View>
-                <Text style={styles.rightText}>더 보기</Text>
-                <Image source={require('../assets/right.png')} style={styles.rightIcon} />
-            </TouchableOpacity>
-
-            <View style={{ flexDirection: 'row' }}>
-                <Image source={require('../assets/Rectangle1.png')} style={styles.newletter} />
-                <View style={{ marginLeft: 15 }}>
-                    <Text style={styles.newletterMainText}>우리들의 PICK</Text>
-                    <Text style={styles.newletterDetailText}>이거부터저거까지 다 만나보세 다 만나보세요. 이게 강남 소품샵이야 룰루루루루루루루루루루</Text>
-                </View>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-                <Image source={require('../assets/Rectangle1.png')} style={styles.newletter} />
-                <View style={{ marginLeft: 15 }}>
-                    <Text style={styles.newletterMainText}>우리들의 PICK</Text>
-                    <Text style={styles.newletterDetailText}>이거부터저거까지 다 만나보세 다 만나보세요. 이게 강남 소품샵이야 룰루루루루루루루루루루</Text>
-                </View>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-                <Image source={require('../assets/Rectangle1.png')} style={styles.newletter} />
-                <View style={{ marginLeft: 15 }}>
-                    <Text style={styles.newletterMainText}>우리들의 PICK</Text>
-                    <Text style={styles.newletterDetailText}>이거부터저거까지 다 만나보세 다 만나보세요. 이게 강남 소품샵이야 룰루루루루루루루루루루</Text>
-                </View>
-            </View>
-
-
-
-
-            <View style={{ marginTop: 17 }} />
-            <TouchableOpacity style={styles.rightIconContainer}>
-                <View style={styles.sectionTitle_sec_view}>
-                    <Text style={styles.sectionTitle_sec}>다꾸템 건질 </Text>
-                    <Text style={styles.sectionTitle_sec_color}>#화려한 </Text>
-                    <Text style={styles.sectionTitle_sec}>소품샵 </Text>
-                </View>
-                <Text style={styles.rightText}>더 보기</Text>
-                <Image source={require('../assets/right.png')} style={styles.rightIcon} />
-            </TouchableOpacity>
-
-            <ScrollView horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
-                <View style={{ alignItems: 'center', marginLeft: 30 }}>
-                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
-                </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
-                </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
-                </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
-                </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
-                </View>
-            </ScrollView>
-
-
-            <TouchableOpacity style={styles.rightIconContainer}>
-                <View style={styles.sectionTitle_sec_view}>
-                    <Text style={styles.sectionTitle_sec}>피규어 건질 </Text>
-                    <Text style={styles.sectionTitle_sec_color}>#아기자기한 </Text>
-                    <Text style={styles.sectionTitle_sec}>소품샵 </Text>
-                </View>
-                <Text style={styles.rightText}>더 보기</Text>
-                <Image source={require('../assets/right.png')} style={styles.rightIcon} />
-            </TouchableOpacity>
-
-            <ScrollView horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
-                <View style={{ alignItems: 'center', marginLeft: 30 }}>
-                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
-                </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
-                </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
-                </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
-                </View>
-                <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                    <Image source={require('../assets/shop.png')} style={styles.shopImage} />
-                </View>
-            </ScrollView>
-
-
-            <View style={{ padding: '5%', }} />
-        </ScrollView>
+        </View>
     );
 };
 
@@ -211,12 +208,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     logo: {
-        width: logoSize,
-        height: logoSize,
+        width: '100%',
+        height: '9%',
         resizeMode: 'contain',
         marginTop: height * 0.05,
     },
-    
+
     searchContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -238,7 +235,13 @@ const styles = StyleSheet.create({
     },
     rightIconContainer: {
         flexDirection: 'row',
-        marginTop: 40,
+        marginTop: 45,
+        marginHorizontal: 20,
+        alignSelf: 'flex-start'
+    },
+    LocationRcmd: {
+        flexDirection: 'row',
+        marginTop: 35,
         marginHorizontal: 20,
         alignSelf: 'flex-start'
     },
@@ -294,12 +297,31 @@ const styles = StyleSheet.create({
         color: colors.Gray500,
         lineHeight: 20, // 줄 간격을 조절하여 텍스트가 읽기 쉽게 함
         textAlign: 'left',
-        width:260
+        width: 260
     },
     placeContainer: {
         flexDirection: 'row',
         alignSelf: 'flex-start',
         marginTop: 30,
+        height: '120%'
+    },
+    placeContainer2: {
+        flexDirection: 'row',
+        alignSelf: 'flex-start',
+        marginTop: 30,
+        height: '280%'
+    },
+    placeContainer3: {
+        flexDirection: 'row',
+        alignSelf: 'flex-start',
+        marginTop: 30,
+        height: '55%'
+    },
+    placeContainer4: {
+        flexDirection: 'row',
+        alignSelf: 'flex-start',
+        marginTop: 30,
+        height: '270%'
     },
     placeText: {
         marginTop: 15,
@@ -336,8 +358,8 @@ const styles = StyleSheet.create({
         // fontWeight: 'bold',
     },
     shopImage: {
-        width: 130,
-        height: 180,
+        width: 150,
+        height: 200,
     },
     last_new_Image: {
         width: 140,
