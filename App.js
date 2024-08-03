@@ -24,12 +24,14 @@ import InquiryScreen from './screens/InquiryScreen';
 import TermsDetailScreen1 from './screens/TermsDetailScreen1';
 import TermsDetailScreen2 from './screens/TermsDetailScreen2';
 import TermsDetailScreen3 from './screens/TermsDetailScreen3';
+import KeywardRecmdScreen from './screens/KeywardRecmdScreen';
 
 
 // 스택 네비게이터와 탭 네비게이터를 위한 생성
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const SearchStack = createStackNavigator();
+const KeywardStack = createStackNavigator();
 
 const MainTabNavigator = () => {
   return (
@@ -89,6 +91,20 @@ const SearchStackNavigator = () => {
   );
 };
 
+// KeywardStackNavigator 설정
+const KeywardStackNavigator = () => {
+  return (
+    <KeywardStack.Navigator>
+      <KeywardStack.Screen name="Keward" 
+      component={KeywardRecmdScreen}
+      options={{ 
+        title: '키워드 추천', // 헤더 이름 지정
+        headerShown: true, // 헤더를 표시하도록 설정
+        }} />
+    </KeywardStack.Navigator>
+  );
+};
+
 export default function App() {
   return (
     <NavigationContainer>
@@ -102,6 +118,7 @@ export default function App() {
         <Stack.Screen name="PreferPlace" component={PerferPlaceScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MainTab" component={MainTabNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="SearchStack" component={SearchStackNavigator} options={{ headerShown: false }} />
+        <Stack.Screen name="KeywardStack" component={KeywardStackNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="MypageEdit" component={MypageEditScreen} options={{ headerShown:true}}/>
         <Stack.Screen name="Setting" component={SettingScreen} options={({ navigation }) => ({
           headerTitle: '환경설정',
