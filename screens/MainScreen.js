@@ -22,23 +22,23 @@ const MainScreen = ({ navigation }) => {
 
                 <ScrollView horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
                     <View style={{ alignItems: 'center', marginLeft: 25 }}>
-                        <Image source={require('../assets/Rectangle1.png')} />
+                        <Image source={require('../assets/Rectangle1.png')} style={styles.themeImg}/>
                         <Text style={styles.placeText}>아기자기한</Text>
                     </View>
-                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                        <Image source={require('../assets/Rectangle1.png')} />
+                    <View style={{ alignItems: 'center', marginLeft: 13 }}>
+                        <Image source={require('../assets/Rectangle1.png')} style={styles.themeImg}/>
                         <Text style={styles.placeText}>모던</Text>
                     </View>
-                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                        <Image source={require('../assets/Rectangle1.png')} />
+                    <View style={{ alignItems: 'center', marginLeft: 13 }}>
+                        <Image source={require('../assets/Rectangle1.png')} style={styles.themeImg}/>
                         <Text style={styles.placeText}>빈티지</Text>
                     </View>
-                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                        <Image source={require('../assets/Rectangle1.png')} />
+                    <View style={{ alignItems: 'center', marginLeft: 13 }}>
+                        <Image source={require('../assets/Rectangle1.png')} style={styles.themeImg}/>
                         <Text style={styles.placeText}>럭셔리</Text>
                     </View>
-                    <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                        <Image source={require('../assets/Rectangle1.png')} />
+                    <View style={{ alignItems: 'center', marginLeft: 13 }}>
+                        <Image source={require('../assets/Rectangle1.png')} style={styles.themeImg}/>
                         <Text style={styles.placeText}>테마별</Text>
                     </View>
                 </ScrollView>
@@ -109,28 +109,25 @@ const MainScreen = ({ navigation }) => {
 
                 <View style={{ flexDirection: 'row' }}>
                     <Image source={require('../assets/Rectangle1.png')} style={styles.newletter} />
-                    <View style={{ marginLeft: 15 }}>
+                    <View style={{ marginLeft: 10 }}>
                         <Text style={styles.newletterMainText}>우리들의 PICK</Text>
-                        <Text style={styles.newletterDetailText}>이거부터저거까지 다 만나보세 다 만나보세요. 이게 강남 소품샵이야 룰루루루루루루루루루루</Text>
+                        <Text style={styles.newletterDetailText}>이거부터저거까지 다 만나보세요. 이게 강남 소품샵이야 룰루루루루루루루루루루</Text>
                     </View>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
                     <Image source={require('../assets/Rectangle1.png')} style={styles.newletter} />
-                    <View style={{ marginLeft: 15 }}>
+                    <View style={{ marginLeft: 10 }}>
                         <Text style={styles.newletterMainText}>우리들의 PICK</Text>
-                        <Text style={styles.newletterDetailText}>이거부터저거까지 다 만나보세 다 만나보세요. 이게 강남 소품샵이야 룰루루루루루루루루루루</Text>
+                        <Text style={styles.newletterDetailText}>이거부터저거까지 다 만나보세요. 이게 강남 소품샵이야 룰루루루루루루루루루루</Text>
                     </View>
                 </View>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row',}}>
                     <Image source={require('../assets/Rectangle1.png')} style={styles.newletter} />
-                    <View style={{ marginLeft: 15 }}>
+                    <View style={{ marginLeft: 10 }}>
                         <Text style={styles.newletterMainText}>우리들의 PICK</Text>
-                        <Text style={styles.newletterDetailText}>이거부터저거까지 다 만나보세 다 만나보세요. 이게 강남 소품샵이야 룰루루루루루루루루루루</Text>
+                        <Text style={styles.newletterDetailText}>이거부터저거까지 다 만나보세요. 이게 강남 소품샵이야 룰루루루루루루루루루루</Text>
                     </View>
                 </View>
-
-
-
 
                 <View style={{ marginTop: 17 }} />
                 <TouchableOpacity style={styles.rightIconContainer}>
@@ -280,6 +277,7 @@ const styles = StyleSheet.create({
         width: 85,
         height: 85,
         marginTop: '7%',
+        marginLeft:'2%'
     },
     newletterMainText: {
         marginTop: '15%',
@@ -293,7 +291,7 @@ const styles = StyleSheet.create({
         color: colors.Gray500,
         lineHeight: 20, // 줄 간격을 조절하여 텍스트가 읽기 쉽게 함
         textAlign: 'left',
-        width: 260
+        width: 260,
     },
     placeContainer: {
         flexDirection: 'row',
@@ -320,6 +318,7 @@ const styles = StyleSheet.create({
         height: '270%'
     },
     placeText: {
+        fontSize:13,
         marginTop: 15,
         color: colors.Gray700,
     },
@@ -360,6 +359,10 @@ const styles = StyleSheet.create({
     last_new_Image: {
         width: 140,
         height: 140,
+    },
+    themeImg:{
+        // width:55,
+        // height:55,
     }
 });
 
