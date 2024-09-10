@@ -6,7 +6,6 @@ const ApiClient = axios.create({
   baseURL: 'http://localhost:8080', // API base URL
   timeout: 3000, // 요청 제한 시간 설정 (밀리초)
   headers: {
-   //'Content-Type': 'application/json', // JSON 전송
   },
 });
 
@@ -15,8 +14,7 @@ ApiClient.interceptors.request.use(
     try {
       const token = await AsyncStorage.getItem('accessToken'); // AsyncStorage에서 JWT 토큰 가져오기
       if (token) {
-        console.log('Access Token:', token); // 토큰이 문자열인지 확인
-        // Bearer <token> 형식으로 헤더에 토큰 추가
+        //console.log('Access Token:', token); 
         config.headers.accessToken = `Bearer ${token}`; 
       } else {
         console.log('No access token found');
@@ -26,9 +24,9 @@ ApiClient.interceptors.request.use(
       delete config.headers['Accept'];
 
       // 로그로 요청 데이터와 헤더 출력
-      console.log('Request Config:', config);
-      console.log('Request Headers:', config.headers);
-      console.log('Request Data:', config.data);
+      // console.log('Request Config:', config);
+      // console.log('Request Headers:', config.headers);
+      // console.log('Request Data:', config.data);
 
     } catch (error) {
       console.error('Error fetching token from AsyncStorage:', error);
@@ -45,9 +43,9 @@ ApiClient.interceptors.request.use(
 ApiClient.interceptors.response.use(
   (response) => {
     // 로그로 응답 데이터 출력
-    console.log('Response:', response);
-    console.log('Response Headers:', response.headers);
-    console.log('Response Data:', response.data);
+    // console.log('Response:', response);
+    // console.log('Response Headers:', response.headers);
+    // console.log('Response Data:', response.data);
     return response;
   },
   (error) => {
@@ -62,11 +60,10 @@ ApiClient.interceptors.response.use(
 export const setAccessToken = async (token) => {
   try {
     await AsyncStorage.setItem('accessToken', token); // accessToken을 AsyncStorage에 저장
-    console.log('Access Token saved:', token);
+    //console.log('Access Token saved:', token);
   } catch (error) {
     console.error('Error saving access token:', error);
   }
 };
 
-// ApiClient 인스턴스 export
 export default ApiClient;

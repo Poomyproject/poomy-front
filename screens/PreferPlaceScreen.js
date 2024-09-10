@@ -2,17 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import colors from '../config/colors';
 import { fonts } from '../config/fonts'; 
-import ApiClient from './ApiClient'; // ApiClient 임포트
+import ApiClient from './ApiClient';
 
 const PreferPlaceScreen = ({ navigation }) => {
-  const [places, setPlaces] = useState([]); // 초기 상태를 빈 배열로 설정
-  const [selectedPlaces, setSelectedPlaces] = useState([]); // 선택된 장소 저장
+  const [places, setPlaces] = useState([]);
+  const [selectedPlaces, setSelectedPlaces] = useState([]); 
 
   useEffect(() => {
-    // 장소 데이터를 GET 요청으로 서버에서 받아옴
     const fetchPlaces = async () => {
       try {
-        const response = await ApiClient.get('/api/spots'); // ApiClient 사용
+        const response = await ApiClient.get('/api/spots');
         if (response.data && response.data.success) {
           setPlaces(response.data.response); // 응답에서 'response' 배열을 상태에 저장
         } else {
@@ -22,7 +21,6 @@ const PreferPlaceScreen = ({ navigation }) => {
         console.error('Error fetching places:', error);
       }
     };
-
     fetchPlaces(); // 컴포넌트 마운트 시 장소 데이터 가져오기
   }, []);
 
@@ -44,18 +42,17 @@ const PreferPlaceScreen = ({ navigation }) => {
         return;
       }
   
-      // 선택된 장소를 hotPlaceIds 배열로 서버에 전송
       const data = {
         spotIds: selectedPlaces
       };
   
-      console.log('Data being sent to server:', data);
+      //console.log('Data being sent to server:', data);
   
       const response = await ApiClient.post('/api/users/spots', data);
-      console.log('Response:', response.data);
+      //console.log('Response:', response.data);
       
       if (response.data.success) {
-        console.log('Places submitted successfully:', response.data);
+        //console.log('Places submitted successfully:', response.data);
         navigation.navigate('MainTab', { screen: 'Main' });
       } else {
         console.error('Error:', response.data);

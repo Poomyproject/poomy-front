@@ -4,10 +4,39 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../config/colors';
 import MypageEditScreen from './MypageEditScreen';
+import ApiClient from './ApiClient';
+import { useEffect,useState } from 'react';
 
 
 const MyPageScreen = () => {
   const navigation = useNavigation(); 
+
+  const [nickname, setNickname] = useState('');
+  const [googleEmail, setGoogleEmail] = useState('');
+  const [imgUrl, setImgUrl] = useState('');
+  const [moods, setMoods] = useState([]);
+  const [places, setPlaces] = useState([]);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await ApiClient.get('/api/users'); // API 요청
+        const data = response.data.response;
+
+        setNickname(data.nickname);
+        setGoogleEmail(data.googleEmail);
+        setImgUrl(data.imgUrl);
+        setMoods(data.moods);
+        setPlaces(data.spots);
+
+        console.log('User Info:', data); // 콘솔로 확인
+      } catch (error) {
+        console.error('Error fetching user info:', error);
+      }
+    };
+    fetchUserInfo(); // 데이터 가져오기 호출
+  }, []);
+
 
   const goToMypageEdit = () => {
     navigation.navigate('MypageEdit');
@@ -68,7 +97,7 @@ const MyPageScreen = () => {
       <View style={styles.content}>
         <View style={[styles.profile, { marginTop: -60 }]}>
           <Image source={require('../assets/profile.png')} style={styles.profileImage} />
-          <Text style={styles.profileText}>이름님,{'\n'}행운을 빌어요!</Text>
+          <Text style={styles.profileText}>{nickname}{'\n'}행운을 빌어요!</Text>
           <TouchableOpacity onPress={goToMypageEdit}>
       <Image source={require('../assets/edit.png')} style={styles.editImage} />
     </TouchableOpacity>
@@ -78,15 +107,26 @@ const MyPageScreen = () => {
             <Image source={require('../assets/mappin.png')} style={styles.preferIcon} />
             <Text style={styles.preferText}>관심장소</Text>
             <View style={styles.verticalLine}></View>
-            <Text style={styles.textWithBorder}>#이태원</Text>
-            <Text style={styles.textWithBorder}>#혜화/대학로</Text>
+            {places.length > 0 ? (
+            places.map((place) => (
+            <Text key={place.id} style={styles.textWithBorder}>#{place.name}</Text>
+            ))
+            ) : (
+            <Text>관심장소가 없습니다.</Text>
+            )}
           </View>
           <View style={[styles.preferBox, { marginTop: -30 }]}>
             <Image source={require('../assets/headphones.png')} style={styles.preferIcon} />
             <Text style={styles.preferText}>관심분위기</Text>
             <View style={styles.verticalLine}></View>
-            <Text style={styles.textWithBorder}>#온화한</Text>
-            <Text style={styles.textWithBorder}>#아기자기한</Text>
+            
+            {moods.length > 0 ? (
+            moods.map((mood) => (
+            <Text key={mood.id} style={styles.textWithBorder}>#{mood.name}</Text>
+            ))
+            ) : (
+            <Text>관심분위기가 없습니다.</Text>
+            )}
           </View>
         </View>
 
