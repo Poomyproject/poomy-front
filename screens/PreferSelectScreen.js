@@ -45,18 +45,17 @@ const PreferSelectScreen = ({ navigation }) => {
         return;
       }
   
-      // 선택된 장소를 hotPlaceIds 배열로 서버에 전송
       const data = {
         moodIds: selectedMoods
       };
   
-      console.log('Data being sent to server:', data);
+      //console.log('Data being sent to server:', data);
   
       const response = await ApiClient.post('/api/users/moods', data);
-      console.log('Response:', response.data);
+      //console.log('Response:', response.data);
       
       if (response.data.success) {
-        console.log('Places submitted successfully:', response.data);
+        //console.log('Places submitted successfully:', response.data);
         navigation.navigate('PreferPlace');
       } else {
         console.error('Error:', response.data);
