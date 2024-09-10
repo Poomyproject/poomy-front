@@ -1,7 +1,7 @@
 // App.js
 import 'react-native-gesture-handler';
 import React from 'react';
-import { Image, StyleSheet ,TouchableOpacity,Text } from 'react-native'; 
+import { Image, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -19,7 +19,7 @@ import SearchScreen from './screens/SearchScreen';
 import MypageEditScreen from './screens/MypageEditScreen';
 import SettingScreen from './screens/SettingScreen';
 import AnnounceScreen from './screens/AnnounceScreen';
-import { Toast, toastConfig } from './screens/Toast'; 
+import { Toast, toastConfig } from './screens/Toast';
 import InquiryScreen from './screens/InquiryScreen';
 import TermsDetailScreen1 from './screens/TermsDetailScreen1';
 import TermsDetailScreen2 from './screens/TermsDetailScreen2';
@@ -42,12 +42,12 @@ const MypageStack = createStackNavigator();
 const MypageStackScreen = () => {
   return (
     <MypageStack.Navigator>
-      <MypageStack.Screen 
+      <MypageStack.Screen
         name="MyPage"
         component={MyPageScreen}
         options={{ headerShown: false }}
       />
-      <MypageStack.Screen 
+      <MypageStack.Screen
         name="MypageEdit"
         component={MypageEditScreen}
         options={({ navigation }) => ({
@@ -72,19 +72,19 @@ const MypageStackScreen = () => {
 const MainTabNavigator = () => {
   return (
     <Tab.Navigator initialRouteName="Main">
-      <Tab.Screen 
-        name="Favorites" 
+      <Tab.Screen
+        name="Favorites"
         component={FavoritesScreen}
         options={{
           headerShown: false,
           tabBarLabel: '찜',
           tabBarIcon: ({ color, size }) => (
-            <Image 
+            <Image
               source={require('./assets/ic_todo.png')}
               style={{ width: size, height: size, tintColor: color }}
             />
           ),
-        }} 
+        }}
       />
       <Tab.Screen
         name="Main"
@@ -93,14 +93,13 @@ const MainTabNavigator = () => {
           headerShown: false,
           tabBarLabel: '홈',
           tabBarIcon: ({ color, size }) => (
-            <Image 
+            <Image
               source={require('./assets/ic_home.png')}
               style={{ width: size, height: size, tintColor: color }}
             />
           ),
         }}
       />
-      {/* 여기서 이름을 "MyPageTab"으로 변경 */}
       <Tab.Screen 
         name="MyPageTab" 
         component={MypageStackScreen}
@@ -108,12 +107,12 @@ const MainTabNavigator = () => {
           headerShown: false,
           tabBarLabel: '마이페이지',
           tabBarIcon: ({ color, size }) => (
-            <Image 
+            <Image
               source={require('./assets/ic_mypage.png')}
               style={{ width: size, height: size, tintColor: color }}
             />
           ),
-        }} 
+        }}
       />
     </Tab.Navigator>
   );
@@ -131,14 +130,18 @@ const SearchStackNavigator = () => {
 
 // KeywardStackNavigator 설정
 const KeywardStackNavigator = () => {
+
   return (
     <KeywardStack.Navigator>
-      <KeywardStack.Screen name="Keward" 
-      component={KeywardRecmdScreen}
-      options={{ 
-        title: '키워드 추천', // 헤더 이름 지정
-        headerShown: true, // 헤더를 표시하도록 설정
-        }} />
+      <KeywardStack.Screen name="키워드 추천"
+        component={KeywardRecmdScreen}
+        options={({ navigation }) => ({
+          headerLeft: () => (
+            <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
+              <Image source={require('./assets/left.png')} style={{ height: 24, width: 24 }} />
+            </TouchableOpacity>
+          ),
+        })} />
     </KeywardStack.Navigator>
   );
 };
@@ -146,7 +149,7 @@ const KeywardStackNavigator = () => {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="MainTab"> 
+      <Stack.Navigator initialRouteName="MainTab">
         <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
@@ -156,12 +159,13 @@ export default function App() {
         <Stack.Screen name="PreferPlace" component={PerferPlaceScreen} options={{ headerShown: false }} />
         <Stack.Screen name="MainTab" component={MainTabNavigator} options={{ headerShown: false }} />
         <Stack.Screen name="SearchStack" component={SearchStackNavigator} options={{ headerShown: false }} />
-        <Stack.Screen name="Welcome" component={WelcomeScreen} options={{headerShown: false}}/>
+        <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="KeywardStack" component={KeywardStackNavigator} options={{ headerShown: false }} />
-        <Stack.Screen name="MypageEdit" component={MypageEditScreen} options={{ headerShown:true}}/>
+        <Stack.Screen name="MypageEdit" component={MypageEditScreen} options={{ headerShown: true }} />
         <Stack.Screen name="Setting" component={SettingScreen} options={({ navigation }) => ({
           headerTitle: '환경설정',
           headerLeft: () => (
+
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Image source={require('./assets/left.png')} style={{ height: 24, width: 24 }} />
             </TouchableOpacity>
@@ -171,44 +175,45 @@ export default function App() {
           headerTitle: '문의사항',
           headerLeft: () => (
             <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
-              <Image source={require('./assets/left.png')} style = {{height:24, width : 24}}/>
+              <Image source={require('./assets/left.png')} style={{ height: 24, width: 24 }} />
             </TouchableOpacity>
-           ),
-          })}/>
+          ),
+        })} />
         <Stack.Screen
-        name="Announce"
-        component={AnnounceScreen}
-        options={({ navigation }) => ({
-          headerTitle: '공지사항',
-          headerLeft: () => (
-            <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
-              <Image source={require('./assets/left.png')} style = {{height:24, width : 24}}/>
-            </TouchableOpacity>
-           ),
+          name="Announce"
+          component={AnnounceScreen}
+          options={({ navigation }) => ({
+            headerTitle: '공지사항',
+            headerLeft: () => (
+              <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
+                <Image source={require('./assets/left.png')} style={{ height: 24, width: 24 }} />
+              </TouchableOpacity>
+            ),
           })}
         />
-        <Stack.Screen name= "TermsDetail1" component={TermsDetailScreen1} options={({ navigation }) => ({
+        <Stack.Screen name="TermsDetail1" component={TermsDetailScreen1} options={({ navigation }) => ({
           headerTitle: ' ',
           headerLeft: () => (
             <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
-              <Image source={require('./assets/left.png')} style = {{height:24, width : 24}}/>
+              <Image source={require('./assets/left.png')} style={{ height: 24, width: 24 }} />
             </TouchableOpacity>
-           ),
-          })}/>
-        <Stack.Screen name= "TermsDetail2" component={TermsDetailScreen2} options={({ navigation }) => ({
+          ),
+        })} />
+        <Stack.Screen name="TermsDetail2" component={TermsDetailScreen2} options={({ navigation }) => ({
           headerTitle: ' ',
           headerLeft: () => (
             <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
-              <Image source={require('./assets/left.png')} style = {{height:24, width : 24}}/>
+              <Image source={require('./assets/left.png')} style={{ height: 24, width: 24 }} />
             </TouchableOpacity>
-           ),
-          })}/>
-          <Stack.Screen name= "TermsDetail3" component={TermsDetailScreen3} options={({ navigation }) => ({
+          ),
+        })} />
+        <Stack.Screen name="TermsDetail3" component={TermsDetailScreen3} options={({ navigation }) => ({
           headerTitle: ' ',
           headerLeft: () => (
             <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
-              <Image source={require('./assets/left.png')} style = {{height:24, width : 24}}/>
+              <Image source={require('./assets/left.png')} style={{ height: 24, width: 24 }} />
             </TouchableOpacity>
+
            ),
           })}/>
           <Stack.Screen name= "ShopDetail" component={ShopDetailScreen} options={({ navigation }) => ({
@@ -219,6 +224,7 @@ export default function App() {
             </TouchableOpacity>
            ),
           })}/>
+
       </Stack.Navigator>
       <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
     </NavigationContainer>
@@ -232,7 +238,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconButton: {
-    marginLeft : 10 ,
+    marginLeft: 10,
   },
 
 });
