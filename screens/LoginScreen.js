@@ -25,7 +25,7 @@ const LoginScreen = ({ navigation }) => {
 
       const postResponse = await handlePostRequest(userInfo.idToken);
       if (postResponse) {
-        navigation.replace('Terms');
+        await checkUserInfoStatus(); // 사용자 정보 확인 후 적절한 화면으로 이동
       }
     } catch (error) {
       handleSignInError(error);
@@ -69,6 +69,30 @@ const LoginScreen = ({ navigation }) => {
       }
       Alert.alert('Error', '로그인 실패');
       return false;
+    }
+  };
+
+  // 사용자 정보 상태 확인
+  const checkUserInfoStatus = async () => {
+    try {
+      const response = await ApiClient.get('/api/users'); // '/api/users' API 호출
+      const { nickname, moods, spots } = response.data.response;
+
+      console.log(response.data.response);
+
+      // 조건에 따른 분기 처리
+      if (!nickname) {
+        navigation.replace('NamesetScreen'); // 닉네임 설정 화면으로 이동
+      } else if (!moods || moods.length === 0) {
+        navigation.replace('PreferSelectScreen'); // 선호 분위기 설정 화면으로 이동
+      } else if (!spots || spots.length === 0) {
+        navigation.replace('PreferPlaceScreen'); // 선호 장소 설정 화면으로 이동
+      } else {
+        navigation.replace('MainTab'); // 모든 정보가 있으면 메인 화면으로 이동
+      }
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+      Alert.alert('Error', '사용자 정보를 확인할 수 없습니다.');
     }
   };
 
