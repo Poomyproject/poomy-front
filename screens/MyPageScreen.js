@@ -31,7 +31,7 @@ const MyPageScreen = () => {
       await AsyncStorage.removeItem('accessToken');
 
       // 로그인 화면으로 이동
-      navigation.replace('Login');
+      navigation.replace('Splash');
     } catch (error) {
       console.error('로그아웃 오류:', error);
       Alert.alert('로그아웃 오류', '로그아웃 중 문제가 발생했습니다.');

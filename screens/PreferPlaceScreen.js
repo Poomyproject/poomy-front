@@ -1,27 +1,80 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import colors from '../config/colors';
 import { fonts } from '../config/fonts'; 
-
+import ApiClient from './ApiClient'; // ApiClient 임포트
 
 const PreferPlaceScreen = ({ navigation }) => {
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [places, setPlaces] = useState([]); // 초기 상태를 빈 배열로 설정
+  const [selectedPlaces, setSelectedPlaces] = useState([]); // 선택된 장소 저장
 
-  const tags = [
-    '홍대', '이태원', '신사', '송리단길', '영등포', '명동',
-    '종로', '북촌 한옥마을', '혜화', '강남', '신촌', '성수',
-  ];
+  useEffect(() => {
+    // 장소 데이터를 GET 요청으로 서버에서 받아옴
+    const fetchPlaces = async () => {
+      try {
+        const response = await ApiClient.get('/api/spots'); // ApiClient 사용
+        if (response.data && response.data.success) {
+          setPlaces(response.data.response); // 응답에서 'response' 배열을 상태에 저장
+        } else {
+          console.error('Failed to fetch places:', response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching places:', error);
+      }
+    };
 
-  const toggleTag = (tag) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags((prev) => prev.filter((t) => t !== tag));
-    } else if (selectedTags.length < 2) {
-      setSelectedTags((prev) => [...prev, tag]);
+    fetchPlaces(); // 컴포넌트 마운트 시 장소 데이터 가져오기
+  }, []);
+
+  // 장소를 선택하는 함수
+  const togglePlace = (placeId) => {
+    if (selectedPlaces.includes(placeId)) {
+      setSelectedPlaces((prev) => prev.filter((id) => id !== placeId));
+    } else if (selectedPlaces.length < 2) {
+      setSelectedPlaces((prev) => [...prev, placeId]);
     }
   };
 
-  const isButtonDisabled = selectedTags.length === 0;
+  const isButtonDisabled = selectedPlaces.length === 0;
 
+  const submitPlaces = async () => {
+    try {
+      if (selectedPlaces.length === 0) {
+        Alert.alert('Error', '선택된 장소가 없습니다.');
+        return;
+      }
+  
+      // 선택된 장소를 hotPlaceIds 배열로 서버에 전송
+      const data = {
+        spotIds: selectedPlaces
+      };
+  
+      console.log('Data being sent to server:', data);
+  
+      const response = await ApiClient.post('/api/users/spots', data);
+      console.log('Response:', response.data);
+      
+      if (response.data.success) {
+        console.log('Places submitted successfully:', response.data);
+        navigation.navigate('MainTab', { screen: 'Main' });
+      } else {
+        console.error('Error:', response.data);
+        Alert.alert('Error', 'Failed to submit selected places.');
+      }
+    } catch (error) {
+      console.error('Error during submission:', error);
+      if (error.response) {
+        console.error('Error response status:', error.response.status);
+        console.error('Error response data:', error.response.data);
+      }
+      Alert.alert('Error', 'An error occurred while submitting the places.');
+    }
+  };
+  
+
+
+ 
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -32,31 +85,36 @@ const PreferPlaceScreen = ({ navigation }) => {
       <View style={styles.content}>
         <Image source={require('../assets/progress_bar2.png')} style={styles.image} />
         <Text style={styles.text}>관심있는 장소를 선택해주세요.</Text>
-        <Text style={styles.details}>당신의 주요 활동지가 어디인가요? (최대 2개)</Text>
+        <Text style={styles.details}>당신의 주요 활동 장소는 어디인가요? (최대 2개)</Text>
         <View style={styles.tagsContainer}>
-          {tags.map((tag) => (
-            <TouchableOpacity
-              key={tag}
-              style={[
-                styles.tag,
-                selectedTags.includes(tag) ? styles.selectedTag : styles.unselectedTag,
-              ]}
-              onPress={() => toggleTag(tag)}
-            >
-              <Text
+          {places.length > 0 ? (
+            places.map((place) => (
+              <TouchableOpacity
+                key={place.id}
                 style={[
-                  styles.tagText,
-                  selectedTags.includes(tag) ? styles.selectedTagText : styles.unselectedTagText,
+                  styles.tag,
+                  selectedPlaces.includes(place.id) ? styles.selectedTag : styles.unselectedTag,
                 ]}
+                onPress={() => togglePlace(place.id)}
               >
-                #{tag}
-              </Text>
-            </TouchableOpacity>
-          ))}
+                <Image source={{ uri: place.imgUrl }} style={styles.placeImage} />
+                <Text
+                  style={[
+                    styles.tagText,
+                    selectedPlaces.includes(place.id) ? styles.selectedTagText : styles.unselectedTagText,
+                  ]}
+                >
+                  #{place.name}
+                </Text>
+              </TouchableOpacity>
+            ))
+          ) : (
+            <Text>Loading places...</Text> // 데이터가 없을 때 보여줄 내용
+          )}
         </View>
         <TouchableOpacity
           style={[styles.button, isButtonDisabled ? styles.buttonDisabled : styles.buttonEnabled]}
-          onPress={() => navigation.navigate('MainTab', { screen: 'Main' })}
+          onPress={submitPlaces} // 선택한 장소 전송
           disabled={isButtonDisabled}
         >
           <Text style={[styles.buttonText, isButtonDisabled ? styles.buttonTextInactive : styles.buttonTextActive]}>
@@ -100,36 +158,33 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     marginBottom: 10,
   },
-
   details: {
     ...fonts.Body2,
     color: colors.Gray700,
     marginBottom: 20,
   },
-
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     marginBottom: 20,
   },
-  
   tag: {
     borderRadius: 20,
     paddingVertical: 5,
     paddingHorizontal: 10,
     marginVertical: 5,
     marginHorizontal: 5,
-    borderWidth: 1, // 태그의 테두리 두께 설정
+    borderWidth: 1,
+    alignItems: 'center',
   },
-
   selectedTag: {
     backgroundColor: colors.Green900,
-    borderColor: colors.Green900, // 선택된 상태의 태그 테두리 색상
+    borderColor: colors.Green900,
   },
   unselectedTag: {
     backgroundColor: colors.Ivory100,
-    borderColor: colors.Gray100, // 비선택 상태의 태그 테두리 색상
+    borderColor: colors.Gray100,
   },
   selectedTagText: {
     color: colors.Ivory100,
@@ -139,12 +194,17 @@ const styles = StyleSheet.create({
     color: colors.Gray700,
     ...fonts.Body2,
   },
+  placeImage: {
+    width: 50,
+    height: 50,
+    marginBottom: 5,
+  },
   button: {
     width: 350,
     height: 48,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 8, // 둥근 모서리
+    borderRadius: 8,
     position: 'absolute',
     bottom: 94,
     alignSelf: 'center',
@@ -157,13 +217,13 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 15,
-    fontFamily: 'Pretendard-Medium'
+    fontFamily: 'Pretendard-Medium',
   },
   buttonTextActive: {
-    color: colors.Ivory100, // 활성화 상태의 버튼 텍스트 색상
+    color: colors.Ivory100,
   },
   buttonTextInactive: {
-    color: colors.Gray500, // 비활성화 상태의 버튼 텍스트 색상
+    color: colors.Gray500,
   },
 });
 
