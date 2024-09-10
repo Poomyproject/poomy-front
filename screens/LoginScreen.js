@@ -1,44 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
-import { API_BASE_URL, GOOGLE_IOS_CLIENT_ID } from '@env';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { GOOGLE_IOS_CLIENT_ID } from '@env';
 import colors from '../config/colors';
-import fonts from '../config/fonts'; 
-
-// Axios 인스턴스 생성
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-    'X-Requested-With': 'XMLHttpRequest',
-  },
-});
-
-// Axios 요청 인터셉터 설정
-api.interceptors.request.use(
-  async (config) => {
-    const token = await AsyncStorage.getItem('accessToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-console.log('API_BASE_URL:', API_BASE_URL);
-console.log('GOOGLE_IOS_CLIENT_ID:', GOOGLE_IOS_CLIENT_ID);
+import fonts from '../config/fonts';
+import ApiClient, { setAccessToken } from './ApiClient'; // ApiClient와 setAccessToken 가져오기
 
 const LoginScreen = ({ navigation }) => {
   const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     GoogleSignin.configure({
-      include_granted_scopes: false,
       iosClientId: GOOGLE_IOS_CLIENT_ID,
       offlineAccess: false,
     });
@@ -56,62 +28,47 @@ const LoginScreen = ({ navigation }) => {
         navigation.replace('Terms');
       }
     } catch (error) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log('User cancelled Google sign-in');
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log('Google sign-in is already in progress');
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        Alert.alert('Error', 'Google Play Services are not available');
-      } else {
-        console.log('Google sign-in error', error);
-        Alert.alert('Error', 'Failed to sign in with Google');
-      }
+      handleSignInError(error);
+    }
+  };
+
+  const handleSignInError = (error) => {
+    if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+      console.log('User cancelled Google sign-in');
+    } else if (error.code === statusCodes.IN_PROGRESS) {
+      console.log('Google sign-in is already in progress');
+    } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+      Alert.alert('Error', 'Google Play Services are not available');
+    } else {
+      console.log('Google sign-in error:', error.message);
+      Alert.alert('Error', 'Failed to sign in with Google');
     }
   };
 
   const handlePostRequest = async (idToken) => {
     try {
-      const url = `${API_BASE_URL}/api/users/login/google`; //로그인 api
-      console.log('Sending POST request to:', url);
-      console.log('Request body:', { idToken });
+      const url = `/api/users/login/google`;
+      const response = await ApiClient.post(url, { idToken });
+      let accessToken = response.headers['accesstoken'] || response.data.accessToken;
 
-      const response = await axios.post(url, { idToken }, {
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-        withCredentials: true,
-      });
-
-      console.log('Post response:', response.data);
-
-      // 응답 헤더에서 accessToken 추출
-      const accessToken = response.headers['accesstoken'];
-      console.log('Access Token:', accessToken);
+      if (accessToken && accessToken.startsWith('Bearer ')) {
+        accessToken = accessToken.substring(7);
+      }
 
       if (accessToken) {
-        await AsyncStorage.setItem('accessToken', accessToken);
-        await setAuthHeader(); // Update the auth header for future requests
+        await setAccessToken(accessToken); // accessToken 저장
         return true;
       } else {
-        console.error('Access Token is undefined');
-        Alert.alert('Error', 'Access Token is undefined');
-        return false;
+        throw new Error('Failed to receive access token from server');
       }
     } catch (error) {
-      console.error('Error posting data:', error.message);
-      console.error('Error details:', error.toJSON ? error.toJSON() : error);
+      if (error.response) {
+        console.error('Error response:', error.response.status, error.response.data);
+      } else {
+        console.error('Error posting data:', error.message);
+      }
       Alert.alert('Error', '로그인 실패');
       return false;
-    }
-  };
-
-  const setAuthHeader = async () => {
-    const token = await AsyncStorage.getItem('accessToken');
-    if (token) {
-      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    } else {
-      delete api.defaults.headers.common['Authorization'];
     }
   };
 
@@ -143,7 +100,6 @@ const styles = StyleSheet.create({
     height: 48,
     backgroundColor: colors.Ivory100,
     marginTop: 40,
-    alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
@@ -157,7 +113,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: colors.Gray900,
     fontSize: 15,
-    fontFamily : 'Pretendard-Medium',
+    fontFamily: 'Pretendard-Medium',
   },
 });
 
