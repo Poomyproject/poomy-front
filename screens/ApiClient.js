@@ -40,21 +40,33 @@ ApiClient.interceptors.request.use(
 
 
 // 응답 인터셉터 설정 (에러 처리)
-ApiClient.interceptors.response.use(
-  (response) => {
-    // 로그로 응답 데이터 출력
-    // console.log('Response:', response);
-    // console.log('Response Headers:', response.headers);
-    // console.log('Response Data:', response.data);
-    return response;
-  },
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      console.error('Unauthorized - 로그아웃 또는 재로그인 필요');
+export const setAxiosInterceptors = (navigation) => {
+  ApiClient.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    async (error) => {
+      const status = error.response ? error.response.status : null;
+
+      if (status === 401 || status === 500) {
+        console.error(`${status} Error - 로그아웃 또는 재로그인 필요`);
+
+        // 엑세스 토큰 삭제
+        await AsyncStorage.removeItem('accessToken');
+        console.log('Access Token removed. Redirecting to Splash.');
+
+        // 401 또는 500 에러 발생 시 Splash 화면으로 이동
+        if (navigation && typeof navigation.replace === 'function') {
+          navigation.navigate('Splash');  // 로그아웃 처리
+        } else {
+          console.error('Navigation object is not properly defined.');
+        }
+      }
+      return Promise.reject(error); // 오류가 발생하면 에러 반환
     }
-    return Promise.reject(error); // 오류가 발생하면 에러 반환
-  }
-);
+  );
+};
+
 
 // 토큰을 AsyncStorage에 저장하는 함수
 export const setAccessToken = async (token) => {
