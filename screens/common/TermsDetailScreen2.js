@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import colors from '../config/colors';
+import colors from '../../config/colors';
 
-const InquiryScreen = () => {
+const TermsDetailScreen2 = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>문의사항 화면</Text>
+      <Text style={styles.title}>약관 디테일2</Text>
     </View>
   );
 };
@@ -23,4 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default InquiryScreen;
+export default TermsDetailScreen2;

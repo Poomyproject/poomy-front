@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { GOOGLE_IOS_CLIENT_ID } from '@env';
-import colors from '../config/colors';
-import fonts from '../config/fonts';
+import colors from '../../config/colors';
+import fonts from '../../config/fonts';
 import ApiClient, { setAccessToken } from './ApiClient'; // ApiClient와 setAccessToken 가져오기
 
 const LoginScreen = ({ navigation }) => {
@@ -98,9 +98,9 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Image source={require('../assets/logo2.png')} style={styles.image} />
+      <Image source={require('../../assets/logo2.png')} style={styles.image} />
       <TouchableOpacity style={styles.button} onPress={onGoogleButtonPress}>
-        <Image source={require('../assets/icon_google.png')} style={styles.googleIcon} />
+        <Image source={require('../../assets/icon_google.png')} style={styles.googleIcon} />
         <Text style={styles.buttonText}>구글 계정으로 로그인</Text>
       </TouchableOpacity>
     </View>

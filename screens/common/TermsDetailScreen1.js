@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import colors from '../config/colors';
+import colors from '../../config/colors';
 
 const TermsDetailScreen1 = () => {
   return (

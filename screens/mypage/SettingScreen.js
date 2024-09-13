@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet , Switch, TouchableOpacity, Image  } from 'react-native';
-import colors from '../config/colors';
-import { fonts } from '../config/fonts'; 
+import colors from '../../config/colors';
+import { fonts } from '../../config/fonts'; 
 
 
 
@@ -46,21 +46,21 @@ const SettingScreen = () => {
       <View style={[{ marginTop: 0 }]}>
             <TouchableOpacity style={styles.buttonBox}>
               <Text style={styles.buttonText}>Poomy 이용약관</Text>
-              <Image source={require('../assets/right_black.png')} style={styles.buttonImage} />
+              <Image source={require('../../assets/right_black.png')} style={styles.buttonImage} />
             </TouchableOpacity>
             <View style={styles.line}></View>
           </View>  
           <View>
             <TouchableOpacity style={styles.buttonBox}>
               <Text style={styles.buttonText}>개인정보 수집 및 이용에 대한 동의</Text>
-              <Image source={require('../assets/right_black.png')} style={styles.buttonImage} />
+              <Image source={require('../../assets/right_black.png')} style={styles.buttonImage} />
             </TouchableOpacity>
             <View style={styles.line}></View>
           </View>  
           <View style={[{ marginTop: 0 }]}>
             <TouchableOpacity style={styles.buttonBox}>
               <Text style={styles.buttonText}>위치정보 이용동의 및 위치기반서비스 이용약관</Text>
-              <Image source={require('../assets/right_black.png')} style={styles.buttonImage} />
+              <Image source={require('../../assets/right_black.png')} style={styles.buttonImage} />
             </TouchableOpacity>
             <View style={styles.line}></View>
           </View> 

@@ -9,25 +9,25 @@ const ShopDetailScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Image source={require('../assets/photo.png')}></Image>
+            <Image source={require('../../assets/photo.png')}></Image>
             <View style={styles.header}>
         <Text style={styles.shopName}>선민이네 샵</Text>
         <TouchableOpacity>
-          <Image source={require('../assets/heart.png')} style={styles.icon}/>
+          <Image source={require('../../assets/heart.png')} style={styles.icon}/>
         </TouchableOpacity>
       </View>
       
       <View style={styles.infoContainer}>
         <View style={styles.infoRow}>
-            <Image source={require('../assets/clock.png')} style={styles.icon}/>
+            <Image source={require('../../assets/clock.png')} style={styles.icon}/>
           <Text style={styles.infoText}>09:00 - 15:00</Text>
         </View>
         <View style={styles.infoRow}>
-        <Image source={require('../assets/phone.png')} style={styles.icon}/>
+        <Image source={require('../../assets/phone.png')} style={styles.icon}/>
           <Text style={styles.infoText}>000-0000-0000</Text>
         </View>
         <View style={styles.infoRow}>
-        <Image source={require('../assets/map-pin_gray.png')} style={styles.icon}/>
+        <Image source={require('../../assets/map-pin_gray.png')} style={styles.icon}/>
           <Text style={styles.infoText}>서울시 용산구 | 이태원역 1번 출구 9분</Text>
         </View>
       </View>

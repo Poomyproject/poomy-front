@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import colors from '../config/colors';
-import { fonts } from '../config/fonts'; 
+import colors from '../../config/colors';
+import { fonts } from '../../config/fonts'; 
 import ApiClient from './ApiClient';
 
 const NamesetScreen = ({ navigation }) => {
@@ -30,8 +30,8 @@ const NamesetScreen = ({ navigation }) => {
   const isAllChecked = isLengthValid && isContentValid;
 
   const getIcon = (valid) => {
-    if (!isTouched) return require('../assets/check_gray.png');
-    return valid ? require('../assets/check_green.png') : require('../assets/check_red.png');
+    if (!isTouched) return require('../../assets/check_gray.png');
+    return valid ? require('../../assets/check_green.png') : require('../../assets/check_red.png');
   };
 
 
@@ -65,11 +65,11 @@ const submitNickname = async () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../assets/left.png')} style={styles.backIcon} />
+          <Image source={require('../../assets/left.png')} style={styles.backIcon} />
         </TouchableOpacity>
       </View>
       <View style={styles.content}>
-        <Image source={require('../assets/progress_bar.png')} style={styles.image} />
+        <Image source={require('../../assets/progress_bar.png')} style={styles.image} />
         <Text style={styles.text}>사용하실 이름을 {'\n'}입력해주세요.</Text>
         <View style={styles.inputContainer}>
           <TextInput
@@ -85,7 +85,7 @@ const submitNickname = async () => {
           />
           {name.length > 0 && (
             <TouchableOpacity onPress={clearInput} style={styles.clearButton}>
-              <Image source={require('../assets/x.png')} style={styles.clearIcon} />
+              <Image source={require('../../assets/x.png')} style={styles.clearIcon} />
             </TouchableOpacity>
           )}
         </View>
