@@ -20,7 +20,7 @@ const MyPageScreen = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await ApiClient.get('/api/users'); // API 요청
+        const response = await ApiClient.get('/api/users');
         const data = response.data.response;
 
         setNickname(data.nickname);
@@ -29,12 +29,12 @@ const MyPageScreen = () => {
         setMoods(data.moods);
         setPlaces(data.spots);
 
-        console.log('User Info:', data); // 콘솔로 확인
+        console.log('User Info:', data);
       } catch (error) {
         console.error('Error fetching user info:', error);
       }
     };
-    fetchUserInfo(); // 데이터 가져오기 호출
+    fetchUserInfo();
   }, []);
 
 
