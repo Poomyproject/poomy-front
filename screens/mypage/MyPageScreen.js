@@ -2,9 +2,9 @@ import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity , Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import colors from '../config/colors';
+import colors from '../../config/colors';
 import MypageEditScreen from './MypageEditScreen';
-import ApiClient from './ApiClient';
+import ApiClient from '../auth/ApiClient';
 import { useEffect,useState } from 'react';
 
 
@@ -96,15 +96,15 @@ const MyPageScreen = () => {
       </View>
       <View style={styles.content}>
         <View style={[styles.profile, { marginTop: -60 }]}>
-          <Image source={require('../assets/profile.png')} style={styles.profileImage} />
+          <Image source={require('../../assets/profile.png')} style={styles.profileImage} />
           <Text style={styles.profileText}>{nickname}{'\n'}행운을 빌어요!</Text>
           <TouchableOpacity onPress={goToMypageEdit}>
-      <Image source={require('../assets/edit.png')} style={styles.editImage} />
+      <Image source={require('../../assets/edit.png')} style={styles.editImage} />
     </TouchableOpacity>
         </View>
         <View style={styles.preferContainer}>
           <View style={styles.preferBox}>
-            <Image source={require('../assets/mappin.png')} style={styles.preferIcon} />
+            <Image source={require('../../assets/mappin.png')} style={styles.preferIcon} />
             <Text style={styles.preferText}>관심장소</Text>
             <View style={styles.verticalLine}></View>
             {places.length > 0 ? (
@@ -116,7 +116,7 @@ const MyPageScreen = () => {
             )}
           </View>
           <View style={[styles.preferBox, { marginTop: -30 }]}>
-            <Image source={require('../assets/headphones.png')} style={styles.preferIcon} />
+            <Image source={require('../../assets/headphones.png')} style={styles.preferIcon} />
             <Text style={styles.preferText}>관심분위기</Text>
             <View style={styles.verticalLine}></View>
             
@@ -134,28 +134,28 @@ const MyPageScreen = () => {
           <View style={[{ marginTop: -40 }]}>
             <TouchableOpacity style={styles.buttonBox} onPress={goToSetting}>
               <Text style={styles.buttonText}>환경설정</Text>
-              <Image source={require('../assets/right_black.png')} style={styles.buttonImage} />
+              <Image source={require('../../assets/right_black.png')} style={styles.buttonImage} />
             </TouchableOpacity>
             <View style={styles.line}></View>
           </View>
           <TouchableOpacity style={styles.buttonBox} onPress={goToAnnouce}>
             <Text style={styles.buttonText}>공지사항</Text>
-            <Image source={require('../assets/right_black.png')} style={styles.buttonImage} />
+            <Image source={require('../../assets/right_black.png')} style={styles.buttonImage} />
           </TouchableOpacity>
           <View style={styles.line}></View>
           <TouchableOpacity style={styles.buttonBox} onPress={goToInquiry}>
             <Text style={styles.buttonText}>문의사항</Text>
-            <Image source={require('../assets/right_black.png')} style={styles.buttonImage} />
+            <Image source={require('../../assets/right_black.png')} style={styles.buttonImage} />
           </TouchableOpacity>
           <View style={styles.line}></View>
           <TouchableOpacity style={[styles.buttonBox, { marginTop: 60 }]} onPress={confirmLogout}>
             <Text style={styles.buttonText}>로그아웃</Text>
-            <Image source={require('../assets/right_black.png')} style={styles.buttonImage}  />
+            <Image source={require('../../assets/right_black.png')} style={styles.buttonImage}  />
           </TouchableOpacity>
           <View style={styles.line}></View>
           <TouchableOpacity style={styles.buttonBox}>
             <Text style={styles.buttonText}>탈퇴</Text>
-            <Image source={require('../assets/right_black.png')} style={styles.buttonImage} />
+            <Image source={require('../../assets/right_black.png')} style={styles.buttonImage} />
           </TouchableOpacity>
           <View style={styles.line}></View>
         </View>

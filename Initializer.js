@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import ApiClient, { setAxiosInterceptors } from './screens/ApiClient'; // 인터셉터 설정 함수와 ApiClient 임포트
+import ApiClient, { setAxiosInterceptors } from './screens/auth/ApiClient'; // 인터셉터 설정 함수와 ApiClient 임포트
 
 const Initializer = () => {
   const navigation = useNavigation(); // navigation 객체 가져오기

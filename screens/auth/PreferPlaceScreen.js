@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
-import colors from '../config/colors';
-import { fonts } from '../config/fonts'; 
+import colors from '../../config/colors';
+import { fonts } from '../../config/fonts'; 
 import ApiClient from './ApiClient';
 
 const PreferPlaceScreen = ({ navigation }) => {
@@ -72,11 +72,11 @@ const PreferPlaceScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../assets/left.png')} style={styles.backIcon} />
+          <Image source={require('../../assets/left.png')} style={styles.backIcon} />
         </TouchableOpacity>
       </View>
       <View style={styles.content}>
-        <Image source={require('../assets/progress_bar2.png')} style={styles.image} />
+        <Image source={require('../../assets/progress_bar2.png')} style={styles.image} />
         <Text style={styles.text}>관심있는 장소를 선택해주세요.</Text>
         <Text style={styles.details}>당신의 주요 활동 장소는 어디인가요? (최대 2개)</Text>
         <View style={styles.tagsContainer}>
