@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import colors from '../config/colors';
+import colors from '../../config/colors';
 
-const TermsDetailScreen2 = () => {
+const AnnounceScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>약관 디테일2</Text>
+      <Text style={styles.title}>공지사항 화면</Text>
     </View>
   );
 };
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.Ivory100,
+    backgroundColor:colors.Ivory100,
   },
   title: {
     fontSize: 24,
@@ -23,4 +23,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TermsDetailScreen2;
+export default AnnounceScreen;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import colors from '../config/colors';
-import { fonts } from '../config/fonts'; 
+import colors from '../../config/colors';
+import { fonts } from '../../config/fonts'; 
 
 const TermsScreen = ({ navigation }) => {
   const [isChecked1, setIsChecked1] = useState(false);
@@ -48,7 +48,7 @@ const TermsScreen = ({ navigation }) => {
       </TouchableOpacity>
       <Text style={styles.checkBoxText}>(필수) Pommy(푸미) 이용약관</Text>
       <TouchableOpacity onPress={() => navigation.navigate('TermsDetail1')} style = {{marginLeft:'auto'}}>
-          <Image source={require('../assets/right_black.png')} style={styles.right} />
+          <Image source={require('../../assets/right_black.png')} style={styles.right} />
       </TouchableOpacity>
       </View>
 
@@ -58,7 +58,7 @@ const TermsScreen = ({ navigation }) => {
         <Text style={styles.checkBoxText}>(필수) Pommy(푸미) 개인정보 수집 및 이...</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('TermsDetail2')} style = {{marginLeft:'auto'}}>
-          <Image source={require('../assets/right_black.png')} style={styles.right} />
+          <Image source={require('../../assets/right_black.png')} style={styles.right} />
         </TouchableOpacity>
       </View>
 
@@ -68,7 +68,7 @@ const TermsScreen = ({ navigation }) => {
       </TouchableOpacity>
       <Text style={styles.checkBoxText}>(필수) 위치정보 이용동의 및 위치기반서비...</Text>
       <TouchableOpacity onPress={() => navigation.navigate('TermsDetail3')} style = {{marginLeft:'auto'}}>
-          <Image source={require('../assets/right_black.png')} style={styles.right} />
+          <Image source={require('../../assets/right_black.png')} style={styles.right} />
       </TouchableOpacity>
       </View>
 

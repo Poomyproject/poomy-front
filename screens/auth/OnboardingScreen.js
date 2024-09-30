@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Swiper from 'react-native-swiper';
-import colors from '../config/colors';
-import { fonts } from '../config/fonts'; 
+import colors from '../../config/colors';
+import { fonts } from '../../config/fonts'; 
 
 
 const OnboardingScreen = ({ navigation }) => {
@@ -27,26 +27,26 @@ const OnboardingScreen = ({ navigation }) => {
             반가워요!{'\n'}소품샵 찾아주는 앱{'\n'}
             <Text style={styles.highlight}>Pommy</Text>예요.
           </Text>
-          <Image source={require('../assets/onboarding1.png')} style={styles.image} />
+          <Image source={require('../../assets/onboarding1.png')} style={styles.image} />
         </View>
         <View style={styles.slide}>
           <Text style={[styles.text, styles.textPosition]}>
             <Text style={styles.highlight}>Pommy</Text>는{'\n'}여러분의 취향에 맞는 소품{'\n'}소품샵을 추천해줘요.
           </Text>
-          <Image source={require('../assets/onboarding2.png')} style={styles.image} />
+          <Image source={require('../../assets/onboarding2.png')} style={styles.image} />
         </View>
         <View style={styles.slide}>
           <Text style={[styles.text, styles.textPosition]}>
             생생한 소품샵 후기,{'\n'}
             <Text style={styles.highlight}>Pommy</Text>에서 찾아보세요.
           </Text>
-          <Image source={require('../assets/onboarding3.png')} style={styles.image} />
+          <Image source={require('../../assets/onboarding3.png')} style={styles.image} />
         </View>
         <View style={styles.slide}>
           <Text style={[styles.text, styles.textPosition]}>
             <Text style={styles.highlight}>Pommy</Text>와{'\n'} 내 마음에 쏙 드는 {'\n'} 소품샵을 찾으러 떠나볼까요?
           </Text>
-          <Image source={require('../assets/onboarding4.png')} style={styles.image} />
+          <Image source={require('../../assets/onboarding4.png')} style={styles.image} />
         </View>
       </Swiper>
       <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Login')}>
@@ -91,8 +91,8 @@ const styles = StyleSheet.create({
   },
 
   image: {
-  width: 390,
-  height: 380,
+  width: 300,
+  height: 300,
   position: 'absolute',
   marginTop: 42,
   },

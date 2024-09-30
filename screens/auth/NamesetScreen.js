@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import colors from '../config/colors';
-import { fonts } from '../config/fonts'; // fonts 임포트
-
+import colors from '../../config/colors';
+import { fonts } from '../../config/fonts'; 
+import ApiClient from './ApiClient';
 
 const NamesetScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -30,19 +30,46 @@ const NamesetScreen = ({ navigation }) => {
   const isAllChecked = isLengthValid && isContentValid;
 
   const getIcon = (valid) => {
-    if (!isTouched) return require('../assets/check_gray.png');
-    return valid ? require('../assets/check_green.png') : require('../assets/check_red.png');
+    if (!isTouched) return require('../../assets/check_gray.png');
+    return valid ? require('../../assets/check_green.png') : require('../../assets/check_red.png');
   };
+
+
+const submitNickname = async () => {
+  try {
+    const data = { nickname: name }; // 서버에 보낼 데이터 형식
+    console.log('Data being sent to server:', data); // 확인용 로그
+
+    // 서버로 POST 요청
+    const response = await ApiClient.post('/api/users/nickname', data);
+
+    // 서버 응답 확인
+    if (response.data.success) {
+      console.log('Nickname submitted successfully:', response.data);
+      navigation.navigate('PreferSelect'); // 성공 시 다음 화면으로 이동
+    } else {
+      console.error('Error:', response.data);
+      Alert.alert('Error', 'Failed to submit nickname');
+    }
+  } catch (error) {
+    console.error('Error during submission:', error);
+    if (error.response) {
+      console.error('Error response status:', error.response.status);
+      console.error('Error response data:', error.response.data);
+    }
+    Alert.alert('Error', 'An error occurred while submitting the nickname.');
+  }
+};
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={require('../assets/left.png')} style={styles.backIcon} />
+          <Image source={require('../../assets/left.png')} style={styles.backIcon} />
         </TouchableOpacity>
       </View>
       <View style={styles.content}>
-        <Image source={require('../assets/progress_bar.png')} style={styles.image} />
+        <Image source={require('../../assets/progress_bar.png')} style={styles.image} />
         <Text style={styles.text}>사용하실 이름을 {'\n'}입력해주세요.</Text>
         <View style={styles.inputContainer}>
           <TextInput
@@ -58,7 +85,7 @@ const NamesetScreen = ({ navigation }) => {
           />
           {name.length > 0 && (
             <TouchableOpacity onPress={clearInput} style={styles.clearButton}>
-              <Image source={require('../assets/x.png')} style={styles.clearIcon} />
+              <Image source={require('../../assets/x.png')} style={styles.clearIcon} />
             </TouchableOpacity>
           )}
         </View>
@@ -83,11 +110,14 @@ const NamesetScreen = ({ navigation }) => {
         <TouchableOpacity
           style={[styles.button, isAllChecked ? styles.buttonActive : styles.buttonInactive]}
           disabled={!isAllChecked}
-          onPress={() => navigation.navigate('PreferSelect')}
+          onPress={submitNickname} // 닉네임 제출
         >
-          <Text style={[styles.buttonText, isAllChecked ? styles.buttonTextActive : styles.buttonTextInactive]}>
-          다음</Text>
-        </TouchableOpacity>
+        <Text style={[styles.buttonText, isAllChecked ? styles.buttonTextActive : styles.buttonTextInactive]}>
+        다음
+        </Text>
+</TouchableOpacity>
+        
+        
       </View>
     </View>
   );

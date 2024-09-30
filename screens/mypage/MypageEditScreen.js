@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
-import colors from '../config/colors';
-import { fonts } from '../config/fonts';
+import colors from '../../config/colors';
+import { fonts } from '../../config/fonts';
 import Modal from 'react-native-modal';
 
 const MypageEditScreen = () => {
@@ -26,7 +26,7 @@ const MypageEditScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Image source={require('../assets/defualt.png')} style={styles.profileImage} />
+      <Image source={require('../../assets/defualt.png')} style={styles.profileImage} />
       <View style={styles.contentContainer}>
         <Text style={styles.textColor}>닉네임</Text>
         <TextInput
@@ -61,7 +61,7 @@ const MypageEditScreen = () => {
           <View style={styles.modalContent}>
           <View style={styles.textContainer}>
           <Text style={styles.text}>분위기</Text>
-          <Image source={require('../assets/close.png')} style={styles.image} />
+          <Image source={require('../../assets/close.png')} style={styles.image} />
           </View>
           <View style={styles.moodContainer}>
             {['코지', '럭셔리', '모던', '아기자기한', '빈티지', '테마별'].map((mood) => (

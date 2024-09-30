@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import colors from '../config/colors';
+import colors from '../../config/colors';
 
 const SplashScreen = ({ navigation }) => {
   useEffect(() => {
@@ -29,7 +29,7 @@ const SplashScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../assets/logo.png')}
+        source={require('../../assets/logo.png')}
         style={styles.image}
       />
     </View>
