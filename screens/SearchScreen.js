@@ -27,10 +27,12 @@ const SearchScreen = () => {
     //필터 info 토스트
     const showToast = () => {
         Toast.show({
-          type: 'success',
-          text1: 'POOMY가 소품샵에 직접 방문하여 선정한 키워드들이에요',
+            type: 'success',
+            text1: 'POOMY에서 직접 방문하여 선정한 매장의 분위기 키워드입니다',
+            position: 'center',  // 위치 설정: 'top', 'bottom', 'center' 가능
+            topOffset: 160,    // top에 대한 오프셋 값 (50px 아래에서 시작)
         });
-      };
+    };
 
     return (
         <View style={styles.container}>
@@ -55,7 +57,7 @@ const SearchScreen = () => {
                         <Text style={styles.poomyTitle}>POOMY</Text>
                         <Text style={styles.sectionTitle}>의 추천 키워드</Text>
                         <TouchableOpacity onPress={showToast}>
-                            <Image source={require('../assets/alert-circle.png')} style={styles.infoIcon}/>
+                            <Image source={require('../assets/alert-circle.png')} style={styles.infoIcon} />
                         </TouchableOpacity>
                     </View>
                     <View horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
@@ -101,8 +103,8 @@ const SearchScreen = () => {
                                         <Text>{item.address}</Text>
                                     </View>
                                 </View>
-                                <TouchableOpacity style={{marginTop:'13%'}}>
-                                    <Image source={require('../assets/heart.png')} style={styles.heartImg}/>
+                                <TouchableOpacity style={{ marginTop: '13%' }}>
+                                    <Image source={require('../assets/heart.png')} style={styles.heartImg} />
                                 </TouchableOpacity>
                             </View>
                         </>
@@ -137,7 +139,7 @@ const styles = StyleSheet.create({
     searchImg: {
         width: 30,
         height: 30,
-      },
+    },
     leftarrow: {
         height: 30,
         width: 30,
@@ -206,7 +208,7 @@ const styles = StyleSheet.create({
         borderRadius: 13, // 테두리 모서리 둥글게 하기
         textAlign: 'center', // 텍스트 가운데 정렬 (필요시)
         marginHorizontal: 5,
-        fontSize: '14%',
+        fontSize: 13,
         marginTop: '2%',
         // fontWeight: 'bold',
     },
@@ -265,10 +267,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
 
     },
-    infoIcon:{
-        width:20,
-        height:20,
-        marginLeft:6,
+    infoIcon: {
+        width: 20,
+        height: 20,
+        marginLeft: 5,
     },
 });
 
