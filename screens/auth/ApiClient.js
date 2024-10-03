@@ -48,7 +48,11 @@ export const setAxiosInterceptors = (navigation) => {
     async (error) => {
       const status = error.response ? error.response.status : null;
 
+      
       if (status === 401 || status === 500) {
+
+        console.log(error.config.url);
+
         console.error(`${status} Error - 로그아웃 또는 재로그인 필요`);
 
         // 엑세스 토큰 삭제

@@ -172,9 +172,15 @@ const MainScreen = ({ navigation }) => {
                         <Image source={{ uri: homeSpotShop.shopList[0]?.image }} style={styles.newsletterImage} />
                         <Text style={styles.placeText}>{homeSpotShop.shopList[0]?.mood}</Text>
                     </View> */}
-                    <View style={{ alignItems: 'center', marginLeft: 25 }}>
+                    <TouchableOpacity style={{ alignItems: 'center', marginLeft: 25 }}>
                         <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
-                    </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{ alignItems: 'center', marginLeft: 25 }}>
+                        <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{ alignItems: 'center', marginLeft: 25 }}>
+                        <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
+                    </TouchableOpacity>
                 </ScrollView>
 
                 <View style={styles.LocationRcmd}>
