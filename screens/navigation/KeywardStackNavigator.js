@@ -14,7 +14,7 @@ const KeywardStackNavigator = () => {
         options={({ navigation }) => ({
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image source={require('../../assets/left.png')} style={{ height: 24, width: 24 }} />
+              <Image source={require('../../assets/left.png')} style={{ height: 24, width: 24,marginLeft: 20 }} />
             </TouchableOpacity>
           ),
         })}

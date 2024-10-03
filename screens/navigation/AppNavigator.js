@@ -16,6 +16,8 @@ import TermsDetailScreen2 from '../common/TermsDetailScreen2';
 import TermsDetailScreen3 from '../common/TermsDetailScreen3';
 import ShopDetailScreen from '../shop/ShopDetailScreen';
 import MypageEditScreen from '../mypage/MypageEditScreen';
+
+import NewsLetterStackNavigator from './NewsLetterStackNavigator';
 import MainTabNavigator from './MainTabNavigator';
 import SearchStackNavigator from './SearchStackNavigator';
 import KeywardStackNavigator from './KeywardStackNavigator';
@@ -36,6 +38,8 @@ const AppNavigator = () => {
       <Stack.Screen name="SearchStack" component={SearchStackNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="KeywardStack" component={KeywardStackNavigator} options={{ headerShown: false }} />
+      <Stack.Screen name="NewsLetterStack" component={NewsLetterStackNavigator} options={{ headerShown: false }} />
+
       <Stack.Screen name="MypageEdit" component={MypageEditScreen} options={{ headerShown: true }} />
       <Stack.Screen name="Setting" component={SettingScreen} />
       <Stack.Screen name="Inquiry" component={InquiryScreen} />
