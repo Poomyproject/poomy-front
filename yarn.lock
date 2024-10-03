@@ -1668,6 +1668,16 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@mj-studio/js-util@1.1.14":
+  version "1.1.14"
+  resolved "https://registry.npmjs.org/@mj-studio/js-util/-/js-util-1.1.14.tgz"
+  integrity sha512-u9EIz0wfD8N+aHLHrcNkHhS2O0AJyd1kvX/24ykrHkmwlAhcZr1WjEpQGh8oVv2LJbdL3mx6OJ/EqHdgofhLZQ==
+
+"@mj-studio/js-util@1.1.3":
+  version "1.1.3"
+  resolved "https://registry.npmjs.org/@mj-studio/js-util/-/js-util-1.1.3.tgz"
+  integrity sha512-XZe1V3J1CJ9DbPY0GlPTOES7UdnWcoUe3kIjmUWMvwmunOb/kYuDWiswu5eogHhcPSlM3LpYQYU2HhMzf3N6tw==
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz"
@@ -1879,6 +1889,29 @@
   version "12.2.1"
   resolved "https://registry.npmjs.org/@react-native-google-signin/google-signin/-/google-signin-12.2.1.tgz"
   integrity sha512-qt2Cb+bN2NS8BBT06M3UbLVS1gaSYTenNh4uZtPNmyJC23xZAynLkuhvsC6gmeEnxcj0wLVUn1Es+LSHw0OhVQ==
+
+"@react-native-kakao/core@2.2.6":
+  version "2.2.6"
+  resolved "https://registry.npmjs.org/@react-native-kakao/core/-/core-2.2.6.tgz"
+  integrity sha512-5WGA6J9NMByHwTpIV/5Y5nokkFqYPAM0+YV1RdgHl87iPtDouU1KDMC9BrbpGKgmQXBHVLSdh0HphvsgkZ+hfg==
+  dependencies:
+    crypto-js "^4.2.0"
+    query-string "^9.0.0"
+    return-fetch "^0.4.5"
+
+"@react-native-kakao/share@^2.2.6":
+  version "2.2.6"
+  resolved "https://registry.npmjs.org/@react-native-kakao/share/-/share-2.2.6.tgz"
+  integrity sha512-WyQYCClq4g68+GUAkV4zP3AG6yBwz5fxn8jVDPvqRl6Ewnir1rvghfhdm1BdGd9ZUqHMiEPv4PUrdHf/wGPmdA==
+  dependencies:
+    "@mj-studio/js-util" "1.1.14"
+
+"@react-native-kakao/social@^2.2.6":
+  version "2.2.6"
+  resolved "https://registry.npmjs.org/@react-native-kakao/social/-/social-2.2.6.tgz"
+  integrity sha512-1DUvdbpWX4j1X9Up831snDsgpuQkDXLe/FULtOrcx78CzKP/hTtKg2GLGiVidnu3jGiBDrcS/wB9ZaW0PeyWkg==
+  dependencies:
+    "@mj-studio/js-util" "1.1.3"
 
 "@react-native/assets-registry@0.74.83":
   version "0.74.83"
@@ -3111,6 +3144,11 @@ crypt@~0.0.1, crypt@0.0.2:
   resolved "https://registry.npmjs.org/crypt/-/crypt-0.0.2.tgz"
   integrity sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==
 
+crypto-js@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.npmjs.org/crypto-js/-/crypto-js-4.2.0.tgz"
+  integrity sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==
+
 crypto-random-string@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/crypto-random-string/-/crypto-random-string-1.0.0.tgz"
@@ -3202,6 +3240,11 @@ decode-uri-component@^0.2.2:
   version "0.2.2"
   resolved "https://registry.npmjs.org/decode-uri-component/-/decode-uri-component-0.2.2.tgz"
   integrity sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==
+
+decode-uri-component@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.npmjs.org/decode-uri-component/-/decode-uri-component-0.4.1.tgz"
+  integrity sha512-+8VxcR21HhTy8nOt6jf20w0c9CADrw1O8d+VZ/YzzCt4bJ3uBjw+D1q2osAB8RnpwwaeYBxy0HyKQxD5JBMuuQ==
 
 deep-extend@^0.6.0:
   version "0.6.0"
@@ -3627,7 +3670,7 @@ expo-status-bar@~1.12.1:
   resolved "https://registry.npmjs.org/expo-status-bar/-/expo-status-bar-1.12.1.tgz"
   integrity sha512-/t3xdbS8KB0prj5KG5w7z+wZPFlPtkgs95BsmrP/E7Q0xHXTcDcQ6Cu2FkFuRM+PKTb17cJDnLkawyS5vDLxMA==
 
-expo@*, expo@>=50.0.0, expo@~51.0.8:
+expo@*, expo@>=47.0.0, expo@>=50.0.0, expo@~51.0.8:
   version "51.0.24"
   resolved "https://registry.npmjs.org/expo/-/expo-51.0.24.tgz"
   integrity sha512-HoOuNIWXzS6Gxifcb0N+qRt5K6iR9YitQaWIVNB8elyupvQdyI566IMgMBiO45NgpO5es0sfFNNBasxBHLkbUw==
@@ -3726,6 +3769,11 @@ filter-obj@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/filter-obj/-/filter-obj-1.1.0.tgz"
   integrity sha512-8rXg1ZnX7xzy2NGDVkBVaAy+lSlPNwad13BtgSlLuxfIslyt5Vg64U7tFcCt4WS1R0hvtnQybT/IyCkGZ3DpXQ==
+
+filter-obj@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.npmjs.org/filter-obj/-/filter-obj-5.1.0.tgz"
+  integrity sha512-qWeTREPoT7I0bifpPUXtxkZJ1XJzxWtfoWWkdVGqa+eCr3SHW/Ocp89o8vLvbUuQnadybJpjOKu4V+RwO6sGng==
 
 finalhandler@1.1.2:
   version "1.1.2"
@@ -5860,6 +5908,15 @@ query-string@^7.1.3:
     split-on-first "^1.0.0"
     strict-uri-encode "^2.0.0"
 
+query-string@^9.0.0:
+  version "9.1.0"
+  resolved "https://registry.npmjs.org/query-string/-/query-string-9.1.0.tgz"
+  integrity sha512-t6dqMECpCkqfyv2FfwVS1xcB6lgXW/0XZSaKdsCNGYkqMO76AFiJEg4vINzoDKcZa6MS7JX+OHIjwh06K5vczw==
+  dependencies:
+    decode-uri-component "^0.4.1"
+    filter-obj "^5.1.0"
+    split-on-first "^3.0.0"
+
 querystring@^0.2.1:
   version "0.2.1"
   resolved "https://registry.npmjs.org/querystring/-/querystring-0.2.1.tgz"
@@ -6247,6 +6304,11 @@ restore-cursor@^3.1.0:
     onetime "^5.1.0"
     signal-exit "^3.0.2"
 
+return-fetch@^0.4.5:
+  version "0.4.6"
+  resolved "https://registry.npmjs.org/return-fetch/-/return-fetch-0.4.6.tgz"
+  integrity sha512-uI0dmvEnVqX98/+s5VBRguLHofJE1Ot+Yi7DSGljc4pt2tkcfhfSXaom2W78IEnx8lYTjvBWfxh9BTHXF9MigA==
+
 reusify@^1.0.4:
   version "1.0.4"
   resolved "https://registry.npmjs.org/reusify/-/reusify-1.0.4.tgz"
@@ -6575,6 +6637,11 @@ split-on-first@^1.0.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/split-on-first/-/split-on-first-1.1.0.tgz"
   integrity sha512-43ZssAJaMusuKWL8sKUBQXHWOpq8d6CfN/u1p4gUzfJkM05C8rxTmYrkIPTXapZpORA6LkkzcUulJ8FqA7Uudw==
+
+split-on-first@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/split-on-first/-/split-on-first-3.0.0.tgz"
+  integrity sha512-qxQJTx2ryR0Dw0ITYyekNQWpz6f8dGd7vffGNflQQ3Iqj9NJ6qiZ7ELpZsJ/QBhIVAiDfXdag3+Gp8RvWa62AA==
 
 split@^1.0.1:
   version "1.0.1"

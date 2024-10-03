@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import colors from '../../config/colors';
 import { fonts } from '../../config/fonts'; 
 import ApiClient from './ApiClient';
@@ -9,6 +9,8 @@ const NamesetScreen = ({ navigation }) => {
   const [isLengthValid, setIsLengthValid] = useState(false);
   const [isContentValid, setIsContentValid] = useState(false);
   const [isTouched, setIsTouched] = useState(false);
+  const [isDuplicateChecked, setIsDuplicateChecked] = useState(false); // 중복 확인 여부
+  const [isDuplicate, setIsDuplicate] = useState(false); // 중복 여부
 
   const validateName = (input) => {
     const lengthValid = input.length <= 5 && input.length > 0;
@@ -18,6 +20,7 @@ const NamesetScreen = ({ navigation }) => {
     setIsContentValid(contentValid);
     setName(input);
     setIsTouched(true);
+    setIsDuplicateChecked(false); // 중복 확인 초기화
   };
 
   const clearInput = () => {
@@ -25,41 +28,59 @@ const NamesetScreen = ({ navigation }) => {
     setIsLengthValid(false);
     setIsContentValid(false);
     setIsTouched(false);
+    setIsDuplicateChecked(false); // 중복 확인 초기화
   };
 
-  const isAllChecked = isLengthValid && isContentValid;
+  const checkDuplicate = async () => {
+    try {
+      // 서버로 닉네임 중복 확인 요청
+      const response = await ApiClient.post('/api/users/check/nickname', { nickname: name });
+      if (response.data.isDuplicate) {
+        setIsDuplicate(true);
+        Alert.alert('중복된 닉네임', '이미 사용 중인 닉네임입니다.');
+      } else {
+        setIsDuplicate(false);
+        Alert.alert('사용 가능한 닉네임', '해당 닉네임을 사용할 수 있습니다.');
+      }
+      setIsDuplicateChecked(true);
+    } catch (error) {
+      console.error('Error during nickname check:', error);
+      Alert.alert('오류', '닉네임 중복 확인 중 오류가 발생했습니다.');
+    }
+  };
+
+  const submitNickname = async () => {
+    try {
+      const data = { nickname: name }; // 서버에 보낼 데이터 형식
+      console.log('Data being sent to server:', data); // 확인용 로그
+
+      // 서버로 POST 요청
+      const response = await ApiClient.post('/api/users/nickname', data);
+
+      // 서버 응답 확인
+      if (response.data.success) {
+        console.log('Nickname submitted successfully:', response.data);
+        navigation.navigate('PreferSelect'); // 성공 시 다음 화면으로 이동
+      } else {
+        console.error('Error:', response.data);
+        Alert.alert('Error', 'Failed to submit nickname');
+      }
+    } catch (error) {
+      console.error('Error during submission:', error);
+      if (error.response) {
+        console.error('Error response status:', error.response.status);
+        console.error('Error response data:', error.response.data);
+      }
+      Alert.alert('Error', 'An error occurred while submitting the nickname.');
+    }
+  };
+
+  const isAllChecked = isLengthValid && isContentValid && isDuplicateChecked && !isDuplicate;
 
   const getIcon = (valid) => {
     if (!isTouched) return require('../../assets/check_gray.png');
     return valid ? require('../../assets/check_green.png') : require('../../assets/check_red.png');
   };
-
-
-const submitNickname = async () => {
-  try {
-    const data = { nickname: name }; // 서버에 보낼 데이터 형식
-    console.log('Data being sent to server:', data); // 확인용 로그
-
-    // 서버로 POST 요청
-    const response = await ApiClient.post('/api/users/nickname', data);
-
-    // 서버 응답 확인
-    if (response.data.success) {
-      console.log('Nickname submitted successfully:', response.data);
-      navigation.navigate('PreferSelect'); // 성공 시 다음 화면으로 이동
-    } else {
-      console.error('Error:', response.data);
-      Alert.alert('Error', 'Failed to submit nickname');
-    }
-  } catch (error) {
-    console.error('Error during submission:', error);
-    if (error.response) {
-      console.error('Error response status:', error.response.status);
-      console.error('Error response data:', error.response.data);
-    }
-    Alert.alert('Error', 'An error occurred while submitting the nickname.');
-  }
-};
 
   return (
     <View style={styles.container}>
@@ -89,6 +110,7 @@ const submitNickname = async () => {
             </TouchableOpacity>
           )}
         </View>
+
         <View style={styles.validationContainer}>
           <Image source={getIcon(isLengthValid)} style={styles.icon} />
           <Text style={[
@@ -107,17 +129,37 @@ const submitNickname = async () => {
             공백, 쉼표, 숫자, 특수기호 불가
           </Text>
         </View>
+
+        {/* 닉네임 중복 확인 버튼 */}
+        <TouchableOpacity 
+          style={styles.duplicateCheckButton}
+          onPress={checkDuplicate}
+        >
+          <Text style={styles.duplicateCheckButtonText}>닉네임 중복 확인</Text>
+        </TouchableOpacity>
+
+        {/* 닉네임 중복 확인 결과 */}
+        {isDuplicateChecked && (
+          <View style={styles.validationContainer}>
+            <Image source={getIcon(!isDuplicate)} style={styles.icon} />
+            <Text style={[
+              styles.validationText,
+              isDuplicate ? styles.invalidText : styles.validText, // 중복 확인 시 초록색 텍스트로 변경
+            ]}>
+              {isDuplicate ? '이미 사용 중인 닉네임입니다.' : '사용 가능한 닉네임입니다.'}
+            </Text>
+          </View>
+        )}
+
         <TouchableOpacity
           style={[styles.button, isAllChecked ? styles.buttonActive : styles.buttonInactive]}
           disabled={!isAllChecked}
           onPress={submitNickname} // 닉네임 제출
         >
-        <Text style={[styles.buttonText, isAllChecked ? styles.buttonTextActive : styles.buttonTextInactive]}>
-        다음
-        </Text>
-</TouchableOpacity>
-        
-        
+          <Text style={[styles.buttonText, isAllChecked ? styles.buttonTextActive : styles.buttonTextInactive]}>
+            다음
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -211,6 +253,17 @@ const styles = StyleSheet.create({
     color: colors.Error,
     ...fonts.Body4,
   },
+  duplicateCheckButton: {
+    backgroundColor: colors.Green900,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  duplicateCheckButtonText: {
+    color: colors.Ivory100,
+    fontSize: 15,
+  },
   button: {
     width: 350,
     height: 48,
@@ -219,7 +272,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 8, // 둥근 모서리
+    borderRadius: 8,
   },
   buttonInactive: {
     backgroundColor: colors.Gray100,
@@ -231,10 +284,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   buttonTextActive: {
-    color: colors.Ivory100, // 활성화 상태의 버튼 텍스트 색상
+    color: colors.Ivory100,
   },
   buttonTextInactive: {
-    color: colors.Gray500, // 비활성화 상태의 버튼 텍스트 색상
+    color: colors.Gray500,
   },
 });
 
