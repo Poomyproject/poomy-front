@@ -5,6 +5,11 @@ import colors from '../config/colors';
 const { width, height } = Dimensions.get('window');
 
 const MainScreen = ({ navigation }) => {
+
+    const handlePress = () => {
+        navigation.navigate('ShopDetail');
+      };
+
     return (
         <View style={{backgroundColor:'white', marginTop:10,}}>
             <Image source={require('../assets/MainLogo.png')} style={styles.logo} />
@@ -53,9 +58,12 @@ const MainScreen = ({ navigation }) => {
                 </TouchableOpacity>
 
                 <ScrollView horizontal={true} style={styles.placeContainer2} showsHorizontalScrollIndicator={false}>
-                    <View style={{ alignItems: 'center', marginLeft: 25 }}>
-                        <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
-                    </View>
+                {/* 임의로 넣어둔 디테일 이동 버튼  */}
+                <TouchableOpacity onPress={handlePress}>
+                <View style={{ alignItems: 'center', marginLeft: 25 }}>
+                <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
+                </View>
+                </TouchableOpacity>
                     <View style={{ alignItems: 'center', marginLeft: 20 }}>
                         <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
                     </View>
