@@ -5,6 +5,7 @@ import LikeScreen from '../like/LikeScreen';
 import MainScreen from '../MainScreen';
 import MypageStackNavigator from './MypageStackNavigator';
 import colors from '../../config/colors';
+import ShopNavigatior from './ShopNavigatior';
 
 const Tab = createBottomTabNavigator();
 
@@ -19,11 +20,12 @@ const MainTabNavigator = () => {
           tabBarIcon: ({ color, size }) => (
             <Image source={require('../../assets/ic_todo.png')} style={{ width: size, height: size, tintColor: color }} />
           ),
+          headerShown: false,
         }}
       />
       <Tab.Screen
         name="Main"
-        component={MainScreen}
+        component={ShopNavigatior}
         options={{
         tabBarLabel: '홈',
         tabBarIcon: ({ color, size }) => (

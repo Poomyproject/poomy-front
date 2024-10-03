@@ -2,6 +2,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons'; // 아이콘 사용
+import colors from '../../config/colors';
+import { fonts } from '../../config/fonts'; 
 
 
 const ShopDetailScreen = () => {
@@ -31,9 +33,19 @@ const ShopDetailScreen = () => {
           <Text style={styles.infoText}>서울시 용산구 | 이태원역 1번 출구 9분</Text>
         </View>
       </View>
-      <View>
+      <Image source = {require('../../assets/img_map.png')} style ={{marginTop: 10}}></Image>
+      <View style={styles.header}>
+        <Text style = {styles.shopName}>리뷰</Text>
+        <Image source={require('../../assets/edit.png')} style={{ alignItems: 'left', marginLeft: 230 }}></Image>
+        <Text style = {styles.infoText}>작성하기</Text>
+        </View>
+        <View style = {styles.review}>
+        <Text style = {styles.shopName}>13명의 추천을 받은 소품샵이에요</Text>
+        </View>
         
-      </View>
+
+  
+      
 
         </View>
     );
@@ -78,8 +90,14 @@ const ShopDetailScreen = () => {
       },
       infoText: {
         fontSize: 14,
-        color: '#A59494',
+        color: colors.Gray700,
+        ...fonts.Body4,
         marginLeft: 8,
+      },
+      review : {
+        marginTop: 10,
+        alignItems: 'left',
+        alignItems: 'left',
       },
     
  })
