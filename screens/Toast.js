@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   toastContainer: {
     marginTop:20,
     height:35,
-    width: '73%',
+    width: '85%',
     backgroundColor: colors.Green900,
     borderRadius: 5,
     justifyContent: 'center',
