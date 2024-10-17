@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView, ViewComponent, ActivityIndicator } from 'react-native';
+// import Icon from 'react-native-vector-icons/FontAwesome'; // FontAwesome 아이콘 불러오기
 import colors from '../config/colors';
 import ApiClient, { setAxiosInterceptors } from '../screens/auth/ApiClient'; // ApiClient의 실제 경로로 수정하세요
-import ShopDetailScreen from './shop/ShopDetailScreen';
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -24,7 +25,7 @@ const MainScreen = ({ navigation }) => {
 
     // 데이터 fetching
     useEffect(() => {
-        //setAxiosInterceptors(navigation);
+        setAxiosInterceptors(navigation);
 
         // 가장 상단 샵 정보 불러오기
         const fetchHomeSpotShop = async () => {
@@ -35,6 +36,7 @@ const MainScreen = ({ navigation }) => {
                 } else {
                     throw new Error('소품샵 데이터 로딩 실패');
                 }
+                console.log(response.data.response);
             } catch (err) {
                 console.error('Error fetching home spot shop:', err);
                 setError(err);
@@ -58,20 +60,20 @@ const MainScreen = ({ navigation }) => {
             }
         };
 
-        // const fetchNewsletters = async () => {
-        //     try {
-        //         const response = await ApiClient.get('/api/home/newsLetter');
-        //         if (response.data.success) {
-        //             setNewsletters(response.data.response);  // 뉴스레터 데이터를 상태에 저장
-        //         } else {
-        //             throw new Error('뉴스레터 데이터 로딩 실패');
-        //         }
-        //     } catch (err) {
-        //         console.error('Error fetching newsletters:', err);
-        //         setError(err);
-        //         Alert.alert('데이터 로딩 실패', '뉴스레터 데이터를 불러오는 데 실패했습니다.');
-        //     } 
-        // };
+        const fetchNewsletters = async () => {
+            try {
+                const response = await ApiClient.get('/api/home/newsletter');
+                if (response.data.success) {
+                    setNewsletters(response.data.response);  // 뉴스레터 데이터를 상태에 저장
+                } else {
+                    throw new Error('뉴스레터 데이터 로딩 실패');
+                }
+            } catch (err) {
+                console.error('Error fetching newsletters:', err);
+                setError(err);
+                Alert.alert('데이터 로딩 실패', '뉴스레터 데이터를 불러오는 데 실패했습니다.');
+            }
+        };
 
         // 분위기 데이터 
         const fetchMoodShops = async () => {
@@ -89,10 +91,12 @@ const MainScreen = ({ navigation }) => {
             }
         };
 
+
+
         // API 호출
         const fetchData = async () => {
             setLoading(true);
-            await Promise.all([fetchHomeSpotShop(), fetchHomeSpot(), fetchMoodShops(), ]); // 병렬로 호출
+            await Promise.all([fetchHomeSpotShop(), fetchHomeSpot(), fetchNewsletters(), fetchMoodShops()]); // 병렬로 호출
             setLoading(false);
         };
 
@@ -137,32 +141,30 @@ const MainScreen = ({ navigation }) => {
 
                 <ScrollView horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
                     <View style={{ alignItems: 'center', marginLeft: 25 }}>
-                        <Image source={require('../assets/mood1.png')} style={styles.themeImg} />
-                        <Text style={styles.placeText}>아기자기한</Text>
+                        <Image source={require('../assets/home_mood1.png')} style={styles.themeImg} />
+                        <Text style={styles.placeText}>아기자기</Text>
                     </View>
                     <View style={{ alignItems: 'center', marginLeft: 13 }}>
-                        <Image source={require('../assets/mood2.png')} style={styles.themeImg} />
+                        <Image source={require('../assets/home_mood2.png')} style={styles.themeImg} />
                         <Text style={styles.placeText}>모던</Text>
                     </View>
                     <View style={{ alignItems: 'center', marginLeft: 13 }}>
-                        <Image source={require('../assets/mood3.png')} style={styles.themeImg} />
+                        <Image source={require('../assets/home_mood3.png')} style={styles.themeImg} />
                         <Text style={styles.placeText}>빈티지</Text>
                     </View>
                     <View style={{ alignItems: 'center', marginLeft: 13 }}>
-                        <Image source={require('../assets/mood4.png')} style={styles.themeImg} />
+                        <Image source={require('../assets/home_mood4.png')} style={styles.themeImg} />
                         <Text style={styles.placeText}>럭셔리</Text>
                     </View>
                     <View style={{ alignItems: 'center', marginLeft: 13 }}>
-                        <Image source={require('../assets/mood5.png')} style={styles.themeImg} />
+                        <Image source={require('../assets/home_mood5.png')} style={styles.themeImg} />
                         <Text style={styles.placeText}>테마별</Text>
                     </View>
                 </ScrollView>
 
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
-                    <Text style={styles.sectionTitle_sec}>
-                    {homeSpotShop ? homeSpotShop.prefix : 'Default Text'} 
-                    </Text>
+                        <Text style={styles.sectionTitle_sec}>{homeSpotShop.prefix} </Text>
                         <Text style={styles.sectionTitle_sec_color}>#{homeSpotShop.hashtag} </Text>
                         <Text style={styles.sectionTitle_sec}>로가자! </Text>
                     </View>
@@ -170,16 +172,33 @@ const MainScreen = ({ navigation }) => {
                 </TouchableOpacity>
 
                 <ScrollView horizontal={true} style={styles.placeContainer2} showsHorizontalScrollIndicator={false}>
-                    {/* 가장 상단 소품샵 추천 (현재 이미지 없어서 주석처리) */}
+                    <TouchableOpacity style={styles.box}>
+                        <View style={styles.hashtagContainer}>
+                            <Text style={styles.hashtagText}>{homeSpotShop.shopList[0]?.mood}</Text>
+                        </View>
+                        <Image source={{ uri: homeSpotShop.shopList[0]?.image }} style={styles.boxshopImage} />
+                        <Text style={styles.shopName}>{homeSpotShop.shopList[0]?.name}</Text>
+                        <View style={styles.favoriteContainer}>
+                            <Text style={styles.favoriteText}>❤️ {homeSpotShop.shopList[0]?.favoriteNum}</Text>
+                        </View>
+                    </TouchableOpacity>
+
                     {/* <View style={{ alignItems: 'center', marginLeft: 25 }}>
-                        <Image source={{ uri: homeSpotShop.shopList[0]?.image }} style={styles.newsletterImage} />
+                        <Image source={{ uri: homeSpotShop.shopList[1]?.image }} style={styles.newsletterImage} />
+                        <Text style={styles.placeText}>{homeSpotShop.shopList[0]?.mood}</Text>
+                    </View>
+                    <View style={{ alignItems: 'center', marginLeft: 25 }}>
+                        <Image source={{ uri: homeSpotShop.shopList[2]?.image }} style={styles.newsletterImage} />
                         <Text style={styles.placeText}>{homeSpotShop.shopList[0]?.mood}</Text>
                     </View> */}
-                    <TouchableOpacity style={{ alignItems: 'center', marginLeft: 25 }} 
-                    onPress={() => navigation.navigate('ShopDetail', { screen: 'ShopDetail' })}
+
+
+                    {/* 욘짱이 네비게이트 옮겨놓은거 */}
+                    {/* <TouchableOpacity style={{ alignItems: 'center', marginLeft: 25 }}
+                        onPress={() => navigation.navigate('ShopDetail', { screen: 'ShopDetail' })}
                     >
                         <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </ScrollView>
 
                 <View style={styles.LocationRcmd}>
@@ -209,8 +228,8 @@ const MainScreen = ({ navigation }) => {
                     </TouchableOpacity>
                 </ScrollView>
 
-                <TouchableOpacity style={styles.rightIconContainer} 
-                onPress={() => navigation.navigate('NewsLetterStack', { screen: 'NewsLetter' })}>
+                <TouchableOpacity style={styles.rightIconContainer}
+                    onPress={() => navigation.navigate('NewsLetterStack', { screen: 'NewsLetter' })}>
                     <View style={styles.sectionTitle_sec_view}>
                         <Text style={styles.sectionTitle_sec}>뉴스레터 </Text>
                     </View>
@@ -218,12 +237,19 @@ const MainScreen = ({ navigation }) => {
                 </TouchableOpacity>
 
                 <View style={{ flexDirection: 'row' }}>
-                    <Image source={require('../assets/Rectangle1.png')} style={styles.newletter} />
+                    {/* <Image source={{ uri: newsletters[0]?.mainImage }} style={styles.newletter} /> */}
                     <View style={{ marginLeft: 10 }}>
-                        <Text style={styles.newletterMainText}>우리들의 PICK</Text>
-                        <Text style={styles.newletterDetailText}>이거부터저거까지 다 만나보세요. 이게 강남 소품샵이야 룰루루루루루루루루루루</Text>
+                        <Text style={styles.newletterMainText}>{newsletters[0]?.headline}</Text>
+                        <Text style={styles.newletterDetailText}>{newsletters[0]?.subTopic}</Text>
+                        <View style={{ flexDirection: 'row', }}>
+                            <Text style={{ color: colors.Gray500, }}>{newsletters[0]?.firstKeyword} </Text>
+                            <Text style={{ color: colors.Gray500, }}>{newsletters[0]?.secondKeyword} </Text>
+                            <Text style={{ color: colors.Gray500, }}>{newsletters[0]?.thirdKeyword} </Text>
+                        </View>
                     </View>
                 </View>
+
+
                 <View style={{ flexDirection: 'row' }}>
                     <Image source={require('../assets/Rectangle1.png')} style={styles.newletter} />
                     <View style={{ marginLeft: 10 }}>
@@ -252,7 +278,8 @@ const MainScreen = ({ navigation }) => {
 
                 <ScrollView horizontal={true} style={styles.placeContainer4} showsHorizontalScrollIndicator={false}>
                     <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                        <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                        <Image source={{ uri: moodItem1.shopList[0]?.image }} style={styles.shopImage} />
+                        <Text>{moodItem1.shopList[0]?.name}</Text>
                     </View>
                 </ScrollView>
 
@@ -269,8 +296,8 @@ const MainScreen = ({ navigation }) => {
                 {/* mood 2번째 부분 */}
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
-                        <Text style={styles.sectionTitle_sec}>{moodItem2 ? moodItem2.prefix : 'Default Text'}  </Text>
-                        <Text style={styles.sectionTitle_sec_color}>#{homeSpotShop ? homeSpotShop.prefix : 'Default Text'}</Text>
+                        <Text style={styles.sectionTitle_sec}>{moodItem2.prefix} </Text>
+                        <Text style={styles.sectionTitle_sec_color}>#{moodItem2.hashtag} </Text>
                         <Text style={styles.sectionTitle_sec}>소품샵 </Text>
                     </View>
                     <Image source={require('../assets/right.png')} style={styles.rightIcon} />
@@ -278,7 +305,8 @@ const MainScreen = ({ navigation }) => {
 
                 <ScrollView horizontal={true} style={styles.placeContainer4} showsHorizontalScrollIndicator={false}>
                     <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                        <Image source={require('../assets/shop.png')} style={styles.shopImage} />
+                        <Image source={{ uri: moodItem2.shopList[0]?.image }} style={styles.shopImage} />
+                        <Text>{moodItem2.shopList[0]?.name}</Text>
                     </View>
                 </ScrollView>
 
@@ -426,7 +454,7 @@ const styles = StyleSheet.create({
     },
     newsletterImage: {
         width: 150,
-        height: 200,
+        height: 170,
     },
     keword: {
         flexDirection: 'row',
@@ -463,7 +491,60 @@ const styles = StyleSheet.create({
     },
     errorText: {
         padding: 80,
-    }
+    },
+
+    box: {
+        alignItems: 'center',
+        marginLeft: 25,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 10,
+        width: 130, // 원하는 너비
+        position: 'relative', // 자식 요소들을 상대적으로 배치하기 위해 필요
+    },
+    hashtagContainer: {
+        position: 'absolute',
+        top: 10,
+        left: 10,
+        backgroundColor: colors.Ivory100, // 회색 배경
+        borderRadius: 20,
+        paddingHorizontal: 10,
+        paddingVertical: 6,
+        borderWidth: 1,
+        borderColor:colors.Green500,
+        zIndex: 2, // 이미지 위로 올리기 위해 zIndex 사용
+
+    },
+    hashtagText: {
+        fontSize: 12,
+        color: colors.Gray700,
+    },
+    boxshopImage: {
+        width: 130, // 이미지 너비
+        height: 180, // 이미지 높이
+        borderRadius: 5, // 이미지 모서리를 둥글게
+    },
+    shopName: {
+        position: 'absolute', // 이미지 위로 올리기 위해 절대 위치 설정
+        bottom: 40, // 이미지 하단에서부터 40px 위에 위치
+        left: 10,
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginTop: 10,
+        color: '#333',
+        left: 10,
+        color: '#FFFFFF', // 흰색 텍스트
+    },
+    favoriteContainer: {
+        position: 'absolute', // 이미지 위로 올리기 위해 절대 위치 설정
+        bottom: 10, // 이미지 하단에서 10px 위에 위치
+        left: 10,
+        zIndex: 2, // 이미지 위로 보이도록 zIndex 추가
+    },
+    favoriteText: {
+        fontSize: 14,
+        color: '#888',
+    },
 });
 
 export default MainScreen;
