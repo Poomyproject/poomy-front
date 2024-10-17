@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     width: 380,
   },
   buttonText: {
-    fontSize: 16,
+    ...fonts.Body1
   },
   buttonImage: {
     width: 20,

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView, ViewComponent, ActivityIndicator } from 'react-native';
 import colors from '../config/colors';
 import ApiClient, { setAxiosInterceptors } from '../screens/auth/ApiClient'; // ApiClient의 실제 경로로 수정하세요
+import ShopDetailScreen from './shop/ShopDetailScreen';
 
 const { width, height } = Dimensions.get('window');
 
@@ -23,7 +24,7 @@ const MainScreen = ({ navigation }) => {
 
     // 데이터 fetching
     useEffect(() => {
-        setAxiosInterceptors(navigation);
+        //setAxiosInterceptors(navigation);
 
         // 가장 상단 샵 정보 불러오기
         const fetchHomeSpotShop = async () => {
@@ -159,7 +160,9 @@ const MainScreen = ({ navigation }) => {
 
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
-                        <Text style={styles.sectionTitle_sec}>{homeSpotShop.prefix} </Text>
+                    <Text style={styles.sectionTitle_sec}>
+                    {homeSpotShop ? homeSpotShop.prefix : 'Default Text'} 
+                    </Text>
                         <Text style={styles.sectionTitle_sec_color}>#{homeSpotShop.hashtag} </Text>
                         <Text style={styles.sectionTitle_sec}>로가자! </Text>
                     </View>
@@ -172,9 +175,11 @@ const MainScreen = ({ navigation }) => {
                         <Image source={{ uri: homeSpotShop.shopList[0]?.image }} style={styles.newsletterImage} />
                         <Text style={styles.placeText}>{homeSpotShop.shopList[0]?.mood}</Text>
                     </View> */}
-                    <View style={{ alignItems: 'center', marginLeft: 25 }}>
+                    <TouchableOpacity style={{ alignItems: 'center', marginLeft: 25 }} 
+                    onPress={() => navigation.navigate('ShopDetail', { screen: 'ShopDetail' })}
+                    >
                         <Image source={require('../assets/Frame1.png')} style={styles.newsletterImage} />
-                    </View>
+                    </TouchableOpacity>
                 </ScrollView>
 
                 <View style={styles.LocationRcmd}>
@@ -264,8 +269,8 @@ const MainScreen = ({ navigation }) => {
                 {/* mood 2번째 부분 */}
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
-                        <Text style={styles.sectionTitle_sec}>{moodItem2.prefix} </Text>
-                        <Text style={styles.sectionTitle_sec_color}>#{moodItem2.hashtag} </Text>
+                        <Text style={styles.sectionTitle_sec}>{moodItem2 ? moodItem2.prefix : 'Default Text'}  </Text>
+                        <Text style={styles.sectionTitle_sec_color}>#{homeSpotShop ? homeSpotShop.prefix : 'Default Text'}</Text>
                         <Text style={styles.sectionTitle_sec}>소품샵 </Text>
                     </View>
                     <Image source={require('../assets/right.png')} style={styles.rightIcon} />

@@ -49,38 +49,20 @@ const NamesetScreen = ({ navigation }) => {
     }
   };
 
-  const submitNickname = async () => {
-    try {
-      const data = { nickname: name }; // 서버에 보낼 데이터 형식
-      console.log('Data being sent to server:', data); // 확인용 로그
-
-      // 서버로 POST 요청
-      const response = await ApiClient.post('/api/users/nickname', data);
-
-      // 서버 응답 확인
-      if (response.data.success) {
-        console.log('Nickname submitted successfully:', response.data);
-        navigation.navigate('PreferSelect'); // 성공 시 다음 화면으로 이동
-      } else {
-        console.error('Error:', response.data);
-        Alert.alert('Error', 'Failed to submit nickname');
-      }
-    } catch (error) {
-      console.error('Error during submission:', error);
-      if (error.response) {
-        console.error('Error response status:', error.response.status);
-        console.error('Error response data:', error.response.data);
-      }
-      Alert.alert('Error', 'An error occurred while submitting the nickname.');
-    }
-  };
-
   const isAllChecked = isLengthValid && isContentValid && isDuplicateChecked && !isDuplicate;
 
   const getIcon = (valid) => {
     if (!isTouched) return require('../../assets/check_gray.png');
     return valid ? require('../../assets/check_green.png') : require('../../assets/check_red.png');
   };
+
+  const getIcon2 = (valid, isChecked) => {
+    if (!isChecked) {
+      return require('../../assets/check_gray.png'); // 중복 확인이 안 됐을 때는 회색
+    }
+    return valid ? require('../../assets/check_green.png') : require('../../assets/check_red.png'); // 중복 확인 후 유효성에 따라 색상
+  };
+  
 
   return (
     <View style={styles.container}>
@@ -92,7 +74,8 @@ const NamesetScreen = ({ navigation }) => {
       <View style={styles.content}>
         <Image source={require('../../assets/progress_bar.png')} style={styles.image} />
         <Text style={styles.text}>사용하실 이름을 {'\n'}입력해주세요.</Text>
-        <View style={styles.inputContainer}>
+        
+        <View style={styles.inputRow}>
           <TextInput
             style={[
               styles.input,
@@ -104,11 +87,19 @@ const NamesetScreen = ({ navigation }) => {
             placeholderTextColor={!isTouched ? colors.Gray400 : (isLengthValid && isContentValid ? colors.Gray400: colors.Gray400)}
             onBlur={() => setIsTouched(true)}
           />
-          {name.length > 0 && (
+          {/* {name.length > 0 && (
             <TouchableOpacity onPress={clearInput} style={styles.clearButton}>
               <Image source={require('../../assets/x.png')} style={styles.clearIcon} />
             </TouchableOpacity>
-          )}
+          )} */}
+
+          {/* 닉네임 중복 확인 버튼 */}
+          <TouchableOpacity 
+            style={isDuplicateChecked ? styles.duplicateCheckButtonActive : styles.duplicateCheckButton}
+            onPress={checkDuplicate}
+          >
+            <Text style={styles.duplicateCheckButtonText}>중복확인</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.validationContainer}>
@@ -130,31 +121,21 @@ const NamesetScreen = ({ navigation }) => {
           </Text>
         </View>
 
-        {/* 닉네임 중복 확인 버튼 */}
-        <TouchableOpacity 
-          style={styles.duplicateCheckButton}
-          onPress={checkDuplicate}
-        >
-          <Text style={styles.duplicateCheckButtonText}>닉네임 중복 확인</Text>
-        </TouchableOpacity>
+        <View style={styles.validationContainer}>
+        <Image source={getIcon2(!isDuplicate, isDuplicateChecked)} style={styles.icon} />
+        <Text style={[
+          styles.validationText,
+          !isDuplicateChecked ? styles.defaultText : (isDuplicate ? styles.duplicateInvalidText : styles.duplicateValidText),
+          ]}>
+          {!isDuplicateChecked ? '닉네임 중복확인을 해주세요' : (isDuplicate ? '이미 사용 중인 닉네임입니다.' : '사용 가능한 닉네임입니다.')}
+        </Text>
+        </View>
 
-        {/* 닉네임 중복 확인 결과 */}
-        {isDuplicateChecked && (
-          <View style={styles.validationContainer}>
-            <Image source={getIcon(!isDuplicate)} style={styles.icon} />
-            <Text style={[
-              styles.validationText,
-              isDuplicate ? styles.invalidText : styles.validText, // 중복 확인 시 초록색 텍스트로 변경
-            ]}>
-              {isDuplicate ? '이미 사용 중인 닉네임입니다.' : '사용 가능한 닉네임입니다.'}
-            </Text>
-          </View>
-        )}
 
         <TouchableOpacity
           style={[styles.button, isAllChecked ? styles.buttonActive : styles.buttonInactive]}
           disabled={!isAllChecked}
-          onPress={submitNickname} // 닉네임 제출
+          onPress={() => navigation.navigate('PreferSelect')}
         >
           <Text style={[styles.buttonText, isAllChecked ? styles.buttonTextActive : styles.buttonTextInactive]}>
             다음
@@ -197,7 +178,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     marginBottom: 40,
   },
-  inputContainer: {
+  inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
@@ -237,33 +218,55 @@ const styles = StyleSheet.create({
     height: 14,
     marginRight: 10,
   },
+
   validationText: {
     fontSize: 14,
     ...fonts.Body4,
   },
+
   defaultText: {
     color: colors.Gray400,
     ...fonts.Body4,
   },
+
   validText: {
     color: colors.Green900,
     ...fonts.Body4,
   },
+
   invalidText: {
     color: colors.Error,
     ...fonts.Body4,
   },
+
   duplicateCheckButton: {
-    backgroundColor: colors.Green900,
+    // backgroundColor: colors.Gray100,
+    borderColor: colors.Gray200,  // 테두리 색상
+    borderWidth: 1,               // 테두리 두께 추가
     paddingVertical: 10,
+    paddingHorizontal: 15,
     borderRadius: 8,
+    color: colors.Gray900,
     alignItems: 'center',
-    marginBottom: 20,
+    marginLeft: 10,    
   },
+  
+  duplicateCheckButtonActive: {
+    borderColor: colors.Gray300,  // 테두리 색상
+    borderWidth: 1,               // 테두리 두께 추가
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+    color: colors.Gray900,
+    alignItems: 'center',
+    marginLeft: 10,    
+  },
+
   duplicateCheckButtonText: {
-    color: colors.Ivory100,
+    color: colors.Gray200,
     fontSize: 15,
   },
+
   button: {
     width: 350,
     height: 48,
@@ -288,6 +291,19 @@ const styles = StyleSheet.create({
   },
   buttonTextInactive: {
     color: colors.Gray500,
+  },
+  duplicateValidText: {
+    color: colors.Green900,  // 사용 가능한 닉네임일 때 초록색으로 표시
+    ...fonts.Body4,
+  },
+  duplicateInvalidText: {
+    color: colors.Error,  // 중복된 닉네임일 때 빨간색으로 표시
+    ...fonts.Body4,
+  },
+  validationText: {
+    fontSize: 14,
+    ...fonts.Body4,
+    color: colors.Gray400,  // 닉네임 중복 확인 전 회색으로 표시
   },
 });
 
