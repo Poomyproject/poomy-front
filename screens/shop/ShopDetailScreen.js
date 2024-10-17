@@ -1,16 +1,17 @@
-
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity,ScrollView } from 'react-native';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons'; // 아이콘 사용
 import colors from '../../config/colors';
 import { fonts } from '../../config/fonts'; 
+import { useNavigation } from '@react-navigation/native';
 
 
 const ShopDetailScreen = () => {
 
+  const navigation = useNavigation();
 
     return (
-        <View style={styles.container}>
+      <ScrollView contentContainerStyle={{ alignItems: 'center', flexGrow: 1 }}>
             <Image source={require('../../assets/photo.png')}></Image>
             <View style={styles.header}>
         <Text style={styles.shopName}>선민이네 샵</Text>
@@ -35,26 +36,111 @@ const ShopDetailScreen = () => {
       </View>
       <Image source = {require('../../assets/img_map.png')} style ={{marginTop: 10}}></Image>
       <View style={styles.header}>
-        <Text style = {styles.shopName}>리뷰</Text>
-        <Image source={require('../../assets/edit.png')} style={{ alignItems: 'left', marginLeft: 230 }}></Image>
-        <Text style = {styles.infoText}>작성하기</Text>
+      <TouchableOpacity 
+        style={{ flexDirection: 'row', alignItems: 'center' }} 
+        onPress={() => navigation.navigate('UserReview1', { screen: 'UserReview1' })} // UserReviewScreen1로 이동
+        >
+      <Text style={styles.shopName}>리뷰</Text>
+      <Image source={require('../../assets/edit.png')} style={{ marginLeft: 230 }} />
+      <Text style={styles.infoText}>작성하기</Text>
+      </TouchableOpacity>
         </View>
-        <View style = {styles.review}>
-        <Text style = {styles.shopName}>13명의 추천을 받은 소품샵이에요</Text>
-        </View>
-        
+    <View style={styles.reviewSection}>
+  <Text style={styles.subTitle}>13명의 추천을 받은 소품샵이에요</Text>
 
+  {/* 이미지 및 리뷰 상단 */}
+  <View style={styles.imageRow}>
+    <Image source={require('../../assets/img_sample.png')} style={styles.reviewImage} />
+    <Image source={require('../../assets/img_sample.png')} style={styles.reviewImage} />
+    <Image source={require('../../assets/img_sample.png')} style={styles.reviewImage} />
+    <View style={styles.moreImages}>
+      <Text style={styles.moreText}>+10</Text>
+    </View>
+  </View>
+
+  {/* 리뷰 리스트 */}
+  <View style={styles.reviewBox}>
+    <View style={styles.reviewItem}>
+      <Image source={require('../../assets/img_user_sample.png')} style={styles.userImage} />
+      <View style={styles.reviewContent}>
+        <Text style={styles.reviewUser}>민지</Text>
+        <Text style={styles.reviewDate}>2024.07.11</Text>
+        <Text style={styles.reviewText}>사장님이 너무 친절했어요! TTT 그립지만 좋아하는 카페에 물품이 많아서 구경하기 너무 좋았어요~</Text>
+      </View>
+      <FontAwesome name="heart-o" size={24} color={colors.Gray500} />
+    </View>
+
+    <View style={styles.reviewItem}>
+      <Image source={require('../../assets/img_user_sample.png')} style={styles.userImage} />
+      <View style={styles.reviewContent}>
+        <Text style={styles.reviewUser}>해강</Text>
+        <Text style={styles.reviewDate}>2024.07.11</Text>
+        <Text style={styles.reviewText}>아기자기한 소품들이 많고 예뻐서 구경하는 데 시간 가는 줄 몰랐습니다! 꿀!</Text>
+      </View>
+      <FontAwesome name="thumbs-o-up" size={24} color={colors.Green500} />
+    </View>
+
+    {/* 추가 이미지가 있는 리뷰 */}
+    <View style={styles.reviewItem}>
+      <Image source={require('../../assets/img_user_sample.png')} style={styles.userImage} />
+      <View style={styles.reviewContent}>
+        <Text style={styles.reviewUser}>민지</Text>
+        <Text style={styles.reviewDate}>2024.07.11</Text>
+        <Text style={styles.reviewText}>사장님이 너무 친절했어요! TTT 그립지만 좋아하는 카페에 물품이 많아서 구경하기 너무 좋았어요~</Text>
+        <View style={styles.extraImageRow}>
+          <Image source={require('../../assets/img_user_sample.png')} style={styles.extraImage} />
+          <View style={styles.moreImages}>
+            <Text style={styles.moreText}>+2</Text>
+          </View>
+        </View>
+      </View>
+      <FontAwesome name="heart-o" size={24} color={colors.Gray500} />
+    </View>
+  </View>
+
+  <TouchableOpacity style={styles.viewAllButton}>
+    <Text style={styles.viewAllText}>리뷰 전체보기</Text>
+  </TouchableOpacity>
+</View>
+
+{/* 소품샵 추천 */}
+<View style={styles.recommendSection}>
+  <View style={styles.chipRow}>
+    <View style={styles.chip}>
+      <Text style={styles.chipText}>이태원</Text>
+    </View>
+    <View style={styles.chip}>
+      <Text style={styles.chipText}>홍대</Text>
+    </View>
+  </View>
   
-      
+  <Text style={styles.subTitle}>소품샵 추천</Text>
 
-        </View>
+  {/* 추천 소품샵 */}
+  <View style={styles.shopRecommendationRow}>
+    <View style={styles.shopRecommendation}>
+      <Image source={require('../../assets/img_sample.png')} style={styles.recommendImage} />
+      <Text style={styles.shopName}>선민이네 샵</Text>
+    </View>
+    <View style={styles.shopRecommendation}>
+      <Image source={require('../../assets/img_sample.png')} style={styles.recommendImage} />
+      <Text style={styles.shopName}>선민이네 샵</Text>
+    </View>
+    <View style={styles.shopRecommendation}>
+      <Image source={require('../../assets/img_sample.png')} style={styles.recommendImage} />
+      <Text style={styles.shopName}>선민이네 샵</Text>
+    </View>
+  </View>
+</View>
+    
+</ScrollView>
     );
 
  };
 
  const styles = StyleSheet.create({
     container : {
-        flex : 1,
+        flexGrow : 1,
         marginTop : 10, 
         alignItems : 'center',
     },
@@ -98,6 +184,122 @@ const ShopDetailScreen = () => {
         marginTop: 10,
         alignItems: 'left',
         alignItems: 'left',
+      },
+      reviewSection: {
+        marginTop: 20,
+      },
+      subTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 10,
+      },
+      imageRow: {
+        flexDirection: 'row',
+        marginBottom: 15,
+      },
+      reviewImage: {
+        width: 60,
+        height: 60,
+        marginRight: 10,
+        borderRadius: 8,
+      },
+      moreImages: {
+        width: 60,
+        height: 60,
+        backgroundColor: colors.Gray100,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 8,
+      },
+      moreText: {
+        fontSize: 16,
+        color: colors.Gray500,
+      },
+      reviewBox: {
+        marginBottom: 15,
+      },
+      reviewItem: {
+        flexDirection: 'row',
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: colors.Gray300,
+        alignItems: 'center',
+      },
+      userImage: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        marginRight: 10,
+      },
+      reviewContent: {
+        flex: 1,
+      },
+      reviewUser: {
+        fontWeight: 'bold',
+        fontSize: 14,
+      },
+      reviewDate: {
+        fontSize: 12,
+        color: colors.Gray500,
+        marginVertical: 4,
+      },
+      reviewText: {
+        fontSize: 14,
+        color: colors.Gray900,
+      },
+      extraImageRow: {
+        flexDirection: 'row',
+        marginTop: 10,
+      },
+      extraImage: {
+        width: 60,
+        height: 60,
+        borderRadius: 8,
+        marginRight: 10,
+      },
+      viewAllButton: {
+        marginTop: 10,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: colors.Gray300,
+        borderRadius: 8,
+        alignItems: 'center',
+      },
+      viewAllText: {
+        fontSize: 14,
+        color: colors.Gray700,
+      },
+      recommendSection: {
+        marginTop: 20,
+      },
+      chipRow: {
+        flexDirection: 'row',
+        marginBottom: 15,
+      },
+      chip: {
+        backgroundColor: colors.Gray100,
+        paddingVertical: 6,
+        paddingHorizontal: 12,
+        borderRadius: 20,
+        marginRight: 10,
+      },
+      chipText: {
+        fontSize: 12,
+        color: colors.Gray500,
+      },
+      shopRecommendationRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+      },
+      shopRecommendation: {
+        width: 90,
+        alignItems: 'center',
+      },
+      recommendImage: {
+        width: 90,
+        height: 90,
+        borderRadius: 8,
+        marginBottom: 5,
       },
     
  })
