@@ -191,11 +191,11 @@ const MainScreen = ({ navigation }) => {
                         <Text style={styles.placeText}>{homeSpotShop.shopList[0]?.mood}</Text>
                     </View> */}
                    
-                    </View>
+                    
                     <View style={{ alignItems: 'center', marginLeft: 25 }}>
                         <Image source={{ uri: homeSpotShop.shopList[2]?.image }} style={styles.newsletterImage} />
                         <Text style={styles.placeText}>{homeSpotShop.shopList[0]?.mood}</Text>
-                    </View> */}
+                    </View> 
 
 
                     {/* 욘짱이 네비게이트 옮겨놓은거 */}
