@@ -13,6 +13,7 @@ ApiClient.interceptors.request.use(
   async (config) => {
     try {
       const token = await AsyncStorage.getItem('accessToken'); // AsyncStorage에서 JWT 토큰 가져오기
+      console.log(token)
       if (token) {
         //console.log('Access Token:', token); 
         config.headers.accessToken = `Bearer ${token}`; 
@@ -70,7 +71,7 @@ export const setAxiosInterceptors = (navigation) => {
     }
   );
 };
-
+ 
 
 // 토큰을 AsyncStorage에 저장하는 함수
 export const setAccessToken = async (token) => {
@@ -81,5 +82,6 @@ export const setAccessToken = async (token) => {
     console.error('Error saving access token:', error);
   }
 };
+
 
 export default ApiClient;
