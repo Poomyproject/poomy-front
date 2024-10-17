@@ -6,6 +6,7 @@ import colors from '../../config/colors';
 import MypageEditScreen from './MypageEditScreen';
 import ApiClient from '../auth/ApiClient';
 import { useEffect,useState } from 'react';
+import { fonts } from '../../config/fonts';
 
 
 const MyPageScreen = () => {
@@ -253,6 +254,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     fontSize: 12,
   },
+
   buttonBox: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -260,14 +262,18 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 380,
   },
+
   buttonText: {
-    fontSize: 16,
+    ...fonts.Body1
   },
+
   buttonImage: {
     width: 20,
     height: 20,
-    marginLeft: 10,
+    marginRight: 10,
+
   },
+
   line: {
     height: 1,
     width: '100%',
