@@ -408,10 +408,6 @@ const styles = StyleSheet.create({
         color: colors.Gray900,
         marginTop: 5,
     },
-    rightText_sec: {
-        color: colors.Gray900,
-        marginTop: 10,
-    },
     rightIcon: {
         width: 24,
         height: 24,
@@ -463,22 +459,10 @@ const styles = StyleSheet.create({
         marginTop: 15,
         color: colors.Gray700,
     },
-    recommandContainer: {
-        flexDirection: 'row',
-        marginHorizontal: 20,
-        alignSelf: 'flex-start'
-    },
-    newsletterImage: {
-        width: 150,
-        height: 170,
-    },
     keword: {
         flexDirection: 'row',
         marginLeft: '7%',
         marginTop: '3%'
-    },
-    keword_view: {
-        alignSelf: 'flex-start'
     },
     keword_text: {
         alignSelf: 'flex-start',
@@ -496,10 +480,6 @@ const styles = StyleSheet.create({
     shopImage: {
         width: 150,
         height: 150,
-    },
-    last_new_Image: {
-        width: 140,
-        height: 140,
     },
     themeImg: {
         width: 58,
@@ -565,14 +545,6 @@ const styles = StyleSheet.create({
         height: 80, // 그라디언트 이미지 높이 설정
         position: 'absolute',
         bottom: 0, // 아래쪽에 그라디언트 배치
-    },
-    LastHTcontainer: {
-        backgroundColor: colors.Ivory100, // 회색 배경
-        borderRadius: 20,
-        paddingHorizontal: 10,
-        paddingVertical: 6,
-        borderWidth: 1,
-        borderColor: colors.Green500,
     },
     lastshoptext: {
         marginLeft: 10,
