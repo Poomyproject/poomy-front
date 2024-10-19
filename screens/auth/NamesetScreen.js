@@ -63,6 +63,24 @@ const NamesetScreen = ({ navigation }) => {
     return valid ? require('../../assets/check_green.png') : require('../../assets/check_red.png'); // 중복 확인 후 유효성에 따라 색상
   };
   
+  const handleSaveNickname = async () => {
+    try {
+      const response = await ApiClient.post('/api/users/nickname', {
+        nickname: name,  // 여기서 name 변수를 사용합니다.
+      });
+  
+      if (response.data.success) {
+        //Alert.alert('성공', '닉네임이 저장되었습니다.');
+        navigation.navigate('PreferSelect');
+      } else {
+        Alert.alert('오류', '닉네임을 다시 설정해주세요');
+      }
+    } catch (error) {
+      console.error('Error during nickname submission:', error);
+      Alert.alert('오류', '네트워크 오류가 발생했습니다.');
+    }
+  };
+  
 
   return (
     <View style={styles.container}>
@@ -135,11 +153,12 @@ const NamesetScreen = ({ navigation }) => {
         <TouchableOpacity
           style={[styles.button, isAllChecked ? styles.buttonActive : styles.buttonInactive]}
           disabled={!isAllChecked}
-          onPress={() => navigation.navigate('PreferSelect')}
+          onPress={handleSaveNickname}
         >
           <Text style={[styles.buttonText, isAllChecked ? styles.buttonTextActive : styles.buttonTextInactive]}>
             다음
           </Text>
+          
         </TouchableOpacity>
       </View>
     </View>
