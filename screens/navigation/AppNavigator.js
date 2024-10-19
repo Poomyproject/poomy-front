@@ -2,6 +2,8 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { TouchableOpacity, Image, Text } from 'react-native';
 import colors from '../../config/colors';
+import { fonts } from '../../config/fonts';
+import axios from 'axios';
 
 
 import SplashScreen from '../auth/SplashScreen';
@@ -20,6 +22,7 @@ import TermsDetailScreen2 from '../common/TermsDetailScreen2';
 import TermsDetailScreen3 from '../common/TermsDetailScreen3';
 import ShopDetailScreen from '../shop/ShopDetailScreen';
 import MypageEditScreen from '../mypage/MypageEditScreen';
+import NameEditScreen from '../mypage/NameEditScreen';
 
 import UserReviewScreen1 from '../review/UserReviewScreen1';
 import UserReviewScreen2 from '../review/UserReviewScreen2';
@@ -49,6 +52,21 @@ const AppNavigator = () => {
       <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
     
       <Stack.Screen name="MypageEdit" component={MypageEditScreen} options={{ headerShown: true }} />
+      
+      <Stack.Screen name="NameEdit" component={NameEditScreen} options={({ navigation }) => ({
+          headerTitle: '이름바꾸기',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image source={require('../../assets/left.png')} style={{ height: 24, width: 24 }} />
+            </TouchableOpacity>
+          ),
+          headerRight: () => (
+            <TouchableOpacity onPress={handleSaveNickname}>
+              <Text style={{ marginRight: 20, color: colors.Green900, ...fonts.Body2 }}>완료</Text>
+            </TouchableOpacity>
+          ),
+        })} />
+
       <Stack.Screen name="Setting" component={SettingScreen} />
       <Stack.Screen name="Inquiry" component={InquiryScreen} />
       <Stack.Screen name="Announce" component={AnnounceScreen}/>
@@ -61,22 +79,23 @@ const AppNavigator = () => {
         name="UserReview1" 
         component={UserReviewScreen1} 
         options={({ navigation }) => ({
-          headerTitle: '리뷰 작성 1단계',
+          headerTitle: '리뷰 작성하기',
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Image source={require('../../assets/left.png')} style={{ height: 24, width: 24 }} />
             </TouchableOpacity>
           ),
           headerTitleAlign: 'center',
-          headerStyle: { backgroundColor: colors.Ivory100 }, // 헤더 배경 색
-          headerTintColor: colors.Green900, // 텍스트 색상
+          headerStyle: { backgroundColor: colors.Ivory100 }, 
+          headerTintColor: colors.Gray900, 
+          ...fonts.Body1
         })}
       />
       <Stack.Screen 
         name="UserReview2" 
         component={UserReviewScreen2} 
         options={({ navigation }) => ({
-          headerTitle: '리뷰 작성 2단계',
+          headerTitle: '리뷰 작성하기',
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Image source={require('../../assets/left.png')} style={{ height: 24, width: 24 }} />
@@ -84,14 +103,15 @@ const AppNavigator = () => {
           ),
           headerTitleAlign: 'center',
           headerStyle: { backgroundColor: colors.Ivory100 },
-          headerTintColor: colors.Green900,
+          headerTintColor: colors.Gray900,
+          ...fonts.Body1
         })}
       />
       <Stack.Screen 
         name="UserReview3" 
         component={UserReviewScreen3} 
         options={({ navigation }) => ({
-          headerTitle: '리뷰 작성 3단계',
+          headerTitle: '리뷰 작성하기',
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Image source={require('../../assets/left.png')} style={{ height: 24, width: 24 }} />
@@ -99,14 +119,15 @@ const AppNavigator = () => {
           ),
           headerTitleAlign: 'center',
           headerStyle: { backgroundColor: colors.Ivory100 },
-          headerTintColor: colors.Green900,
+          headerTintColor: colors.Gray900,
+          ...fonts.Body1
         })}
       />
       <Stack.Screen 
         name="UserReview4" 
         component={UserReviewScreen4} 
         options={({ navigation }) => ({
-          headerTitle: '리뷰 작성 4단계',
+          headerTitle: '리뷰 작성하기',
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Image source={require('../../assets/left.png')} style={{ height: 24, width: 24 }} />
@@ -114,7 +135,8 @@ const AppNavigator = () => {
           ),
           headerTitleAlign: 'center',
           headerStyle: { backgroundColor: colors.Ivory100 },
-          headerTintColor: colors.Green900,
+          headerTintColor: colors.Gray900,
+          ...fonts.Body1
         })}
       />
   

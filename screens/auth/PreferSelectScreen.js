@@ -102,7 +102,7 @@ const PreferSelectScreen = ({ navigation }) => {
                     selectedMoods.includes(moods.id) ? styles.selectedTagText : styles.unselectedTagText,
                   ]}
                 >
-                  #{moods.name}
+                  {moods.name}
                 </Text>
               </TouchableOpacity>
             ))

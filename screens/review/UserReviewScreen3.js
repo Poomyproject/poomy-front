@@ -45,10 +45,8 @@ const UserReviewScreen3 = () => {
         />
         <Text style={styles.charCount}>{`${reviewText.length}/500`}</Text>
         <Text style={styles.minChars}>최소 20자 이상</Text>
-
       </View>
-
-  
+      
       <FlatList
       horizontal
       data={[...photos, { isPlaceholder: true }]} // 마지막 항목에 사진 첨부 버튼을 포함

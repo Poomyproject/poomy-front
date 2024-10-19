@@ -97,7 +97,7 @@ const PreferPlaceScreen = ({ navigation }) => {
                     selectedPlaces.includes(place.id) ? styles.selectedTagText : styles.unselectedTagText,
                   ]}
                 >
-                  #{place.name}
+                  {place.name}
                 </Text>
               </TouchableOpacity>
             ))

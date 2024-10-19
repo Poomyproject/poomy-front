@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
-import colors from '../config/colors';
+import colors from '../../config/colors';
 
 const NewsLetterDetailScreen = () => {
     return (
@@ -31,12 +31,12 @@ const NewsLetterDetailScreen = () => {
                 {/* Section 1 */}
                 <View style={styles.sectionHeader}>
                     <View style={{ width: '76%', flexDirection: 'row', }}>
-                        <Image source={require('../assets/num1_circle.png')} style={styles.rightIcon} />
+                        <Image source={require('../../assets/num1_circle.png')} style={styles.rightIcon} />
                         <Text style={styles.sectionTitle}>소품샵 이름 </Text>
                     </View>
                     <TouchableOpacity style={{ flexDirection: 'row', }}>
                         <Text style={styles.sectionLink}> 바로가기</Text>
-                        <Image source={require('../assets/right.png')} style={styles.rightIcon} />
+                        <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
                     </TouchableOpacity>
                 </View>
 
@@ -57,7 +57,7 @@ const NewsLetterDetailScreen = () => {
                 </Text>
 
                 <View style={styles.locationContainer}>
-                    <Image source={require('../assets/pin.png')} style={styles.rightIcon} />
+                    <Image source={require('../../assets/pin.png')} style={styles.rightIcon} />
                     <Text style={styles.locationText}>3번 소품샵 위치</Text>
                 </View>
 
@@ -65,12 +65,12 @@ const NewsLetterDetailScreen = () => {
                 <View style={{ marginTop: 70, }} />
                 <View style={styles.sectionHeader}>
                     <View style={{ width: '76%', flexDirection: 'row', }}>
-                        <Image source={require('../assets/num2_circle.png')} style={styles.rightIcon} />
+                        <Image source={require('../../assets/num2_circle.png')} style={styles.rightIcon} />
                         <Text style={styles.sectionTitle}>소품샵 이름 </Text>
                     </View>
                     <TouchableOpacity style={{ flexDirection: 'row', }}>
                         <Text style={styles.sectionLink}> 바로가기</Text>
-                        <Image source={require('../assets/right.png')} style={styles.rightIcon} />
+                        <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
                     </TouchableOpacity>
                 </View>
 
@@ -91,7 +91,7 @@ const NewsLetterDetailScreen = () => {
                 </Text>
 
                 <View style={styles.locationContainer}>
-                    <Image source={require('../assets/pin.png')} style={styles.rightIcon} />
+                    <Image source={require('../../assets/pin.png')} style={styles.rightIcon} />
                     <Text style={styles.locationText}>3번 소품샵 위치</Text>
                 </View>
 
@@ -99,12 +99,12 @@ const NewsLetterDetailScreen = () => {
                 <View style={{ marginTop: 70, }} />
                 <View style={styles.sectionHeader}>
                     <View style={{ width: '76%', flexDirection: 'row', }}>
-                        <Image source={require('../assets/num3_circle.png')} style={styles.rightIcon} />
+                        <Image source={require('../../assets/num3_circle.png')} style={styles.rightIcon} />
                         <Text style={styles.sectionTitle}>소품샵 이름 </Text>
                     </View>
                     <TouchableOpacity style={{ flexDirection: 'row', }}>
                         <Text style={styles.sectionLink}> 바로가기</Text>
-                        <Image source={require('../assets/right.png')} style={styles.rightIcon} />
+                        <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
                     </TouchableOpacity>
                 </View>
 
@@ -125,14 +125,14 @@ const NewsLetterDetailScreen = () => {
                 </Text>
 
                 <View style={styles.locationContainer}>
-                    <Image source={require('../assets/pin.png')} style={styles.rightIcon} />
+                    <Image source={require('../../assets/pin.png')} style={styles.rightIcon} />
                     <Text style={styles.locationText}>3번 소품샵 위치</Text>
                 </View>
                 <View style={{ marginBottom: 20, }} />
             </View>
 
             <View style={styles.enddingContainer}>
-                <Image source={require('../assets/NewsPoomy.png')} style={styles.poomyIcon} />
+                <Image source={require('../../assets/NewsPoomy.png')} style={styles.poomyIcon} />
                 <View style={{ marginTop: 50, }}>
                     <Text style={styles.enddingText}>오늘 Poomy가 추천해준</Text>
                     <Text style={styles.enddingText}>빈티지 분위기 소품샵, 어떠셨나요? {"\n"}</Text>
@@ -143,11 +143,11 @@ const NewsLetterDetailScreen = () => {
                 </View>
             </View>
 
-            <Image source={require('../assets/Newsline.png')} style={styles.line} />
+            <Image source={require('../../assets/Newsline.png')} style={styles.line} />
             <Text style={styles.enddingBtnText}>오늘의 뉴스레터는 어떠했나요?</Text>
             <Text style={styles.enddingText}>당신의 의견을 알려주세요. {"\n"}</Text>
             <TouchableOpacity style={styles.usefulBtn}>
-                <Image source={require('../assets/thumb.png')}  style={styles.thumb}/>
+                <Image source={require('../../assets/thumb.png')}  style={styles.thumb}/>
                 <Text style={styles.usefultext}>유용해요</Text>
                 <Text style={styles.usefulcnt}>0</Text>
             </TouchableOpacity>

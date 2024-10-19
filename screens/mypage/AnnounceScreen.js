@@ -18,8 +18,7 @@ const AnnounceScreen = () => {
       {isExpanded1 && (
         <View style={styles.answerContainer}>
           <Text style={styles.answerText}>
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
+            푸미의 첫번째 버전이 출시되었습니다!
           </Text>
         </View>
       )}
