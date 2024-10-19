@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView, ImageBackground, ActivityIndicator } from 'react-native';
+import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView, ViewComponent, ActivityIndicator } from 'react-native';
 import colors from '../config/colors';
 import ApiClient, { setAxiosInterceptors } from '../screens/auth/ApiClient'; // ApiClient의 실제 경로로 수정하세요
 
@@ -162,7 +162,7 @@ const MainScreen = ({ navigation }) => {
 
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
-                        <Text style={styles.sectionTitle_sec}>{homeSpotShop?.prefix} </Text>
+                        <Text style={styles.sectionTitle_sec}>{homeSpotShop.prefix} </Text>
                         <Text style={styles.sectionTitle_sec_color}>#{homeSpotShop.hashtag} </Text>
                         <Text style={styles.sectionTitle_sec}>로가자! </Text>
                     </View>
@@ -176,24 +176,16 @@ const MainScreen = ({ navigation }) => {
                 >
                     {homeSpotShop.shopList.slice(0, 6).map((shop, index) => (
                         <TouchableOpacity key={index} style={styles.box}>
-                            <ImageBackground source={{ uri: shop?.image }} style={styles.boxshopImage}>
-                                {/* 해시태그 컨테이너 */}
-                                <View style={styles.hashtagContainer}>
-                                    <Text style={styles.hashtagText}>{shop?.mood}</Text>
-                                </View>
-
-                                {/* 그라디언트 및 상호명 */}
-                                <View style={styles.overlay}>
-                                    <Image source={require('../assets/gradient.png')} style={styles.gradientbox} />
-                                    <Text style={styles.shopName}>{shop?.name}</Text>
-
-                                    {/* 좋아요 아이콘과 숫자 */}
-                                    <View style={styles.favoriteContainer}>
-                                        <Image source={require('../assets/mainheart.png')} style={styles.mainheart} />
-                                        <Text style={styles.favoriteText}>{shop?.favoriteNum}</Text>
-                                    </View>
-                                </View>
-                            </ImageBackground>
+                            <View style={styles.hashtagContainer}>
+                                <Text style={styles.hashtagText}>{shop?.mood}</Text>
+                            </View>
+                            <Image source={{ uri: shop?.image }} style={styles.boxshopImage} />
+                            <Image source={require('../assets/gradient.png')} style={styles.gradientbox} />
+                            <Text style={styles.shopName}>{shop?.name}</Text>
+                            <View style={styles.favoriteContainer}>
+                                <Image source={require('../assets/mainheart.png')} style={styles.mainheart} />
+                                <Text style={styles.favoriteText}>{shop?.favoriteNum}</Text>
+                            </View>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
@@ -267,7 +259,7 @@ const MainScreen = ({ navigation }) => {
                 <View style={{ marginTop: 17 }} />
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
-                        <Text style={styles.sectionTitle_sec}>{moodItem1?.prefix} </Text>
+                        <Text style={styles.sectionTitle_sec}>{moodItem1.prefix} </Text>
                         <Text style={styles.sectionTitle_sec_color}>#{moodItem1.hashtag} </Text>
                         <Text style={styles.sectionTitle_sec}>소품샵 </Text>
                     </View>
@@ -281,13 +273,11 @@ const MainScreen = ({ navigation }) => {
                 >
                     {moodItem1.shopList.slice(0, 7).map((shop, index) => (
                         <TouchableOpacity key={index} style={styles.lastView}>
-
+                            <View style={styles.LastHTcontainer}>
+                                <Text style={styles.hashtagText}>{shop.spot}</Text>
+                            </View>
                             <View>
-                                <ImageBackground source={{ uri: shop.image }} style={styles.shopImage}>
-                                    <View style={styles.hashtagContainer}>
-                                        <Text style={styles.hashtagText}>{shop.spot}</Text>
-                                    </View>
-                                </ImageBackground>
+                                <Image source={{ uri: shop.image }} style={styles.shopImage} />
                                 <Text style={styles.lastshoptext} numberOfLines={1} ellipsizeMode="tail">
                                     {shop.name.length > 7 ? `${shop.name.substring(0, 11)}...` : shop.name}
                                 </Text>
@@ -300,13 +290,12 @@ const MainScreen = ({ navigation }) => {
                 {/* mood 2번째 부분 */}
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
-                        <Text style={styles.sectionTitle_sec}>{moodItem2?.prefix} </Text>
+                        <Text style={styles.sectionTitle_sec}>{moodItem2.prefix} </Text>
                         <Text style={styles.sectionTitle_sec_color}>#{moodItem2.hashtag} </Text>
                         <Text style={styles.sectionTitle_sec}>소품샵 </Text>
                     </View>
                     <Image source={require('../assets/right.png')} style={styles.rightIcon} />
                 </TouchableOpacity>
-
 
                 <ScrollView
                     horizontal={true}
@@ -315,13 +304,11 @@ const MainScreen = ({ navigation }) => {
                 >
                     {moodItem2.shopList.slice(0, 7).map((shop, index) => (
                         <TouchableOpacity key={index} style={styles.lastView}>
-
+                            <View style={styles.LastHTcontainer}>
+                                <Text style={styles.hashtagText}>{shop.spot}</Text>
+                            </View>
                             <View>
-                                <ImageBackground source={{ uri: shop.image }} style={styles.shopImage}>
-                                    <View style={styles.hashtagContainer}>
-                                        <Text style={styles.hashtagText}>{shop.spot}</Text>
-                                    </View>
-                                </ImageBackground>
+                                <Image source={{ uri: shop.image }} style={styles.shopImage} />
                                 <Text style={styles.lastshoptext} numberOfLines={1} ellipsizeMode="tail">
                                     {shop.name.length > 7 ? `${shop.name.substring(0, 11)}...` : shop.name}
                                 </Text>
@@ -329,6 +316,7 @@ const MainScreen = ({ navigation }) => {
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
+
 
 
                 <View style={{ padding: '20%', }} />
@@ -361,6 +349,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.Ivory900,
         borderRadius: 10,
     },
+
     searchText: {
         flex: 1,
         color: colors.Gray300,
@@ -408,6 +397,10 @@ const styles = StyleSheet.create({
         color: colors.Gray900,
         marginTop: 5,
     },
+    rightText_sec: {
+        color: colors.Gray900,
+        marginTop: 10,
+    },
     rightIcon: {
         width: 24,
         height: 24,
@@ -437,32 +430,47 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'flex-start',
         marginTop: 20,
+        height: '150%'
     },
     placeContainer2: {
         flexDirection: 'row',
         alignSelf: 'flex-start',
         marginTop: 15,
-        marginLeft:15,
+        height: '300%'
     },
     placeContainer3: {
         flexDirection: 'row',
         alignSelf: 'flex-start',
         marginTop: 20,
+        height: '70%'
     },
     placeContainer4: {
         flexDirection: 'row',
         alignSelf: 'flex-start',
         marginTop: 15,
+        height: '300%',
     },
     placeText: {
         fontSize: 13,
         marginTop: 15,
         color: colors.Gray700,
     },
+    recommandContainer: {
+        flexDirection: 'row',
+        marginHorizontal: 20,
+        alignSelf: 'flex-start'
+    },
+    newsletterImage: {
+        width: 150,
+        height: 170,
+    },
     keword: {
         flexDirection: 'row',
         marginLeft: '7%',
         marginTop: '3%'
+    },
+    keword_view: {
+        alignSelf: 'flex-start'
     },
     keword_text: {
         alignSelf: 'flex-start',
@@ -481,6 +489,10 @@ const styles = StyleSheet.create({
         width: 150,
         height: 150,
     },
+    last_new_Image: {
+        width: 140,
+        height: 140,
+    },
     themeImg: {
         width: 58,
         height: 58,
@@ -489,45 +501,52 @@ const styles = StyleSheet.create({
         padding: 80,
     },
     box: {
-        width: 130, // 각 아이템의 너비
-        height: 170, // 각 아이템의 높이
-        borderRadius: 8,
-        overflow: 'hidden', // 경계 밖으로 나가는 요소 숨기기
-        margin: 10,
+        alignItems: 'center',
+        marginLeft: 25,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        padding: 10,
+        width: 130, // 원하는 너비
+        position: 'relative', // 자식 요소들을 상대적으로 배치하기 위해 필요
     },
     hashtagContainer: {
         position: 'absolute',
-        top: 10,
+        top: 20,
         left: 10,
-        backgroundColor: colors.Ivory100,
+        backgroundColor: colors.Ivory100, // 회색 배경
         borderRadius: 20,
         paddingHorizontal: 10,
-        paddingVertical: 5,
-        borderColor: colors.Green500,
+        paddingVertical: 6,
         borderWidth: 1,
+        borderColor: colors.Green500,
+        zIndex: 2, // 이미지 위로 올리기 위해 zIndex 사용
+
     },
     hashtagText: {
-        padding:2,
         fontSize: 12,
-        color: 'black',
-    },
-    overlay: {
-        padding: 10,
+        color: colors.Gray700,
     },
     boxshopImage: {
-        width: 130,
-        height: 170,
-        justifyContent: 'flex-end', // 이미지 위에 텍스트를 아래쪽에 배치
+        width: 130, // 이미지 너비
+        height: 170, // 이미지 높이
+        borderRadius: 5, // 이미지 모서리를 둥글게
     },
     shopName: {
+        position: 'absolute', // 이미지 위로 올리기 위해 절대 위치 설정
+        bottom: 45, // 이미지 하단에서부터 40px 위에 위치
+        left: 10,
         fontSize: 15,
         fontWeight: 'bold',
-        color: 'white',
-        marginBottom: 5,
+        marginTop: 10,
+        color: '#333',
+        color: '#FFFFFF', // 흰색 텍스트
     },
     favoriteContainer: {
         flexDirection: 'row',
-        alignItems: 'center',
+        position: 'absolute', // 이미지 위로 올리기 위해 절대 위치 설정
+        bottom: 25, // 이미지 하단에서 10px 위에 위치
+        left: 10,
+        zIndex: 2, // 이미지 위로 보이도록 zIndex 추가
     },
     favoriteText: {
         marginTop: 0,
@@ -541,21 +560,35 @@ const styles = StyleSheet.create({
         height: 15,
     },
     gradientbox: {
+        position: 'absolute', // 이미지 위로 올리기 위해 절대 위치 설정
+        bottom: 10, // 이미지 하단에서 10px 위에 위치
         width: 130,
-        height: 80, // 그라디언트 이미지 높이 설정
+        height: 80,
+        borderRadius: 5, // 이미지 모서리를 둥글게
+    },
+    LastHTcontainer: {
         position: 'absolute',
-        bottom: 0, // 아래쪽에 그라디언트 배치
+        top: 10,
+        left: 10,
+        backgroundColor: colors.Ivory100, // 회색 배경
+        borderRadius: 20,
+        paddingHorizontal: 10,
+        paddingVertical: 6,
+        borderWidth: 1,
+        borderColor: colors.Green500,
+        zIndex: 2, // 이미지 위로 올리기 위해 zIndex 사용
     },
     lastshoptext: {
         marginLeft: 10,
         marginTop: 10,
+        marginBottom: 20,
         color: colors.Gray900,
         fontWeight: 'bold',
     },
     lastView: {
-        marginTop:10,
         alignItems: 'center',
         marginLeft: 25,
+
         // iOS 그림자 효과
         shadowColor: '#000',
         shadowOffset: {

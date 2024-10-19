@@ -1,14 +1,53 @@
-import React from 'react';
+import React , {useContext , useState , useEffect} from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity,ScrollView } from 'react-native';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons'; // 아이콘 사용
 import colors from '../../config/colors';
 import { fonts } from '../../config/fonts'; 
 import { useNavigation } from '@react-navigation/native';
+import { ShopContext } from './ShopContext';
+import ApiClient from '../auth/ApiClient';
+import { ActivityIndicator } from 'react-native-paper';
 
 
 const ShopDetailScreen = () => {
 
   const navigation = useNavigation();
+  const { selectedShopId } = useContext(ShopContext); // ShopContext에서 shopId를 가져옴
+  const [shopData, setShopData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchShopData = async () => {
+      try {
+        const response = await ApiClient.get(`/api/shop/${selectedShopId}`); // shopId를 이용해 API 호출
+        setShopData(response.data); // API 응답 데이터를 상태에 저장
+        console.log('API 응답:', response.data); // 응답 데이터 출력
+      } catch (err) {
+        console.error('API 요청 중 에러 발생:', err);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (selectedShopId) {
+      fetchShopData(); // selectedShopId가 존재할 때만 API 호출
+    }
+  }, [selectedShopId]);
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
+
+  if (error) {
+    return (
+      <View>
+        <Text>에러 발생: {error.message}</Text>
+      </View>
+    );
+  }
+
 
     return (
       <ScrollView contentContainerStyle={{ alignItems: 'center', flexGrow: 1 }}>
