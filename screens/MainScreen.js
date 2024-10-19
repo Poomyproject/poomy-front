@@ -1,11 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView, ViewComponent, ActivityIndicator } from 'react-native';
 import colors from '../config/colors';
 import ApiClient, { setAxiosInterceptors } from '../screens/auth/ApiClient'; // ApiClient의 실제 경로로 수정하세요
+import { ShopContext } from './shop/ShopContext';
 
 const { width, height } = Dimensions.get('window');
 
 const MainScreen = ({ navigation }) => {
+
+    const { setSelectedShopId } = useContext(ShopContext);
+
+    const handleShopPress = (shopId) => {
+        setSelectedShopId(shopId); // shopId 저장
+        navigation.navigate('ShopDetail', { shopId }); // ShopDetail 화면으로 이동하며 shopId 전달
+      };
+      
     // 여기부터 api 통신
 
     // 가장 상단 샵 정보 불러오기
@@ -162,7 +171,7 @@ const MainScreen = ({ navigation }) => {
 
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
-                        <Text style={styles.sectionTitle_sec}>{homeSpotShop.prefix} </Text>
+                        <Text style={styles.sectionTitle_sec}>{homeSpotShop?.prefix || '컨텐츠 불러오기 실패'} </Text>
                         <Text style={styles.sectionTitle_sec_color}>#{homeSpotShop.hashtag} </Text>
                         <Text style={styles.sectionTitle_sec}>로가자! </Text>
                     </View>
@@ -175,7 +184,10 @@ const MainScreen = ({ navigation }) => {
                     showsHorizontalScrollIndicator={false}
                 >
                     {homeSpotShop.shopList.slice(0, 6).map((shop, index) => (
-                        <TouchableOpacity key={index} style={styles.box}>
+                        <TouchableOpacity key={index}
+                         style={styles.box}
+                         onPress={() => handleShopPress(shop?.id)} // shopId 저장 및 페이지 이동
+                         >
                             <View style={styles.hashtagContainer}>
                                 <Text style={styles.hashtagText}>{shop?.mood}</Text>
                             </View>
@@ -259,7 +271,7 @@ const MainScreen = ({ navigation }) => {
                 <View style={{ marginTop: 17 }} />
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
-                        <Text style={styles.sectionTitle_sec}>{moodItem1.prefix} </Text>
+                        <Text style={styles.sectionTitle_sec}>{moodItem1?.prefix || '컨텐츠 불러오기 실패'} </Text>
                         <Text style={styles.sectionTitle_sec_color}>#{moodItem1.hashtag} </Text>
                         <Text style={styles.sectionTitle_sec}>소품샵 </Text>
                     </View>
@@ -290,8 +302,8 @@ const MainScreen = ({ navigation }) => {
                 {/* mood 2번째 부분 */}
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
-                        <Text style={styles.sectionTitle_sec}>{moodItem2.prefix} </Text>
-                        <Text style={styles.sectionTitle_sec_color}>#{moodItem2.hashtag} </Text>
+                        <Text style={styles.sectionTitle_sec}>{moodItem2?.prefix || '컨텐츠 불러오기 실패'} </Text>
+                        <Text style={styles.sectionTitle_sec_color}>#{moodItem2?.hashtag || '컨텐츠 불러오기 실패'} </Text>
                         <Text style={styles.sectionTitle_sec}>소품샵 </Text>
                     </View>
                     <Image source={require('../assets/right.png')} style={styles.rightIcon} />
@@ -302,7 +314,7 @@ const MainScreen = ({ navigation }) => {
                     style={styles.placeContainer4}
                     showsHorizontalScrollIndicator={false}
                 >
-                    {moodItem2.shopList.slice(0, 7).map((shop, index) => (
+                    {moodItem2?.shopList.slice(0, 7).map((shop, index) => (
                         <TouchableOpacity key={index} style={styles.lastView}>
                             <View style={styles.LastHTcontainer}>
                                 <Text style={styles.hashtagText}>{shop.spot}</Text>

@@ -3,7 +3,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { TouchableOpacity, Image, Text } from 'react-native';
 import colors from '../../config/colors';
 import { fonts } from '../../config/fonts';
-import axios from 'axios';
 
 
 import SplashScreen from '../auth/SplashScreen';
@@ -36,10 +35,13 @@ import SearchStackNavigator from './SearchStackNavigator';
 import KeywardStackNavigator from './KeywardStackNavigator';
 import ReviewStackNavigator from './ReviewStackNavigator';
 
+import ShopProvider from '../shop/ShopContext';
+
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
+    <ShopProvider>
     <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
@@ -50,9 +52,7 @@ const AppNavigator = () => {
       <Stack.Screen name="PreferPlace" component={PerferPlaceScreen} options={{ headerShown: false }} />
       <Stack.Screen name="MainTab" component={MainTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
-    
       <Stack.Screen name="MypageEdit" component={MypageEditScreen} options={{ headerShown: true }} />
-      
       <Stack.Screen name="NameEdit" component={NameEditScreen} options={({ navigation }) => ({
           headerTitle: '이름바꾸기',
           headerLeft: () => (
@@ -139,15 +139,14 @@ const AppNavigator = () => {
           ...fonts.Body1
         })}
       />
-  
 
       <Stack.Screen name="KeywardStack" component={KeywardStackNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NewsLetterStack" component={NewsLetterStackNavigator} options={{ headerShown: false }} />
       {/* <Stack.Screen name="ReviewStack" component={ReviewStackNavigator} options={{ headerShown: false }} /> */}
       <Stack.Screen name="SearchStack" component={SearchStackNavigator} options={{ headerShown: false }} />
 
-
     </Stack.Navigator>
+    </ShopProvider>
   );
 };
 

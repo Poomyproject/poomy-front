@@ -6,11 +6,14 @@ import MainScreen from '../MainScreen';
 import MypageStackNavigator from './MypageStackNavigator';
 import colors from '../../config/colors';
 import ShopNavigatior from './ShopNavigatior';
+import ShopProvider from '../shop/ShopContext';
+
 
 const Tab = createBottomTabNavigator();
 
 const MainTabNavigator = () => {
   return (
+    <ShopProvider>
     <Tab.Navigator initialRouteName="Main">
       <Tab.Screen
         name="Like"
@@ -47,6 +50,7 @@ const MainTabNavigator = () => {
         }}
       />
     </Tab.Navigator>
+    </ShopProvider>
   );
 };
 
