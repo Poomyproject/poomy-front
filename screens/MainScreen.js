@@ -281,11 +281,13 @@ const MainScreen = ({ navigation }) => {
                 >
                     {moodItem1.shopList.slice(0, 7).map((shop, index) => (
                         <TouchableOpacity key={index} style={styles.lastView}>
-                            <View style={styles.LastHTcontainer}>
-                                <Text style={styles.hashtagText}>{shop.spot}</Text>
-                            </View>
+
                             <View>
-                                <Image source={{ uri: shop.image }} style={styles.shopImage} />
+                                <ImageBackground source={{ uri: shop.image }} style={styles.shopImage}>
+                                    <View style={styles.hashtagContainer}>
+                                        <Text style={styles.hashtagText}>{shop.spot}</Text>
+                                    </View>
+                                </ImageBackground>
                                 <Text style={styles.lastshoptext} numberOfLines={1} ellipsizeMode="tail">
                                     {shop.name.length > 7 ? `${shop.name.substring(0, 11)}...` : shop.name}
                                 </Text>
@@ -305,6 +307,7 @@ const MainScreen = ({ navigation }) => {
                     <Image source={require('../assets/right.png')} style={styles.rightIcon} />
                 </TouchableOpacity>
 
+
                 <ScrollView
                     horizontal={true}
                     style={styles.placeContainer4}
@@ -312,11 +315,13 @@ const MainScreen = ({ navigation }) => {
                 >
                     {moodItem2.shopList.slice(0, 7).map((shop, index) => (
                         <TouchableOpacity key={index} style={styles.lastView}>
-                            <View style={styles.LastHTcontainer}>
-                                <Text style={styles.hashtagText}>{shop.spot}</Text>
-                            </View>
+
                             <View>
-                                <Image source={{ uri: shop.image }} style={styles.shopImage} />
+                                <ImageBackground source={{ uri: shop.image }} style={styles.shopImage}>
+                                    <View style={styles.hashtagContainer}>
+                                        <Text style={styles.hashtagText}>{shop.spot}</Text>
+                                    </View>
+                                </ImageBackground>
                                 <Text style={styles.lastshoptext} numberOfLines={1} ellipsizeMode="tail">
                                     {shop.name.length > 7 ? `${shop.name.substring(0, 11)}...` : shop.name}
                                 </Text>
@@ -324,7 +329,6 @@ const MainScreen = ({ navigation }) => {
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
-
 
 
                 <View style={{ padding: '20%', }} />
@@ -442,6 +446,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'flex-start',
         marginTop: 15,
+        marginLeft:15,
     },
     placeContainer3: {
         flexDirection: 'row',
@@ -506,7 +511,7 @@ const styles = StyleSheet.create({
     box: {
         width: 130, // 각 아이템의 너비
         height: 170, // 각 아이템의 높이
-        borderRadius: 10,
+        borderRadius: 8,
         overflow: 'hidden', // 경계 밖으로 나가는 요소 숨기기
         margin: 10,
     },
@@ -514,12 +519,15 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 10,
         left: 10,
-        backgroundColor: 'rgba(255, 255, 255, 0.8)', // 해시태그 배경 투명도
+        backgroundColor: colors.Ivory100,
         borderRadius: 20,
         paddingHorizontal: 10,
         paddingVertical: 5,
+        borderColor: colors.Green500,
+        borderWidth: 1,
     },
     hashtagText: {
+        padding:2,
         fontSize: 12,
         color: 'black',
     },
@@ -532,7 +540,8 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end', // 이미지 위에 텍스트를 아래쪽에 배치
     },
     shopName: {
-        fontSize: 18,
+        fontSize: 15,
+        fontWeight: 'bold',
         color: 'white',
         marginBottom: 5,
     },
@@ -572,6 +581,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     lastView: {
+        marginTop:10,
         alignItems: 'center',
         marginLeft: 25,
         // iOS 그림자 효과
@@ -580,8 +590,8 @@ const styles = StyleSheet.create({
             width: 0,
             height: 0,
         },
-        shadowOpacity: 0.3,
-        shadowRadius: 3,  // Increase shadowRadius for a more noticeable shadow
+        shadowOpacity: 0.2,
+        shadowRadius: 4,  // Increase shadowRadius for a more noticeable shadow
 
         // 배경색 설정 (그림자가 잘 보이게 하기 위해 필요할 수 있음)
         backgroundColor: 'white',
