@@ -1,8 +1,8 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { TouchableOpacity, Image } from 'react-native';
-import NewsLetterScreen from '../NewsLetterScreen';
-import NewsLetterDetailScreen from '../NewsLetterDetailScreen';
+import NewsLetterScreen from '../newsletter/NewsLetterScreen';
+import NewsLetterDetailScreen from '../newsletter/NewsLetterDetailScreen';
 
 const NewsLetterStack = createStackNavigator();
 

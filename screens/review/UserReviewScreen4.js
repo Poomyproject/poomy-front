@@ -47,12 +47,13 @@ const styles = StyleSheet.create({
     ...fonts.Body2,
   },
   button: {
-    width: '80%',
+    width: '100%',
     height: 48,
-    backgroundColor: colors.Green900,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
+    backgroundColor: colors.Green900,
+    marginTop : 280 , 
   },
   buttonText: {
     fontSize: 16,

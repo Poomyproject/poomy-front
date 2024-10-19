@@ -1,20 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import colors from '../../config/colors';
 import { fonts } from '../../config/fonts';
 import Modal from 'react-native-modal';
-import ApiClient from '../auth/ApiClient'; // API 클라이언트 가져오기
+import ApiClient from '../auth/ApiClient'; 
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { UserContext } from './UserContext';
+
 
 const MypageEditScreen = () => {
-  const [nickname, setNickname] = useState('닉네임이 존재하지 않습니다.');
-  const [email, setEmail] = useState('이메일이 존재하지 않습니다.');
-  const [selectedMoods, setSelectedMoods] = useState([]);
-  const [selectedPlaces, setSelectedPlaces] = useState([]);
-
+  const { nickname, setNickname, googleEmail, setgoogleEmail, selectedMoods ,setSelectedMoods, selectedPlaces, setSelectedPlaces } = useContext(UserContext);
   const [isFirstModalVisible, setFirstModalVisible] = useState(false);
   const [isSecondModalVisible, setSecondModalVisible] = useState(false);
+  const navigation = useNavigation();
 
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
+ 
+  // 서버로 닉네임 저장
+  const handleSaveNicknameToServer = async () => {
+    try {
+      const response = await ApiClient.post('/api/users/nickname', { nickname });
+      if (response.data.success) {
+        console.log('Nickname saved successfully');
+        navigation.goBack(); // 저장 후 이전 화면으로 이동
+      } else {
+        console.error('Error saving nickname');
+      }
+    } catch (error) {
+      console.error('Error during nickname save:', error);
+    }
+  };
+
+  useEffect(() => {
+    navigation.setParams({ handleSaveNicknameToServer });
+  }, [nickname]);
 
   // 완료 버튼을 눌렀을 때 변경사항 서버로 전송
   const handleSaveChanges = async () => {
@@ -25,7 +44,7 @@ const MypageEditScreen = () => {
 
     const data = {
       nickname,
-      email,
+      googleEmail,
       places: selectedPlaces,
       moods: selectedMoods,
     };
@@ -40,6 +59,10 @@ const MypageEditScreen = () => {
     }
   };
 
+  const nicknameNavi = () => {
+    navigation.navigate('NameEdit');
+  };
+
   // API에서 사용자 데이터를 가져오는 함수
   const fetchUserData = async () => {
     try {
@@ -47,7 +70,7 @@ const MypageEditScreen = () => {
       if (response.data.success) {
         const userData = response.data.response;
         setNickname(userData.nickname);
-        setEmail(userData.googleEmail);
+        setgoogleEmail(userData.googleEmail);
         setSelectedMoods(userData.moods.map(mood => mood.name));
         setSelectedPlaces(userData.spots.map(spot => spot.name));
       }
@@ -100,7 +123,7 @@ const MypageEditScreen = () => {
         // 선택된 분위기가 2개 미만일 경우 추가
         return [...prevMoods, mood];
       }
-      return prevMoods; // 2개가 넘는 경우 추가하지 않음
+      return prevMoods; 
     })
   };
 
@@ -117,22 +140,16 @@ const MypageEditScreen = () => {
       <Image source={require('../../assets/defualt.png')} style={styles.profileImage} />
       <View style={styles.contentContainer}>
         <Text style={styles.textColor}>닉네임</Text>
-        <TextInput
-          style={styles.textInput}
-          value={nickname}
-          onChangeText={setNickname}
-        />
-
+        <TouchableOpacity style={styles.nicknameContainer} onPress={() => navigation.navigate('NameEdit')}>
+          <Text>{nickname}</Text>
+        </TouchableOpacity>
+        
         <Text style={styles.textColor}>계정정보</Text>
-        <TextInput
-          style={styles.textInput}
-          value={email}
-          onChangeText={setEmail}
-        />
-
+        <Text style={styles.nicknameContainer}>{googleEmail}</Text>
+         
         {/* 첫 번째 관심 장소 선택 */}
-        <Text style={styles.textColor}>첫 번째 관심 장소</Text>
-        <TouchableOpacity onPress={togglePlaceModal} style={styles.textInput}>
+        <Text style={styles.textColor}>관심 장소</Text>
+        <TouchableOpacity onPress={togglePlaceModal} style={styles.moodTextContainer}>
           {selectedPlaces.length === 0 ? (
             <Text>장소 선택</Text>
           ) : (
@@ -147,8 +164,8 @@ const MypageEditScreen = () => {
         </TouchableOpacity>
 
         {/* 두 번째 관심 분위기 선택 */}
-        <Text style={styles.textColor}>두 번째 관심 분위기</Text>
-        <TouchableOpacity onPress={toggleMoodModal} style={styles.textInput}>
+        <Text style={styles.textColor}>관심 분위기</Text>
+        <TouchableOpacity onPress={toggleMoodModal} style={styles.moodTextContainer}>
           {selectedMoods.length === 0 ? (
             <Text>분위기 선택</Text>
           ) : (
@@ -223,10 +240,6 @@ const MypageEditScreen = () => {
             </TouchableOpacity>
           </View>
         </Modal>
-
-        <TouchableOpacity onPress={handleSaveChanges} style={styles.saveButton}>
-          <Text style={styles.saveButtonText}>저장하기</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -265,30 +278,56 @@ const styles = StyleSheet.create({
     ...fonts.Body2,
     justifyContent: 'center',
   },
+  
+  nicknameContainer: {
+    backgroundColor: colors.Ivory300,  
+    borderColor: colors.Gray300,        
+    borderWidth: 1,              
+    borderRadius: 5,             
+    padding: 15,                
+    marginTop: 10,  
+    width: '100%',
+  },
+
+  moodTextContainer : {
+    backgroundColor: colors.Ivory300,  
+    borderColor: colors.Gray300,        
+    borderWidth: 1,              
+    borderRadius: 10,             
+    padding: 10,                
+    marginTop: 10,  
+    width: '100%',
+  },
+
   selectedMoodsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginTop: 8,
+    
   },
+
   moodTag: {
-    backgroundColor: colors.Gray100,  // 박스 배경색 변경
-    borderColor: colors.Green900,  // 테두리 색상 변경
-    borderWidth: 1,  // 테두리 두께
-    paddingVertical: 8,  // 세로 패딩을 더 크게
-    paddingHorizontal: 15,  // 가로 패딩을 더 크게
-    borderRadius: 25,  // 둥근 모서리 크기 수정
-    marginRight: 10,  // 오른쪽 여백
-    marginTop: 10,  // 위쪽 여백
+    backgroundColor: colors.Ivory100,
+    borderColor: colors.Green500,  
+    borderWidth: 1,  
+    paddingVertical: 5,  
+    paddingHorizontal: 15,  
+    borderRadius: 25, 
+    marginRight: 10,  
+    marginTop : -5, 
   },
+
   moodTagText: {
-    color: colors.Green900,  // 텍스트 색상 변경
-    fontSize: 16,  // 글자 크기 변경
-    fontWeight: 'bold',  // 텍스트 굵기 추가
+    color: colors.Gray700, 
+    ...fonts.Caption1,
+    fontWeight: 'bold', 
   },
+
   bottomModal: {
     justifyContent: 'flex-end',
     margin: 0,
   },
+
   modalContent: {
     backgroundColor: colors.Ivory100,
     padding: 30,
@@ -296,16 +335,19 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     alignItems: 'flex-start',
   },
+
   textContainer: {
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
   },
+
   text: {
     flex: 1,
     ...fonts.Body1,
   },
+
   image: {
     width: 20,
     height: 20,
@@ -331,10 +373,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.Green900,
     borderColor: colors.Green900,
   },
+
   moodText: {
     fontSize: 16,
     color: colors.Gray900,
   },
+
   closeButton: {
     width: '100%',
     height: 48,
@@ -361,6 +405,7 @@ const styles = StyleSheet.create({
     color: colors.Ivory100,
     fontSize: 15,
   },
+
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',

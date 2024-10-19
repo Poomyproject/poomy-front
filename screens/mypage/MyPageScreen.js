@@ -5,38 +5,38 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../../config/colors';
 import MypageEditScreen from './MypageEditScreen';
 import ApiClient from '../auth/ApiClient';
-import { useEffect,useState } from 'react';
+import { useEffect,useState, useContext } from 'react';
 import { fonts } from '../../config/fonts';
+import { UserContext } from './UserContext';
 
 
 const MyPageScreen = () => {
   const navigation = useNavigation(); 
 
-  const [nickname, setNickname] = useState('');
-  const [googleEmail, setGoogleEmail] = useState('');
-  const [imgUrl, setImgUrl] = useState('');
-  const [moods, setMoods] = useState([]);
-  const [places, setPlaces] = useState([]);
+  const { nickname, setNickname, googleEmail, setgoogleEmail, selectedMoods ,setSelectedMoods, selectedPlaces, setSelectedPlaces } = useContext(UserContext);
 
-  useEffect(() => {
-    const fetchUserInfo = async () => {
+    // API에서 사용자 데이터를 가져오는 함수
+    const fetchUserData = async () => {
       try {
-        const response = await ApiClient.get('/api/users');
-        const data = response.data.response;
-
-        setNickname(data.nickname);
-        setGoogleEmail(data.googleEmail);
-        setImgUrl(data.imgUrl);
-        setMoods(data.moods);
-        setPlaces(data.spots);
-
-        console.log('User Info:', data);
+        const response = await ApiClient.get('/api/users'); // API 호출
+        if (response.data.success) {
+          const userData = response.data.response;
+          setNickname(userData.nickname);
+          setgoogleEmail(userData.googleEmail);
+          setSelectedMoods(userData.moods.map(mood => mood.name));
+          setSelectedPlaces(userData.spots.map(spot => spot.name));
+        }
       } catch (error) {
-        console.error('Error fetching user info:', error);
+        console.error('데이터 가져오기 실패:', error);
+      } finally {
+        setLoading(false); // 데이터 로드 완료 후 로딩 상태 해제
       }
     };
-    fetchUserInfo();
-  }, []);
+  
+    // 컴포넌트 마운트 시 사용자 데이터를 가져옴
+    useEffect(() => {
+      fetchUserData();
+    }, []);
 
 
   const goToMypageEdit = () => {
@@ -104,26 +104,26 @@ const MyPageScreen = () => {
     </TouchableOpacity>
         </View>
         <View style={styles.preferContainer}>
-          <View style={styles.preferBox}>
-            <Image source={require('../../assets/mappin.png')} style={styles.preferIcon} />
-            <Text style={styles.preferText}>관심장소</Text>
-            <View style={styles.verticalLine}></View>
-            {places.length > 0 ? (
-            places.map((place) => (
-            <Text key={place.id} style={styles.textWithBorder}>#{place.name}</Text>
-            ))
-            ) : (
-            <Text>관심장소가 없습니다.</Text>
-            )}
-          </View>
+        <View style={styles.preferBox}>
+    <Image source={require('../../assets/mappin.png')} style={styles.preferIcon} />
+    <Text style={styles.preferText}>관심장소</Text>
+    <View style={styles.verticalLine}></View>
+    {selectedPlaces && selectedPlaces.length > 0 ? (
+      selectedPlaces.map((place, index) => (
+        <Text key={index} style={styles.textWithBorder}>{place}</Text>
+      ))
+    ) : (
+      <Text>관심장소가 없습니다.</Text>
+    )}
+  </View>
           <View style={[styles.preferBox, { marginTop: -30 }]}>
             <Image source={require('../../assets/headphones.png')} style={styles.preferIcon} />
             <Text style={styles.preferText}>관심분위기</Text>
             <View style={styles.verticalLine}></View>
             
-            {moods.length > 0 ? (
-            moods.map((mood) => (
-            <Text key={mood.id} style={styles.textWithBorder}>#{mood.name}</Text>
+            {selectedMoods && selectedMoods.length > 0 ? (
+            selectedMoods.map((mood) => (
+            <Text key={mood.id} style={styles.textWithBorder}>{mood}</Text>
             ))
             ) : (
             <Text>관심분위기가 없습니다.</Text>
@@ -249,9 +249,9 @@ const styles = StyleSheet.create({
   textWithBorder: {
     borderWidth: 1,
     borderColor: colors.Green500,
-    padding: 6,
+    padding: 7,
     margin: 5,
-    borderRadius: 16,
+    borderRadius: 14,
     fontSize: 12,
   },
 

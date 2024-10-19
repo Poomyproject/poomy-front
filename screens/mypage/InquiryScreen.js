@@ -27,8 +27,8 @@ const InquiryScreen = () => {
       {isExpanded1 && (
         <View style={styles.answerContainer}>
           <Text style={styles.answerText}>
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
+          한 번 등록한 소셜 로그인 계정은 변경할 수 없습니다. 
+          만약 다른 계정으로 로그인하고 싶으시다면, 기존 계정에서 탈퇴한 후 새 계정으로 가입해 주시기 바랍니다.
           </Text>
         </View>
       )}
@@ -45,8 +45,7 @@ const InquiryScreen = () => {
       {isExpanded2 && (
         <View style={styles.answerContainer}>
           <Text style={styles.answerText}>
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
+          소품샵 상세 보기 → 리뷰 → 작성하기를 통해  소품샵에 대한 방문 후기와 특징, 사진 등을 리뷰로 남길 수 있습니다. 
           </Text>
         </View>
       )}
@@ -60,14 +59,14 @@ const InquiryScreen = () => {
 
       {isExpanded3 && (
         <View style={styles.answerContainer}>
-          <Text style={styles.answerText}>
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
+          <Text style={styles.answerText}>리뷰는 한 번 작성하면 수정하거나 삭제할 수 없으니, 신중하게 작성해 주시기 바랍니다.
+          타 사용자의 리뷰에 신고사항이 있는 경우 poomy0315@gmail.com으로 문의바랍니다. 
+
           </Text>
         </View>
         )}
       <TouchableOpacity onPress={() => setIsExpanded4(!isExpanded4)} style={[styles.toggleButton,{marginTop : -15 }]}>
-      <Text style={[styles.question, isExpanded4 && styles.activeQuestion]}>소셜 로그인 계정을 변경할 수 있나요?</Text>
+      <Text style={[styles.question, isExpanded4 && styles.activeQuestion]}>다른 사용자의 리뷰에 댓글을 남길 수 있나요?</Text>
         <Image source = {isExpanded4 ? require('../../assets/img_toggle_down.png') : require('../../assets/img_toggle.png')} style={styles.icon}></Image>
       </TouchableOpacity>
       <View style={styles.separator} />
@@ -76,8 +75,7 @@ const InquiryScreen = () => {
       {isExpanded4 && (
         <View style={styles.answerContainer}>
           <Text style={styles.answerText}>
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
+           다른 사용자의 리뷰에 댓글을 남길 수는 없으며, 리뷰 확인만 가능합니다.
           </Text>
         </View>
       )}
@@ -92,8 +90,7 @@ const InquiryScreen = () => {
       {isExpanded5 && (
         <View style={styles.answerContainer}>
           <Text style={styles.answerText}>
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
+           앱 사용 중 문제가 발생시, poomy0315@gmail.com으로  문의주시면 감사하겠습니다. 
           </Text>
         </View>
       )}
@@ -108,8 +105,7 @@ const InquiryScreen = () => {
       {isExpanded6 && (
         <View style={styles.answerContainer}>
           <Text style={styles.answerText}>
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
+           개인정보약관을 확인해주세요.
           </Text>
         </View>
       )}
@@ -123,13 +119,13 @@ const InquiryScreen = () => {
       {isExpanded7 && (
         <View style={styles.answerContainer}>
           <Text style={styles.answerText}>
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
+          앱 내 닉네임, 프로필 사진은 수정 가능하나, 로그인 계정은 수정 불가능합니다.
           </Text>
         </View>
         )}
 
-      <TouchableOpacity onPress={() => setIsExpanded8(!isExpanded8)} style={[styles.toggleButton,{marginTop : -15 }]}>
+       <Text style = {[styles.title, { marginTop: 35 }]}>가게 정보 변경</Text>
+      <TouchableOpacity onPress={() => setIsExpanded8(!isExpanded8)} style={[styles.toggleButton,]}>
         <Text style={[styles.question, isExpanded8 && styles.activeQuestion]}>다른 사용자의 리뷰에 댓글을 달 수 있나요?</Text>
         <Image source = {isExpanded8 ? require('../../assets/img_toggle_down.png') : require('../../assets/img_toggle.png')} style={styles.icon}></Image>
       </TouchableOpacity>
@@ -138,8 +134,7 @@ const InquiryScreen = () => {
       {isExpanded8 && (
         <View style={styles.answerContainer}>
           <Text style={styles.answerText}>
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
-            변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다. 변경 불가합니다.
+          가게 정보에 대한 오류 발견시, poomy0315@gmail.com으로 문의주시면 감사하겠습니다. 
           </Text>
         </View>
       )}

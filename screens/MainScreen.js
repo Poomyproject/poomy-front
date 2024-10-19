@@ -164,7 +164,9 @@ const MainScreen = ({ navigation }) => {
 
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
-                        <Text style={styles.sectionTitle_sec}>{homeSpotShop.prefix} </Text>
+                    <Text style={styles.sectionTitle_sec}>
+                        {homeSpotShop?.prefix || '기본값'}
+                        </Text>
                         <Text style={styles.sectionTitle_sec_color}>#{homeSpotShop.hashtag} </Text>
                         <Text style={styles.sectionTitle_sec}>로가자! </Text>
                     </View>
@@ -269,8 +271,8 @@ const MainScreen = ({ navigation }) => {
                 <View style={{ marginTop: 17 }} />
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
-                        <Text style={styles.sectionTitle_sec}>{moodItem1.prefix} </Text>
-                        <Text style={styles.sectionTitle_sec_color}>#{moodItem1.hashtag} </Text>
+                        <Text style={styles.sectionTitle_sec}>{moodItem1?.prefix || '기본값'} </Text>
+                        <Text style={styles.sectionTitle_sec_color}>#{moodItem1?.hashtag || '기본값'} </Text>
                         <Text style={styles.sectionTitle_sec}>소품샵 </Text>
                     </View>
                     <Image source={require('../assets/right.png')} style={styles.rightIcon} />
@@ -278,8 +280,8 @@ const MainScreen = ({ navigation }) => {
 
                 <ScrollView horizontal={true} style={styles.placeContainer4} showsHorizontalScrollIndicator={false}>
                     <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                        <Image source={{ uri: moodItem1.shopList[0]?.image }} style={styles.shopImage} />
-                        <Text>{moodItem1.shopList[0]?.name}</Text>
+                        <Image source={{ uri: moodItem1?.shopList[0]?.image || '기본값' }} style={styles.shopImage} />
+                        <Text>{moodItem1?.shopList[0]?.name || '기본값'}</Text>
                     </View>
                 </ScrollView>
 
@@ -296,8 +298,8 @@ const MainScreen = ({ navigation }) => {
                 {/* mood 2번째 부분 */}
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
-                        <Text style={styles.sectionTitle_sec}>{moodItem2.prefix} </Text>
-                        <Text style={styles.sectionTitle_sec_color}>#{moodItem2.hashtag} </Text>
+                        <Text style={styles.sectionTitle_sec}>{moodItem2?.prefix || '기본값'} </Text>
+                        <Text style={styles.sectionTitle_sec_color}>#{moodItem2?.hashtag || '기본값'} </Text>
                         <Text style={styles.sectionTitle_sec}>소품샵 </Text>
                     </View>
                     <Image source={require('../assets/right.png')} style={styles.rightIcon} />
@@ -305,8 +307,8 @@ const MainScreen = ({ navigation }) => {
 
                 <ScrollView horizontal={true} style={styles.placeContainer4} showsHorizontalScrollIndicator={false}>
                     <View style={{ alignItems: 'center', marginLeft: 20 }}>
-                        <Image source={{ uri: moodItem2.shopList[0]?.image }} style={styles.shopImage} />
-                        <Text>{moodItem2.shopList[0]?.name}</Text>
+                        <Image source={{ uri: moodItem2?.shopList[0]?.image || "기본값" }} style={styles.shopImage} />
+                        <Text>{moodItem2?.shopList[0]?.nam || "기본값"}</Text>
                     </View>
                 </ScrollView>
 
