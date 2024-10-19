@@ -54,7 +54,7 @@ const AppNavigator = () => {
       <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="MypageEdit" component={MypageEditScreen} options={{ headerShown: true }} />
       <Stack.Screen name="NameEdit" component={NameEditScreen} options={({ navigation }) => ({
-          headerTitle: '이름바꾸기',
+          headerTitle: '닉네임 변경하기',
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Image source={require('../../assets/left.png')} style={{ height: 24, width: 24 }} />
