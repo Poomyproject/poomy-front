@@ -3,7 +3,6 @@ import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView
 import colors from '../config/colors';
 import ApiClient, { setAxiosInterceptors } from '../screens/auth/ApiClient'; // ApiClient의 실제 경로로 수정하세요
 
-
 const { width, height } = Dimensions.get('window');
 
 const MainScreen = ({ navigation }) => {
