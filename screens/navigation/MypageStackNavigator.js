@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {useEffect} from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { TouchableOpacity, Image, Text } from 'react-native';
 import MyPageScreen from '../mypage/MyPageScreen';
@@ -28,7 +28,21 @@ const handleSaveNickname = async () => {
   }
 };
 
-const MypageStackNavigator = () => {
+
+const MypageStackNavigator = ({ navigation, route }) => {
+
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('tabPress', (e) => {
+  //     e.preventDefault();
+
+  //     navigation.reset({
+  //       index: 0,
+  //       routes: [{ name: 'MyPage' }],
+  //     });
+  //   });
+  //   return unsubscribe;
+  // }, [navigation]);
+
   return (
     <UserProvider>
       <MypageStack.Navigator initialRouteName="MyPage">
