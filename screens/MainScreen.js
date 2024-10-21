@@ -1,11 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useContext } from 'react';
 import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView, ImageBackground, ActivityIndicator } from 'react-native';
 import colors from '../config/colors';
 import ApiClient, { setAxiosInterceptors } from '../screens/auth/ApiClient'; // ApiClient의 실제 경로로 수정하세요
+import { ShopContext } from './shop/ShopContext'; // ShopContext 임포트
 
 const { width, height } = Dimensions.get('window');
 
 const MainScreen = ({ navigation }) => {
+
+    const { setSelectedShopId } = useContext(ShopContext); // ShopContext에서 setSelectedShopId를 가져옴
+
+    const handleShopPress = (shopId) => {
+        setSelectedShopId(shopId); // shopId 저장
+        navigation.navigate('ShopDetail', { shopId }); // ShopDetail 화면으로 이동하며 shopId 전달
+    };
     // 여기부터 api 통신
 
     // 가장 상단 샵 정보 불러오기
@@ -175,7 +183,7 @@ const MainScreen = ({ navigation }) => {
                     showsHorizontalScrollIndicator={false}
                 >
                     {homeSpotShop.shopList.slice(0, 6).map((shop, index) => (
-                        <TouchableOpacity key={index} style={styles.box}>
+                        <TouchableOpacity key={index} style={styles.box} onPress={() => handleShopPress(shop?.id)} >
                             <ImageBackground source={{ uri: shop?.image }} style={styles.boxshopImage}>
                                 {/* 해시태그 컨테이너 */}
                                 <View style={styles.hashtagContainer}>

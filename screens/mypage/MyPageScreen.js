@@ -29,7 +29,7 @@ const MyPageScreen = () => {
       } catch (error) {
         console.error('데이터 가져오기 실패:', error);
       } finally {
-        setLoading(false); // 데이터 로드 완료 후 로딩 상태 해제
+        //setLoading(false); // 데이터 로드 완료 후 로딩 상태 해제
       }
     };
   
