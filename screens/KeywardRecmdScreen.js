@@ -4,7 +4,7 @@ import colors from '../config/colors';
 import { fonts } from '../config/fonts';
 import { ScrollView } from 'react-native-gesture-handler';
 import Modal from 'react-native-modal';
-
+import { Menu, Button, Provider } from 'react-native-paper';
 
 const KeywardRecmdScreen = () => {
 
@@ -44,87 +44,114 @@ const KeywardRecmdScreen = () => {
         setModalVisible(false); // 모달 닫기
     };
 
+    // 최신순, 조회수순, 어쩌구 정렬
+    const [visible, setVisible] = useState(false);
+    const [selectedOption, setSelectedOption] = useState('최신순');
+
+    const openMenu = () => setVisible(true);
+    const closeMenu = () => setVisible(false);
+
+    const handleMenuSelect = (option) => {
+        setSelectedOption(option);
+        closeMenu();
+        // 여기에서 추가적인 정렬 로직을 처리할 수 있습니다.
+    };
+
     return (
-        <ScrollView style={styles.container}>
-
-
-            <View style={styles.buttoncontainer}>
-                {/* 장소 버튼 */}
-                <TouchableOpacity
-                    onPress={() => toggleModal(true)}
-                    style={[styles.textInput, interestPlace ? styles.selectedButton : {}]}
-                >
-                    <Text style={interestPlace ? styles.selectedTextStyle : styles.defaultTextStyle}>
-                        {interestPlace || "장소"}
-                    </Text>
-                    {interestPlace ? (
-                        <TouchableOpacity onPress={() => setInterestPlace(null)}>
-                            <Image source={require('../assets/85-close.png')} style={styles.close} />
-                        </TouchableOpacity>
-                    ) : (
-                        <Image source={require('../assets/down.png')} style={styles.down} />
-                    )}
-                </TouchableOpacity>
-
-
-                <View style={{ marginLeft: 10, }} />
-
-                {/* 분위기 버튼 */}
-                <TouchableOpacity
-                    onPress={() => toggleModal(false)}
-                    style={[styles.textInput, interestMood ? styles.selectedButton : {}]}
-                >
-                    <Text style={interestMood ? styles.selectedTextStyle : styles.defaultTextStyle}>
-                        {interestMood || "분위기"}
-                    </Text>
-                    {interestMood ? (
-                        <TouchableOpacity onPress={() => setInterestMood(null)}>
-                            <Image source={require('../assets/85-close.png')} style={styles.close} />
-                        </TouchableOpacity>
-                    ) : (
-                        <Image source={require('../assets/down.png')} style={styles.down} />
-                    )}
-                </TouchableOpacity>
-
-            </View>
-
-
-
-            <Modal
-                isVisible={isModalVisible}
-                onBackdropPress={toggleModal}
-                swipeDirection="down"
-                style={styles.bottomModal}
-                animationIn="slideInUp"
-                animationOut="slideOutDown"
-            >
-                <View style={styles.modalContent}>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.text}>{isSelectingPlace ? "장소" : "분위기"}</Text>
-                        <Image source={require('../assets/close.png')} style={styles.image} />
-                    </View>
-                    <View style={styles.moodContainer}>
-                        {(isSelectingPlace ? placeOptions : moodOptions).map((option) => (
-                            <TouchableOpacity
-                                key={option}
-                                style={[styles.moodButton, selectedMood === option ? styles.selectedMood : {}]}
-                                onPress={() => handleSelectOption(option)}
-                            >
-                                <Text style={styles.moodText}>{option}</Text>
+        <Provider>
+            <ScrollView style={styles.container}>
+                <View style={styles.buttoncontainer}>
+                    {/* 장소 버튼 */}
+                    <TouchableOpacity
+                        onPress={() => toggleModal(true)}
+                        style={[styles.textInput, interestPlace ? styles.selectedButton : {}]}
+                    >
+                        <Text style={interestPlace ? styles.selectedTextStyle : styles.defaultTextStyle}>
+                            {interestPlace || "장소"}
+                        </Text>
+                        {interestPlace ? (
+                            <TouchableOpacity onPress={() => setInterestPlace(null)}>
+                                <Image source={require('../assets/85-close.png')} style={styles.close} />
                             </TouchableOpacity>
-                        ))}
-                    </View>
-                    <TouchableOpacity onPress={applySelection} style={styles.closeButton}>
-                        <Text style={styles.closeButtonText}>적용하기</Text>
+                        ) : (
+                            <Image source={require('../assets/down.png')} style={styles.down} />
+                        )}
                     </TouchableOpacity>
+
+
+                    <View style={{ marginLeft: 10, }} />
+
+                    {/* 분위기 버튼 */}
+                    <TouchableOpacity
+                        onPress={() => toggleModal(false)}
+                        style={[styles.textInput, interestMood ? styles.selectedButton : {}]}
+                    >
+                        <Text style={interestMood ? styles.selectedTextStyle : styles.defaultTextStyle}>
+                            {interestMood || "분위기"}
+                        </Text>
+                        {interestMood ? (
+                            <TouchableOpacity onPress={() => setInterestMood(null)}>
+                                <Image source={require('../assets/85-close.png')} style={styles.close} />
+                            </TouchableOpacity>
+                        ) : (
+                            <Image source={require('../assets/down.png')} style={styles.down} />
+                        )}
+                    </TouchableOpacity>
+
+
+                    <View style={styles.menuContainer}>
+                        <Menu
+                            visible={visible}
+                            onDismiss={closeMenu}
+                            anchor={
+                                <Button onPress={openMenu} style={styles.menuButton} labelStyle={{ color: 'grey' }}>
+                                    {selectedOption} ▼
+                                </Button>
+                            }
+                            style={[styles.menuDropdown,]}
+                        >
+                            <Menu.Item onPress={() => handleMenuSelect('최신순')} title="최신순" titleStyle={{ fontSize: 14 }} />
+                            <Menu.Item onPress={() => handleMenuSelect('오래된순')} title="오래된순" titleStyle={{ fontSize: 14 }} />
+                            <Menu.Item onPress={() => handleMenuSelect('유용한순')} title="유용한순" titleStyle={{ fontSize: 14 }} />
+                        </Menu>
+                    </View>
+
+
                 </View>
-            </Modal>
-            
-        </ScrollView>
+
+                <Modal
+                    isVisible={isModalVisible}
+                    onBackdropPress={toggleModal}
+                    swipeDirection="down"
+                    style={styles.bottomModal}
+                    animationIn="slideInUp"
+                    animationOut="slideOutDown"
+                >
+                    <View style={styles.modalContent}>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.text}>{isSelectingPlace ? "장소" : "분위기"}</Text>
+                            <Image source={require('../assets/close.png')} style={styles.image} />
+                        </View>
+                        <View style={styles.moodContainer}>
+                            {(isSelectingPlace ? placeOptions : moodOptions).map((option) => (
+                                <TouchableOpacity
+                                    key={option}
+                                    style={[styles.moodButton, selectedMood === option ? styles.selectedMood : {}]}
+                                    onPress={() => handleSelectOption(option)}
+                                >
+                                    <Text style={styles.moodText}>{option}</Text>
+                                </TouchableOpacity>
+                            ))}
+                        </View>
+                        <TouchableOpacity onPress={applySelection} style={styles.closeButton}>
+                            <Text style={styles.closeButtonText}>적용하기</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Modal>
+
+            </ScrollView>
+        </Provider>
     );
-
-
-
 };
 
 const styles = StyleSheet.create({
@@ -508,6 +535,19 @@ const styles = StyleSheet.create({
         color: colors.Ivory100,
         fontSize: 15,
     },
+    menuContainer: {
+        alignItems: 'flex-end',  // 메뉴가 오른쪽에 배치되도록 설정
+        marginBottom: 10,
+    },
+    menuButton: {
+        alignSelf: 'flex-end',  // 버튼을 오른쪽에 배치
+    },
+    menuDropdown: {
+        position: 'absolute',  // 절대 위치 설정
+        top: 55,               // 버튼 아래로 드롭다운 이동 (버튼 높이에 따라 조정 필요)
+        width: 'auto',         // 드롭다운 폭 조정
+        zIndex: 1,             // 드롭다운을 다른 요소 위로 표시하기 위한 설정
+      },
 
 })
 export default KeywardRecmdScreen;
