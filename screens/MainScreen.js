@@ -1,4 +1,4 @@
-import React, { useState, useEffect , useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, StyleSheet, Dimensions, TouchableOpacity, ScrollView, ImageBackground, ActivityIndicator } from 'react-native';
 import colors from '../config/colors';
 import ApiClient, { setAxiosInterceptors } from '../screens/auth/ApiClient'; // ApiClient의 실제 경로로 수정하세요
@@ -213,26 +213,13 @@ const MainScreen = ({ navigation }) => {
 
                 <ScrollView horizontal={true} style={styles.placeContainer3} showsHorizontalScrollIndicator={false}>
                     <View style={{ marginLeft: 20 }} />
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('KeywardStack', { screen: 'Keyward' })}>
-                        <Text style={styles.keword_text}>{homeSpot[0]?.name}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text style={styles.keword_text}>{homeSpot[1]?.name}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text style={styles.keword_text}>{homeSpot[2]?.name}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text style={styles.keword_text}>{homeSpot[3]?.name}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text style={styles.keword_text}>{homeSpot[4]?.name}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Text style={styles.keword_text}>{homeSpot[5]?.name}</Text>
-                    </TouchableOpacity>
+                    {homeSpot.map((spot, index) => (
+                        <TouchableOpacity key={index} onPress={() => navigation.navigate('KeywardStack', { screen: 'Keyward' })}>
+                            <Text style={styles.keword_text}>{spot?.name}</Text>
+                        </TouchableOpacity>
+                    ))}
                 </ScrollView>
+
 
                 <TouchableOpacity style={styles.rightIconContainer}
                     onPress={() => navigation.navigate('NewsLetterStack', { screen: 'NewsLetter' })}>
@@ -242,37 +229,25 @@ const MainScreen = ({ navigation }) => {
                     <Image source={require('../assets/right.png')} style={styles.rightIcon} />
                 </TouchableOpacity>
 
-                <View style={{ flexDirection: 'row' }}>
-                    {/* <Image source={{ uri: newsletters[0]?.mainImage }} style={styles.newletter} /> */}
-                    <View style={{ marginLeft: 10 }}>
-                        <Text style={styles.newletterMainText}>{newsletters[0]?.headline}</Text>
-                        <Text style={styles.newletterDetailText}>{newsletters[0]?.subTopic}</Text>
-                        <View style={{ flexDirection: 'row', }}>
-                            <Text style={{ color: colors.Gray500, }}>{newsletters[0]?.firstKeyword} </Text>
-                            <Text style={{ color: colors.Gray500, }}>{newsletters[0]?.secondKeyword} </Text>
-                            <Text style={{ color: colors.Gray500, }}>{newsletters[0]?.thirdKeyword} </Text>
+                {newsletters.slice(0, 3).map((newsletter, index) => (
+                    <TouchableOpacity key={index} style={{ flexDirection: 'row', marginBottom: 10 }}>
+                        <Image source={{ uri: newsletter?.mainImage }} style={styles.newletter} />
+                        <View style={{ marginLeft: 12 }}>
+                            <Text style={styles.newletterMainText}>{newsletter?.headline}</Text>
+                            <Text style={styles.newletterDetailText}>{newsletter?.subTopic}</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={{ color: colors.Gray500 }}>{newsletter?.firstKeyword} </Text>
+                                <Text style={{ color: colors.Gray500 }}>{newsletter?.secondKeyword} </Text>
+                                <Text style={{ color: colors.Gray500 }}>{newsletter?.thirdKeyword} </Text>
+                            </View>
                         </View>
-                    </View>
-                </View>
+                    </TouchableOpacity>
+                ))}
 
 
-                <View style={{ flexDirection: 'row' }}>
-                    <Image source={require('../assets/Rectangle1.png')} style={styles.newletter} />
-                    <View style={{ marginLeft: 10 }}>
-                        <Text style={styles.newletterMainText}>우리들의 PICK</Text>
-                        <Text style={styles.newletterDetailText}>이거부터저거까지 다 만나보세요. 이게 강남 소품샵이야 룰루루루루루루루루루루</Text>
-                    </View>
-                </View>
-                <View style={{ flexDirection: 'row', }}>
-                    <Image source={require('../assets/Rectangle1.png')} style={styles.newletter} />
-                    <View style={{ marginLeft: 10 }}>
-                        <Text style={styles.newletterMainText}>우리들의 PICK</Text>
-                        <Text style={styles.newletterDetailText}>이거부터저거까지 다 만나보세요. 이게 강남 소품샵이야 룰루루루루루루루루루루</Text>
-                    </View>
-                </View>
+
 
                 {/* mood 첫번째 부분 */}
-                <View style={{ marginTop: 17 }} />
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
                         <Text style={styles.sectionTitle_sec}>{moodItem1?.prefix} </Text>
@@ -289,7 +264,6 @@ const MainScreen = ({ navigation }) => {
                 >
                     {moodItem1.shopList.slice(0, 7).map((shop, index) => (
                         <TouchableOpacity key={index} style={styles.lastView}>
-
                             <View>
                                 <ImageBackground source={{ uri: shop.image }} style={styles.shopImage}>
                                     <View style={styles.hashtagContainer}>
@@ -323,7 +297,6 @@ const MainScreen = ({ navigation }) => {
                 >
                     {moodItem2?.shopList.slice(0, 7).map((shop, index) => (
                         <TouchableOpacity key={index} style={styles.lastView}>
-
                             <View>
                                 <ImageBackground source={{ uri: shop.image }} style={styles.shopImage}>
                                     <View style={styles.hashtagContainer}>
@@ -424,11 +397,12 @@ const styles = StyleSheet.create({
     newletter: {
         width: 85,
         height: 85,
-        marginTop: '7%',
-        marginLeft: '2%'
+        marginTop: '3%',
+        marginLeft: '3.5%',
+        borderRadius: 4,
     },
     newletterMainText: {
-        marginTop: '15%',
+        marginTop: '8%',
         fontSize: 15,
         color: colors.Gray900,
         fontWeight: 'bold',
@@ -450,7 +424,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'flex-start',
         marginTop: 15,
-        marginLeft:15,
+        marginLeft: 15,
     },
     placeContainer3: {
         flexDirection: 'row',
@@ -515,7 +489,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     hashtagText: {
-        padding:2,
+        padding: 2,
         fontSize: 12,
         color: 'black',
     },
@@ -561,7 +535,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     lastView: {
-        marginTop:10,
+        marginTop: 10,
+        height:190,
         alignItems: 'center',
         marginLeft: 25,
         // iOS 그림자 효과
@@ -570,12 +545,14 @@ const styles = StyleSheet.create({
             width: 0,
             height: 0,
         },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,  // Increase shadowRadius for a more noticeable shadow
+        shadowOpacity: 0.1,
+        shadowRadius: 2,  // Increase shadowRadius for a more noticeable shadow
 
         // 배경색 설정 (그림자가 잘 보이게 하기 위해 필요할 수 있음)
         backgroundColor: 'white',
-        borderRadius: 6,  // 모서리를 둥글게 하기 위해
+        borderRadius: 10,  // 모서리를 둥글게 하기 위해
+        borderWidth:1,
+        borderColor:colors.Gray100,
     }
 });
 
