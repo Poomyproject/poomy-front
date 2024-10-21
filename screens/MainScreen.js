@@ -182,6 +182,7 @@ const MainScreen = ({ navigation }) => {
                     style={styles.placeContainer2}
                     showsHorizontalScrollIndicator={false}
                 >
+                    <View style={{marginLeft: 15}}/>
                     {homeSpotShop.shopList.slice(0, 6).map((shop, index) => (
                         <TouchableOpacity key={index} style={styles.box} onPress={() => handleShopPress(shop?.id)} >
                             <ImageBackground source={{ uri: shop?.image }} style={styles.boxshopImage}>
@@ -424,7 +425,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignSelf: 'flex-start',
         marginTop: 15,
-        marginLeft: 15,
     },
     placeContainer3: {
         flexDirection: 'row',
