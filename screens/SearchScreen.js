@@ -62,7 +62,7 @@ const SearchScreen = () => {
                     </View>
                     <View horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
                         <TouchableOpacity>
-                            <Text style={styles.keywordText}>아기자기한</Text>
+                            <Text style={styles.keywordText}>아기자기</Text>
                         </TouchableOpacity>
                         <TouchableOpacity>
                             <Text style={styles.keywordText}>모던</Text>
