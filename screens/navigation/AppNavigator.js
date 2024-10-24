@@ -4,7 +4,6 @@ import { TouchableOpacity, Image, Text } from 'react-native';
 import colors from '../../config/colors';
 import { fonts } from '../../config/fonts';
 
-
 import SplashScreen from '../auth/SplashScreen';
 import OnboardingScreen from '../auth/OnboardingScreen';
 import LoginScreen from '../auth/LoginScreen';
@@ -22,6 +21,7 @@ import TermsDetailScreen3 from '../common/TermsDetailScreen3';
 import ShopDetailScreen from '../shop/ShopDetailScreen';
 import MypageEditScreen from '../mypage/MypageEditScreen';
 import NameEditScreen from '../mypage/NameEditScreen';
+import KeywordList from '../search/KeywordList';
 
 import UserReviewScreen1 from '../review/UserReviewScreen1';
 import UserReviewScreen2 from '../review/UserReviewScreen2';
@@ -32,15 +32,19 @@ import UserReviewScreen4 from '../review/UserReviewScreen4';
 import NewsLetterStackNavigator from './NewsLetterStackNavigator';
 import MainTabNavigator from './MainTabNavigator';
 import SearchStackNavigator from './SearchStackNavigator';
-import KeywardStackNavigator from './KeywardStackNavigator';
+import KeywordStackNavigator from './KeywordStackNavigator';
 import ReviewStackNavigator from './ReviewStackNavigator';
 
 import ShopProvider from '../shop/ShopContext';
+import SpotProvider from '../keyword/KeywordContext';
+import MoodProvider from '../keyword/MoodContext'
 
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
+    <MoodProvider>
+    <SpotProvider>
     <ShopProvider>
     <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
@@ -140,13 +144,15 @@ const AppNavigator = () => {
         })}
       />
 
-      <Stack.Screen name="KeywardStack" component={KeywardStackNavigator} options={{ headerShown: false }} />
+      <Stack.Screen name="KeywordStack" component={KeywordStackNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NewsLetterStack" component={NewsLetterStackNavigator} options={{ headerShown: false }} />
       {/* <Stack.Screen name="ReviewStack" component={ReviewStackNavigator} options={{ headerShown: false }} /> */}
       <Stack.Screen name="SearchStack" component={SearchStackNavigator} options={{ headerShown: false }} />
-
+      <Stack.Screen name="Keyword" component={KeywordList} options={{ headerShown: false }} />
     </Stack.Navigator>
     </ShopProvider>
+    </SpotProvider>
+    </MoodProvider>
   );
 };
 
