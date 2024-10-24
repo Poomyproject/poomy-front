@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Toast from 'react-native-toast-message';
-import colors from '../config/colors';
+import colors from '../../config/colors';
 
 
 const toastConfig = {

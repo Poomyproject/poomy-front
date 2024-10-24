@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, item } from 'react-native';
-import colors from '../config/colors';
-import { fonts } from '../config/fonts';
+import colors from '../../config/colors';
+import { fonts } from '../../config/fonts';
 import { ScrollView } from 'react-native-gesture-handler';
 import Modal from 'react-native-modal';
 import { Menu, Button, Provider } from 'react-native-paper';
+import { KeywordContext } from './KeywordContext'
+import { MoodContext } from './MoodContext';
+import { useFocusEffect } from '@react-navigation/native';
 
-const KeywardRecmdScreen = () => {
+const KeywardRecmdScreen = ({ navigation }) => {
 
+    const { selectedSpotName } = useContext(KeywordContext); // ShopContext에서 shopId를 가져옴
+    const { selectedMoodId } = useContext(MoodContext); // MoodContext에서 themeName를 가져옴
     const [interestPlace, setInterestPlace] = useState(''); // 장소 상태 관리
     const [interestMood, setInterestMood] = useState(''); // 분위기 상태 관리
     const [isModalVisible, setModalVisible] = useState(false); // 모달 상태 관리
@@ -15,8 +20,20 @@ const KeywardRecmdScreen = () => {
     const [isSelectingPlace, setIsSelectingPlace] = useState(false); // 장소 선택 모달인지 분위기 선택 모달인지
 
     // 장소와 분위기 목록
-    const moodOptions = ['코지', '럭셔리', '모던', '아기자기', '빈티지', '테마별'];
-    const placeOptions = ['강남', '명동', '북촌한옥마을', '성수', '송리단길', '영등포', '이태원', '종로', '혜화', '홍대'];
+    const moodOptions = ['럭셔리', '모던', '아기자기', '빈티지', '테마별'];
+    const placeOptions = ['강남', '명동', '북촌 한옥마을', '성수', '송리단길', '영등포', '이태원', '종로', '혜화', '홍대'];
+
+    // 네비게이션에서 받은 selectedSpotName이 있으면 interestPlace에 반영
+    useEffect(() => {
+        if (selectedSpotName && placeOptions.includes(selectedSpotName)) {
+            setInterestPlace(selectedSpotName); // spotName을 interestPlace에 설정
+        } 
+        if (selectedMoodId && moodOptions.includes(selectedMoodId)) {
+            setInterestMood(selectedMoodId);
+        } 
+    }, [selectedSpotName, selectedMoodId, ]);
+
+
 
     // 모달 열기/닫기 토글
     const toggleModal = (isPlace = false) => {
@@ -61,42 +78,46 @@ const KeywardRecmdScreen = () => {
         <Provider>
             <ScrollView style={styles.container}>
                 <View style={styles.buttoncontainer}>
-                    {/* 장소 버튼 */}
-                    <TouchableOpacity
-                        onPress={() => toggleModal(true)}
-                        style={[styles.textInput, interestPlace ? styles.selectedButton : {}]}
-                    >
-                        <Text style={interestPlace ? styles.selectedTextStyle : styles.defaultTextStyle}>
-                            {interestPlace || "장소"}
-                        </Text>
-                        {interestPlace ? (
-                            <TouchableOpacity onPress={() => setInterestPlace(null)}>
-                                <Image source={require('../assets/85-close.png')} style={styles.close} />
-                            </TouchableOpacity>
-                        ) : (
-                            <Image source={require('../assets/down.png')} style={styles.down} />
-                        )}
-                    </TouchableOpacity>
+
+                    <View style={{ width: '80%', flexDirection: 'row' }}>
+                        {/* 장소 버튼 */}
+                        <TouchableOpacity
+                            onPress={() => toggleModal(true)}
+                            style={[styles.textInput, interestPlace ? styles.selectedButton : {}]}
+                        >
+                            <Text style={interestPlace ? styles.selectedTextStyle : styles.defaultTextStyle}>
+                                {interestPlace || "장소"}
+                            </Text>
+                            {interestPlace ? (
+                                <TouchableOpacity onPress={() => setInterestPlace(null)}>
+                                    <Image source={require('../../assets/85-close.png')} style={styles.close} />
+                                </TouchableOpacity>
+                            ) : (
+                                <Image source={require('../../assets/down.png')} style={styles.down} />
+                            )}
+                        </TouchableOpacity>
 
 
-                    <View style={{ marginLeft: 10, }} />
+                        <View style={{ marginLeft: 10, }} />
 
-                    {/* 분위기 버튼 */}
-                    <TouchableOpacity
-                        onPress={() => toggleModal(false)}
-                        style={[styles.textInput, interestMood ? styles.selectedButton : {}]}
-                    >
-                        <Text style={interestMood ? styles.selectedTextStyle : styles.defaultTextStyle}>
-                            {interestMood || "분위기"}
-                        </Text>
-                        {interestMood ? (
-                            <TouchableOpacity onPress={() => setInterestMood(null)}>
-                                <Image source={require('../assets/85-close.png')} style={styles.close} />
-                            </TouchableOpacity>
-                        ) : (
-                            <Image source={require('../assets/down.png')} style={styles.down} />
-                        )}
-                    </TouchableOpacity>
+                        {/* 분위기 버튼 */}
+                        <TouchableOpacity
+                            onPress={() => toggleModal(false)}
+                            style={[styles.textInput, interestMood ? styles.selectedButton : {}]}
+                        >
+                            <Text style={interestMood ? styles.selectedTextStyle : styles.defaultTextStyle}>
+                                {interestMood || "분위기"}
+                            </Text>
+                            {interestMood ? (
+                                <TouchableOpacity onPress={() => setInterestMood(null)}>
+                                    <Image source={require('../../assets/85-close.png')} style={styles.close} />
+                                </TouchableOpacity>
+                            ) : (
+                                <Image source={require('../../assets/down.png')} style={styles.down} />
+                            )}
+                        </TouchableOpacity>
+                    </View>
+
 
 
                     <View style={styles.menuContainer}>
@@ -130,7 +151,7 @@ const KeywardRecmdScreen = () => {
                     <View style={styles.modalContent}>
                         <View style={styles.textContainer}>
                             <Text style={styles.text}>{isSelectingPlace ? "장소" : "분위기"}</Text>
-                            <Image source={require('../assets/close.png')} style={styles.image} />
+                            <Image source={require('../../assets/close.png')} style={styles.image} />
                         </View>
                         <View style={styles.moodContainer}>
                             {(isSelectingPlace ? placeOptions : moodOptions).map((option) => (
@@ -547,7 +568,7 @@ const styles = StyleSheet.create({
         top: 55,               // 버튼 아래로 드롭다운 이동 (버튼 높이에 따라 조정 필요)
         width: 'auto',         // 드롭다운 폭 조정
         zIndex: 1,             // 드롭다운을 다른 요소 위로 표시하기 위한 설정
-      },
+    },
 
 })
 export default KeywardRecmdScreen;

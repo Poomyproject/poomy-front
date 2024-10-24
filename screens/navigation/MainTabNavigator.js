@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image } from 'react-native';
 import LikeScreen from '../like/LikeScreen';
-import MainScreen from '../MainScreen';
+import MainScreen from '../main/MainScreen';
 import MypageStackNavigator from './MypageStackNavigator';
 import colors from '../../config/colors';
 import ShopNavigatior from './ShopNavigatior';

@@ -5,7 +5,7 @@ import { useState } from 'react';
 import colors from '../../config/colors';
 import { fonts } from '../../config/fonts';
 import ShopDetailScreen from '../shop/ShopDetailScreen';
-import MainScreen from '../MainScreen';
+import MainScreen from '../main/MainScreen';
 
 const ShopDetailStack = createStackNavigator();
 

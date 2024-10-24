@@ -5,7 +5,7 @@ const stores = [
     address: '1번 소품샵 위치',
     category: '모던한', 
     location: '이태원', 
-    image: require('../assets/Frame99.png'),
+    image: require('../../assets/Frame99.png'),
   },
   {
     id: 2,
@@ -13,7 +13,7 @@ const stores = [
     address: '2번 소품샵 위치',
     category: '모던한', 
     location: '이태원', 
-    image: require('../assets/Frame99.png'),
+    image: require('../../assets/Frame99.png'),
   },
   {
     id: 3,
@@ -21,7 +21,7 @@ const stores = [
     address: '3번 소품샵 위치',
     category: '모던한', 
     location: '이태원', 
-    image: require('../assets/Frame99.png'),
+    image: require('../../assets/Frame99.png'),
   },
   {
     id: 4,
@@ -29,7 +29,7 @@ const stores = [
     address: '3번 소품샵 위치',
     category: '모던한', 
     location: '이태원', 
-    image: require('../assets/Frame99.png'),
+    image: require('../../assets/Frame99.png'),
   },
   {
     id: 5,
@@ -37,7 +37,7 @@ const stores = [
     address: '3번 소품샵 위치',
     category: '모던한', 
     location: '이태원', 
-    image: require('../assets/Frame99.png'),
+    image: require('../../assets/Frame99.png'),
   },
   {
     id: 6,
@@ -45,7 +45,7 @@ const stores = [
     address: '3번 소품샵 위치',
     category: '모던한', 
     location: '이태원', 
-    image: require('../assets/Frame99.png'),
+    image: require('../../assets/Frame99.png'),
   },
   {
     id: 7,
@@ -53,7 +53,7 @@ const stores = [
     address: '3번 소품샵 위치',
     category: '모던한', 
     location: '이태원', 
-    image: require('../assets/Frame99.png'),
+    image: require('../../assets/Frame99.png'),
   },
   {
     id: 8,
@@ -61,7 +61,7 @@ const stores = [
     address: '3번 소품샵 위치',
     category: '모던한', 
     location: '이태원', 
-    image: require('../assets/Frame99.png'),
+    image: require('../../assets/Frame99.png'),
   },
 ];
 

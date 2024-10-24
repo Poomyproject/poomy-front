@@ -3,7 +3,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import AppNavigator from './screens/navigation/AppNavigator';
 import Initializer from './Initializer';
-import { Toast, toastConfig } from './screens/Toast';
+import { Toast, toastConfig } from './screens/search/Toast';
 
 export default function App() {
   return (
