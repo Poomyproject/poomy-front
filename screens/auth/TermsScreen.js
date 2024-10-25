@@ -6,15 +6,15 @@ import { fonts } from '../../config/fonts';
 const TermsScreen = ({ navigation }) => {
   const [isChecked1, setIsChecked1] = useState(false);
   const [isChecked2, setIsChecked2] = useState(false);
-  const [isChecked3, setIsChecked3] = useState(false);
+  
 
-  const isAllChecked = isChecked1 && isChecked2 && isChecked3;
+  const isAllChecked = isChecked1 && isChecked2;
 
   const handleCheckAll = () => {
     const newValue = !isAllChecked;
     setIsChecked1(newValue);
     setIsChecked2(newValue);
-    setIsChecked3(newValue);
+    
   };
 
   const handleCheck1 = () => {
@@ -25,9 +25,6 @@ const TermsScreen = ({ navigation }) => {
     setIsChecked2(!isChecked2);
   };
 
-  const handleCheck3 = () => {
-    setIsChecked3(!isChecked3);
-  };
 
   return (
     <View style={styles.container}>
@@ -35,7 +32,7 @@ const TermsScreen = ({ navigation }) => {
         시작하기 전,{'\n'}서비스 이용에 동의해주세요.
       </Text>
 
-      <View style = {[styles.boxContainer,{marginVertical:15}]}>
+      <View style = {[styles.boxContainer,{marginVertical:15 , marginTop : -150}]}>
       <TouchableOpacity style={styles.checkBoxContainer} onPress={handleCheckAll}>
         <View style={[styles.checkBox, isAllChecked && styles.checkedBox]} />
       </TouchableOpacity>
@@ -60,16 +57,6 @@ const TermsScreen = ({ navigation }) => {
       <TouchableOpacity onPress={() => navigation.navigate('TermsDetail2')} style = {{marginLeft:'auto'}}>
           <Image source={require('../../assets/right_black.png')} style={styles.right} />
         </TouchableOpacity>
-      </View>
-
-      <View style = {styles.totalContainer}>
-      <TouchableOpacity style={styles.checkBoxContainer} onPress={handleCheck3}>
-      <View style={[styles.checkBox, isChecked3 && styles.checkedBox]} />
-      </TouchableOpacity>
-      <Text style={styles.checkBoxText}>(필수) 위치정보 이용동의 및 위치기반서비...</Text>
-      <TouchableOpacity onPress={() => navigation.navigate('TermsDetail3')} style = {{marginLeft:'auto'}}>
-          <Image source={require('../../assets/right_black.png')} style={styles.right} />
-      </TouchableOpacity>
       </View>
 
       <TouchableOpacity
@@ -102,14 +89,14 @@ const styles = StyleSheet.create ({
   },
 
   boxContainer: {
-    width: 350,  // 원하는 너비
-    height: 56, // 원하는 높이
-    borderColor: colors.Gray100, // 테두리 색상
-    borderWidth: 2, // 테두리 두께
-    borderRadius: 10, // 둥근 모서리
+    width: 350, 
+    height: 56, 
+    borderColor: colors.Gray100,
+    borderWidth: 2, 
+    borderRadius: 10, 
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'transparent', // 내부는 투명하게
+    backgroundColor: 'transparent', 
   },
 
   totalContainer: {
@@ -149,11 +136,17 @@ const styles = StyleSheet.create ({
   },
 
   button: {
-    marginTop: 30,
-    padding: 15,
-    borderRadius: 8,
+    width: 350,
+    height: 48,
+    backgroundColor: colors.Green900,
+    position: 'absolute',
+    bottom: 94,
+    alignSelf: 'center',
+    justifyContent: 'center',
     alignItems: 'center',
-  },
+    borderRadius: 8, // 둥근 모서리
+    },
+    
   buttonInactive: {
     backgroundColor: colors.Gray100,
   },

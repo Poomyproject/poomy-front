@@ -119,7 +119,7 @@ const ShopDetailScreen = () => {
 
 <TouchableOpacity
   style={{ flexDirection: 'row', alignItems: 'center' }}
-  onPress={() => navigation.navigate('UserReview1', { screen: 'UserReview1' })} // UserReviewScreen1로 이동
+  onPress={() => navigation.navigate('UserReview1', { screen: 'UserReview1', selectedShopId })} // selectedShopId를 함께 전달
 >
   <Text style={styles.shopName}>리뷰</Text>
   <Image source={require('../../assets/edit.png')} style={{ marginLeft: 230 }} />

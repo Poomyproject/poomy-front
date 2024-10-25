@@ -5,35 +5,22 @@ import { fonts } from '../../config/fonts';
 import Modal from 'react-native-modal';
 import ApiClient from '../auth/ApiClient'; 
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { UserContext } from './UserContext';
-
+import { useFocusEffect } from '@react-navigation/native';
 
 const MypageEditScreen = () => {
-  const { nickname, setNickname, googleEmail, setgoogleEmail, selectedMoods ,setSelectedMoods, selectedPlaces, setSelectedPlaces } = useContext(UserContext);
+
+  const [nickname, setNickname] = useState('');
+  const [googleEmail, setgoogleEmail] = useState('');
+  const [imgUrl, setImgUrl] = useState(''); // 이미지 URL 관리 추가
+  const [selectedMoods, setSelectedMoods] = useState([]);
+  const [selectedPlaces, setSelectedPlaces] = useState([]);
+
   const [isFirstModalVisible, setFirstModalVisible] = useState(false);
   const [isSecondModalVisible, setSecondModalVisible] = useState(false);
   const navigation = useNavigation();
 
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
- 
-  // 서버로 닉네임 저장
-  const handleSaveNicknameToServer = async () => {
-    try {
-      const response = await ApiClient.post('/api/users/nickname', { nickname });
-      if (response.data.success) {
-        console.log('Nickname saved successfully');
-        navigation.goBack(); // 저장 후 이전 화면으로 이동
-      } else {
-        console.error('Error saving nickname');
-      }
-    } catch (error) {
-      console.error('Error during nickname save:', error);
-    }
-  };
 
-  useEffect(() => {
-    navigation.setParams({ handleSaveNicknameToServer });
-  }, [nickname]);
 
   // 완료 버튼을 눌렀을 때 변경사항 서버로 전송
   const handleSaveChanges = async () => {
@@ -57,10 +44,6 @@ const MypageEditScreen = () => {
     } catch (error) {
       console.error('저장 오류:', error);
     }
-  };
-
-  const nicknameNavi = () => {
-    navigation.navigate('NameEdit');
   };
 
   // API에서 사용자 데이터를 가져오는 함수
@@ -126,6 +109,19 @@ const MypageEditScreen = () => {
       return prevMoods; 
     })
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // 화면이 다시 포커스될 때 닉네임 상태를 업데이트
+      const loadNickname = async () => {
+        const storedNickname = await AsyncStorage.getItem('nickname');
+        if (storedNickname) {
+          setNickname(storedNickname); // 닉네임이 변경된 상태를 반영
+        }
+      };
+      loadNickname();
+    }, [])
+  );
 
   if (loading) {
     return (

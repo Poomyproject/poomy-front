@@ -57,7 +57,7 @@ const AppNavigator = () => {
           headerTitle: '닉네임 변경하기',
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image source={require('../../assets/left.png')} style={{ height: 24, width: 24 }} />
+              <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
             </TouchableOpacity>
           ),
           headerRight: () => (
@@ -70,8 +70,21 @@ const AppNavigator = () => {
       <Stack.Screen name="Setting" component={SettingScreen} />
       <Stack.Screen name="Inquiry" component={InquiryScreen} />
       <Stack.Screen name="Announce" component={AnnounceScreen}/>
-      <Stack.Screen name="TermsDetail1" component={TermsDetailScreen1} />
-      <Stack.Screen name="TermsDetail2" component={TermsDetailScreen2} />
+      <Stack.Screen name="TermsDetail1" component={TermsDetailScreen1} options={({ navigation }) => ({
+          headerTitle: '',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
+            </TouchableOpacity>
+          ),})} />
+      <Stack.Screen name="TermsDetail2" component={TermsDetailScreen2} options={({ navigation }) => ({
+          headerTitle: '',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
+            </TouchableOpacity>
+          ),
+          })}/>
       <Stack.Screen name="TermsDetail3" component={TermsDetailScreen3} />
       <Stack.Screen name="ShopDetail" component={ShopDetailScreen} />
 
@@ -82,7 +95,7 @@ const AppNavigator = () => {
           headerTitle: '리뷰 작성하기',
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image source={require('../../assets/left.png')} style={{ height: 24, width: 24 }} />
+              <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
             </TouchableOpacity>
           ),
           headerTitleAlign: 'center',
@@ -98,7 +111,7 @@ const AppNavigator = () => {
           headerTitle: '리뷰 작성하기',
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image source={require('../../assets/left.png')} style={{ height: 24, width: 24 }} />
+              <Image source={require('../../assets/left.png')} style={{marginLeft : 10, height: 24, width: 24 }} />
             </TouchableOpacity>
           ),
           headerTitleAlign: 'center',
@@ -114,7 +127,7 @@ const AppNavigator = () => {
           headerTitle: '리뷰 작성하기',
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image source={require('../../assets/left.png')} style={{ height: 24, width: 24 }} />
+              <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
             </TouchableOpacity>
           ),
           headerTitleAlign: 'center',
@@ -130,7 +143,7 @@ const AppNavigator = () => {
           headerTitle: '리뷰 작성하기',
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image source={require('../../assets/left.png')} style={{ height: 24, width: 24 }} />
+              <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
             </TouchableOpacity>
           ),
           headerTitleAlign: 'center',

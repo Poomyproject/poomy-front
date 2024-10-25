@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Axios 인스턴스 생성
 const ApiClient = axios.create({
   baseURL: 'http://localhost:8080', // API base URL
-  timeout: 3000, // 요청 제한 시간 설정 (밀리초)
+  timeout: 5000, // 요청 제한 시간 설정 (밀리초)
   headers: {
   },
 });
