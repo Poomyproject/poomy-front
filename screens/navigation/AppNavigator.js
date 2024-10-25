@@ -38,11 +38,13 @@ import ReviewStackNavigator from './ReviewStackNavigator';
 import ShopProvider from '../shop/ShopContext';
 import SpotProvider from '../keyword/KeywordContext';
 import MoodProvider from '../keyword/MoodContext'
+import NewsLetterProvider from '../context/NewsLetterContext';
 
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
+    <NewsLetterProvider>
     <MoodProvider>
     <SpotProvider>
     <ShopProvider>
@@ -153,6 +155,7 @@ const AppNavigator = () => {
     </ShopProvider>
     </SpotProvider>
     </MoodProvider>
+    </NewsLetterProvider>
   );
 };
 

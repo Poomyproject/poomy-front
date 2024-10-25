@@ -5,6 +5,7 @@ import ApiClient, { setAxiosInterceptors } from '../auth/ApiClient';
 import { ShopContext } from '../shop/ShopContext'; // ShopContext 임포트
 import { KeywordContext } from '../keyword/KeywordContext'
 import { MoodContext } from '../keyword/MoodContext';
+import { NewsLetterContext } from '../context/NewsLetterContext'
 import styles from './styles'; // 별도 스타일 파일로 분리
 
 const { width, height } = Dimensions.get('window');
@@ -22,6 +23,7 @@ const MainScreen = ({ navigation }) => {
     const { setSelectedShopId } = useContext(ShopContext); // ShopContext에서 setSelectedShopId를 가져옴
     const { setSelectedSpotName } = useContext(KeywordContext);
     const { setSelectedMoodId } = useContext(MoodContext);
+    const { setSelectedNewsLetterId } = useContext(NewsLetterContext);
 
     const handleShopPress = (shopId) => {
         setSelectedShopId(shopId); // shopId 저장
@@ -39,6 +41,12 @@ const MainScreen = ({ navigation }) => {
         setSelectedMoodId(moodId);
         navigation.navigate('KeywordStack', { screen: 'Keyword', params: { moodId } });
     };
+
+    const handleNewsLetter = (newsletterId) => {
+        setSelectedMoodId(newsletterId);
+        navigation.navigate('NewsLetterStack', { screen: 'NewsLetterDetail', params: { newsletterId } });
+    };
+
 
 
     // 가장 상단 샵 정보 불러오기
@@ -241,7 +249,10 @@ const MainScreen = ({ navigation }) => {
                 </TouchableOpacity>
 
                 {newsletters.slice(0, 3).map((newsletter, index) => (
-                    <TouchableOpacity key={index} style={{ flexDirection: 'row', marginBottom: 10 }}>
+                    <TouchableOpacity 
+                    key={index} 
+                    style={{ flexDirection: 'row', marginBottom: 10 }}
+                    onPress={() => handleNewsLetter(newsletter?.id)}>
                         <Image source={{ uri: newsletter?.mainImage }} style={styles.newletter} />
                         <View style={{ marginLeft: 12 }}>
                             <Text style={styles.newletterMainText}>{newsletter?.headline}</Text>
@@ -254,8 +265,6 @@ const MainScreen = ({ navigation }) => {
                         </View>
                     </TouchableOpacity>
                 ))}
-
-
 
 
                 {/* mood 첫번째 부분 */}
