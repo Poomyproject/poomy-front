@@ -81,7 +81,7 @@ const UserReviewScreen3 = () => {
   
       if (response.data.success) {
         Alert.alert('성공', '리뷰가 성공적으로 저장되었습니다.');
-        navigation.navigate('UserReviewScreen4', {
+        navigation.navigate('UserReview4', {
           reviewId: response.data.response.id,
           userNickName: response.data.response.userNickName,
           userImgUrl: response.data.response.userImgUrl,

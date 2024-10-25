@@ -71,9 +71,30 @@ const AppNavigator = () => {
           ),
         })} />
 
-      <Stack.Screen name="Setting" component={SettingScreen} />
-      <Stack.Screen name="Inquiry" component={InquiryScreen} />
-      <Stack.Screen name="Announce" component={AnnounceScreen}/>
+      <Stack.Screen name="Setting" component={SettingScreen} options={({ navigation }) => ({
+          headerTitle: '환경설정',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
+            </TouchableOpacity>
+          ),
+          })}/>
+      <Stack.Screen name="Inquiry" component={InquiryScreen}options={({ navigation }) => ({
+          headerTitle: '문의사항',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
+            </TouchableOpacity>
+          ),
+          })}/>
+      <Stack.Screen name="Announce" component={AnnounceScreen}options={({ navigation }) => ({
+          headerTitle: '공지사항',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
+            </TouchableOpacity>
+          ),
+          })}/>
       <Stack.Screen name="TermsDetail1" component={TermsDetailScreen1} options={({ navigation }) => ({
           headerTitle: '',
           headerLeft: () => (

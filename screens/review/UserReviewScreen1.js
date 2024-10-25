@@ -122,22 +122,23 @@ const styles = StyleSheet.create({
   moodContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     marginTop: 20,
   },
   moodButton: {
     borderWidth: 1,
-    borderColor: colors.Gray400,
+    borderColor: colors.Gray100,
     borderRadius: 25,
     paddingVertical: 10,
     paddingHorizontal: 20,
+    marginHorizontal: 5,
     marginBottom: 10,
   },
   moodButtonSelected: {
     backgroundColor: colors.Green900, // 선택된 버튼의 배경색
   },
   moodText: {
-    color: colors.Gray600,
+    color: colors.Gray700,
     fontSize: 14,
   },
   moodTextSelected: {

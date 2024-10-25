@@ -36,15 +36,14 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   image: {
-    width: 150,
-    height: 150,
-    marginBottom: 30,
+    width: 233,
+    height: 233,
+    marginTop : 60,
   },
   message: {
-    fontSize: 18,
-    color: colors.Gray900,
-    marginBottom: 30,
-    ...fonts.Body2,
+    marginTop : 40,
+    color: colors.Black,
+    ...fonts.Title2,
   },
   button: {
     width: '100%',
@@ -53,8 +52,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
     backgroundColor: colors.Green900,
-    marginTop : 280 , 
-  },
+    marginTop : 200, 
+  }, 
+  
   buttonText: {
     fontSize: 16,
     color: colors.Ivory100,
