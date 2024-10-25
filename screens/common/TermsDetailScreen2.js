@@ -1,26 +1,222 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet , ScrollView } from 'react-native';
 import colors from '../../config/colors';
+import { fonts } from '../../config/fonts';
 
 const TermsDetailScreen2 = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>약관 디테일2</Text>
-    </View>
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>필수 이용약관</Text>
+      <Text style={styles.subtitle}>개인정보 처리방침 (푸미)</Text>
+      
+      <View style={styles.section}>
+        <View style={styles.box}>
+        <Text style={styles.text}>
+            <Text style={styles.companyName}>{'\n'}푸미(이하 ‘회사’) </Text>
+          <Text style={styles.text}>
+          은(는) 개인정보보호법에 따라 이용자의 개인정보 보호 및 권익을 보호하고
+          개인정보와 관련한 이용자의 고충을 원활하게 처리할 수 있도록 다음과 같은 처리방침을 두고
+          있습니다.
+          {'\n'}회사는 개인정보처리방침을 개정하는 경우 7 일 전부터 웹사이트 공지사항(또는 개별공지)을
+          통하여 공지할 것입니다.
+          {'\n'}본 방침은 2024 년 11 월 15 일부터 시행됩니다.
+          </Text>
+          </Text>
+          <Text style={styles.companyName}>{'\n'}제 1 조(개인정보의 처리목적) </Text>
+          <Text style={styles.text}>
+          {'\n'}회사는 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적
+          이외의 용도로는 이용되지 않으며, 이용 목적이 변경되는 경우에는 개인정보 보호법 제 18 조에
+          따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.
+          {'\n'}<Text style={styles.companyName}>1. 어플 회원가입 및 관리</Text> - 회원 가입의사 확인, 회원제 서비스 제공에 따른 본인 식별·인증,
+          회원자격 유지·관리, 제한적 본인확인제 시행에 따른 본인확인, 서비스 부정이용 방지,
+          각종 고지·통지, 고충처리, 분쟁 조정을 위한 기록 보존 등을 목적으로 개인정보를
+          처리합니다.
+          {'\n'}<Text style={styles.companyName}>2. 민원사무 처리</Text> - 민원인의 신원 확인, 민원사항 확인, 사실조사를 위한 연락·통지, 처리결과
+          통보 등을 목적으로 개인정보를 처리합니다.
+          {'\n'}<Text style={styles.companyName}>3. 재화 또는 서비스 제공</Text> - 서비스 제공, 콘텐츠 제공, 맞춤 서비스 제공, 본인인증 등을
+          목적으로 개인정보를 처리합니다.
+          {'\n'}<Text style={styles.companyName}>4. 마케팅 및 광고에의 활용</Text> - 신규 서비스 개발 및 맞춤 서비스 제공, 이벤트 및 광고성 정보
+          제공 및 참여기회 제공, 접속빈도 파악 또는 회원의 서비스 이용에 대한 통계 등을
+          목적으로 개인정보를 처리합니다.
+          </Text>
+          <Text style={styles.companyName}>{'\n'}제 2 조(개인정보의 처리 및 보유기간) </Text>
+          <Text style={styles.text}>{'\n'}1. 회사는 법령에 따른 개인정보 보유․이용기간 또는 정보주체로부터 개인정보를 수집 시에
+            동의 받은 개인정보 보유․이용기간 내에서 개인정보를 처리․보유합니다.
+            {'\n'}2. 각각의 개인정보 처리 및 보유 기간은 다음과 같습니다.
+            {'\n'}◻ 재화 또는 서비스 제공
+            {'\n'}1. 보유근거 : 정보통신망 이용촉진 및 정보보호에 관한 법률
+            {'\n'}2. 보유기간
+            {'\n'}· 신용정보의 수집/처리 및 이용 등에 관한 기록 : 3 년
+            {'\n'}· 소비자의 불만 또는 분쟁처리에 관한 기록 : 3 년
+            {'\n'}· 대금결제 및 재화 등의 공급에 관한 기록 : 5 년
+            {'\n'}· 계약 또는 청약철회 등에 관한 기록 : 5 년
+            {'\n'}· 표시/광고에 관한 기록 : 6 개월
+            {'\n'}◻ 고객의 서비스 이용 관련한 각종 정보 및 이벤트 사항 소개 및 안내
+            {'\n'}1. 보유근거 : 정보주체로부터의 동의
+            {'\n'}2. 보유기간 : 1 년
+            </Text>
+            <Text style={styles.companyName}>{'\n'}제 3 조(개인정보의 제 3 자 제공) </Text>
+          <Text style={styles.text}>
+          {'\n'}1. 회사는 정보주체의 개인정보를 제 1 조(개인정보의 처리 목적)에서 명시한 범위 내에서만
+          처리하며, 정보주체의 동의, 법률의 특별한 규정 등 개인정보 보호법 제 17 조에 해당하는
+          경우에만 개인정보를 제 3 자에게 제공합니다.
+          {'\n'}2. 회사는 다음과 같이 개인정보를 제 3 자에게 제공하고 있습니다.
+          {'\n'}가) 개인정보를 제공받는 자 : 동일한 푸미 스페이스에 소속된 모임장 및 모임원
+          {'\n'}나) 제공받는 자의 개인정보 이용목적 : 개인정보 상호 공유
+          {'\n'}다) 제공하는 개인정보 항목 : 개인정보(닉네임) 등 서비스 이용을 위해 사용자 직접 입력한
+          정보
+          {'\n'}라) 제공받는 자의 보유․이용기간 : 회원 탈퇴 시
+          </Text>
+          <Text style={styles.companyName}>{'\n'}제 4 조 (개인정보 제 3 자 제공의 예외사항) </Text>
+          <Text style={styles.text}>{'\n'}회사는 이용자의 개인정보를 개인정보 보호방침 제 1 조 (개인정보 수집 범위 및 방법)에서 명시한
+          범위 내에서만 협력업체에게 제공하며 서비스 이용 관련 목적 이 외의 사용 및 타인, 타사에게
+          제공하지 않습니다. 다만 이용자의 동의 없이 개인정보가 제공될 수도 있는 경우는 아래와
+          같습니다.
+          {'\n'}1. 이용자가 사전에 개인정보를 공개한 경우 (글 등록, 댓글 등의 행위)
+          {'\n'}2. 관계법령의 규정에 의거 또는 수사 목적으로 수사기관의 요구가 있는 경우</Text>
+          <Text style={styles.companyName}>{'\n'}제 5 조(개인정보처리의 위탁) </Text>
+          <Text style={styles.text}>회사는 이용자의 개인정보처리 위탁업무를 행하지 않습니다.</Text>
+          <Text style={styles.companyName}>{'\n'}제 6 조(정보주체의 권리․의무 및 행사방법) </Text>
+          <Text style={styles.text}>{'\n'}1. 정보주체는 회사에 대해 언제든지 다음 각 호의 개인정보 보호 관련 권리를 행사할 수
+            있습니다.
+            {'\n'}가) 개인정보 열람요구
+            {'\n'}나) 오류 등이 있을 경우 정정 요구
+            {'\n'}다) 삭제요구
+            {'\n'}라) 처리정지 요구
+            {'\n'}2. 제 1 항에 따른 권리 행사는 회사에 대해 서면, 전화, 전자우편 등을 통하여 하실 수 있으며
+            회사는 이에 대해 지체 없이 조치하여야 합니다.
+            {'\n'}3. 정보주체가 개인정보의 오류 등에 대한 정정 또는 삭제를 요구한 경우에는 회사는 정정
+            또는 삭제를 완료할 때까지 당해 개인정보를 이용하거나 제공하지 않습니다.
+            {'\n'}4. 제 1 항에 따른 권리 행사는 정보주체의 법정대리인이나 위임을 받은 자 등 대리인을
+            통하여 하실 수 있습니다. 이 경우 개인정보 보호법 시행규칙 별지 제 11 호 서식에 따른
+            위임장을 제출하셔야 합니다.
+            {'\n'}5. 정보주체는 개인정보 보호법 등 관계법령을 위반하여 회사가 처리하고 있는 정보주체
+            본인이나 타인의 개인정보 및 사생활을 침해하여서는 아니 됩니다.
+            {'\n'}6. 개인정보 열람 및 처리정지 요구는 개인정보보호법 제 35 조 제 5 항, 제 37 조 제 2 항에
+            의하여 정보주체의 권리가 제한 될 수 있습니다.
+            {'\n'}7. 개인정보의 정정 및 삭제 요구는 다른 법령에서 그 개인정보가 수집 대상으로 명시되어
+            있는 경우에는 그 삭제를 요구할 수 없습니다.
+            {'\n'}8. 푸미는 정보주체 권리에 따른 열람의 요구, 정정·삭제의 요구, 처리 정지의 요구 시 열람 등
+            요구를 한 자가 본인이거나 정당한 대리인인지를 확인합니다.
+          </Text>
+          <Text style={styles.companyName}>{'\n'}제 7 조(처리하는 개인정보 항목) </Text>
+          <Text style={styles.text}>{'\n'}회사는 다음의 개인정보 항목을 처리하고 있습니다.
+          {'\n'}1. 어플 회원 가입 및 관리
+          {'\n'}· 필수항목 : 이메일
+          {'\n'}· 선택항목 : 별명 (선택항목은 입력하지 않아도 회원 가입이 가능합니다.)
+          {'\n'}2. 서비스 제공
+          {'\n'}· 가) 소셜로그인 및 관리
+          {'\n'}· 필수항목 : 이메일
+          {'\n'}3. 고객의 서비스 이용에 대한 통계, 각종 정보 및 이벤트 관련 사항 소개 및 안내
+          {'\n'}3. 성명, 전화 번호, 이메일, 주소, 문의 내용 인터넷 서비스 이용과정에서 아래 개인정보
+          {'\n'}항목이 자동으로 생성되어 수집될 수 있습니다.
+          {'\n'}· 운영체제 정보, 디바이스 식별자, 방문 기록, 서비스 이용 기록, 부정 사용기록, 거래
+          {'\n'}기록, 화면사이즈, IP Address, 쿠키, 방문 일시, 광고 ID</Text>
+          <Text style={styles.companyName}>{'\n'}제 8 조(개인정보의 파기) </Text>
+          <Text style={styles.text}>{'\n'}1. 회사는 개인정보 보유기간의 경과, 처리목적 달성 등 개인정보가 불필요하게 되었을
+          때에는 지체 없이 해당 개인정보를 파기합니다.
+          {'\n'}2. 정보주체로부터 동의 받은 개인정보 보유기간이 경과하거나 처리목적이 달성되었음에도
+          불구하고 다른 법령에 따라 개인정보를 계속 보존하여야 하는 경우에는, 해당 개인정보를
+          별도의 데이터베이스(DB)로 옮기거나 보관장소를 달리하여 보존합니다.
+          {'\n'}3. 개인정보 파기의 절차, 기한 및 방법은 다음과 같습니다.
+          {'\n'}가) 파기절차
+          {'\n'}· 이용자가 입력한 정보는 목적 달성 후 내부 방침 및 기타 관련 법령에 따라 일정기간
+          저장 또는 즉시 파기됩니다.
+          {'\n'}나) 파기기한
+          {'\n'}· 이용자 개인정보의 보유기간이 경과된 경우 : 보유기간의 종료일로부터 5 일 이내
+          {'\n'}· 이용자의 개인정보가 불필요하게 되었을 경우 (개인정보의 처리 목적 달성,
+          서비스의 폐지, 사업의 종료 등) : 개인정보가 불필요한 것으로 인정되는 날로부터
+          5 일 이내
+          {'\n'}다) 파기방법
+          {'\n'}· 전자적 파일 형태의 정보는 기록을 재생할 수 없는 기술적 방법을 사용하며 종이에
+          출력된 개인정보는 분쇄기로 분쇄하거나 소각을 통하여 파기합니다.</Text>
+          <Text style={styles.companyName}>{'\n'}제 9 조(개인정보의 안전성 확보조치) </Text>
+          <Text style={styles.text}>
+          회사는 개인정보의 안전성 확보를 위해 다음과 같은 조치를 취하고 있습니다.
+          가) <Text style={styles.companyName}>관리적 조치</Text> - 내부관리계획 수립․시행, 정기적 직원 교육 등
+          나) <Text style={styles.companyName}>기술적 조치</Text> - 개인정보처리시스템 등의 접근권한 관리, 접근통제시스템 설치,
+          고유식별정보 등의 암호화, 보안프로그램 설치
+          다) <Text style={styles.companyName}>물리적 조치</Text> - 전산실, 자료보관실 등의 접근통제
+          </Text>
+          <Text style={styles.companyName}>{'\n'}제 10 조(개인정보 보호책임자) </Text>
+          <Text style={styles.text}>
+          {'\n'}1. 회사는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한
+          정보주체의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를
+          지정하고 있습니다.
+          {'\n'}가) 개인정보 보호책임자
+          {'\n'}· 성명 : 심지영
+          {'\n'}· 직책 : 개발자
+          {'\n'}· 연락처 : <Text style={styles.companyName}>jysim07@gmail.com</Text>
+          {'\n'}2. 정보주체께서는 회사의 서비스(또는 사업)을 이용하시면서 발생한 모든 개인정보 보호
+          관련 문의, 불만처리, 피해구제 등에 관한 사항을 개인정보 보호책임자 및 담당부서로
+          문의하실 수 있습니다. 회사는 정보주체의 문의에 대해 지체 없이 답변 및 처리해드릴
+          것입니다.
+          </Text>
+          <Text style={styles.companyName}>{'\n'}제 11 조(정보주체의 권익침해에 대한 구제방법)</Text>
+          <Text style={styles.text}>
+          {'\n'}1. 개인정보주체는 개인정보침해로 인한 구제를 받기 위하여 개인정보분쟁조정위원회,
+          한국인터넷진흥원, 개인정보침해신고센터 등에 분쟁해결이나 상담 등을 신청할 수
+          있습니다.
+          {'\n'}- 개인정보 분쟁조정위원회 : <Text style={styles.companyName}>1833-6972</Text>
+          {'\n'}- 개인정보 침해신고센터 : (국번없이) <Text style={styles.companyName}>118</Text> (privacy.kisa.or.kr)
+          {'\n'}- 경찰청 사이버수사국 : (국번없이) <Text style={styles.companyName}>182</Text> (ecrm.police.go.kr)
+          {'\n'}- 대검찰청 사이버수사과 : (국번없이) <Text style={styles.companyName}>1301</Text> (www.spo.go.kr)
+          {'\n'}2. 또한, 개인정보의 열람, 정정ㆍ삭제, 처리정지 등에 대한 정보주체자의 요구에 대하여
+          공공기관의 장이 행한 처분 또는 부작위로 인하여 권리 또는 이익을 침해 받은 자는
+          행정심판법이 정하는 바에 따라 행정심판을 청구할 수 있습니다.
+          ☞ 중앙행정심판위원회 (https://www.simpan.go.kr)
+          </Text>
+
+        </View>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: colors.Ivory100,
+    backgroundColor: '#FFFFFF',  // 배경 색상
+    padding: 16,  // 좌우 패딩 추가
   },
   title: {
-    fontSize: 24,
+    marginTop : 10,
+    ...fonts.Heading1,
+    color: colors.Black,  // 제목 색상
+    marginBottom: 3,
+  },
+  
+  subtitle: {
+    ...fonts.Body2,
+    color: colors.Gray700,
+    marginBottom: 30,
+  },
+
+  section: {
+    marginBottom: 0,  // 섹션 간격
+  },
+
+  box: {
+    backgroundColor: '#F9F9F9',  // 박스 배경 색상
+    padding: 16,
+    borderRadius: 8,  // 모서리 둥글게
+  },
+  companyName: {
     fontWeight: 'bold',
+    fontSize: 14,
+    color:colors.Gray700,
+  },
+  text: {
+    fontSize: 14,
+    color:colors.Gray700,
+    lineHeight: 20,  // 줄 간격
+    marginBottom: 10,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000',  // 섹션 제목 색상
+    marginBottom: 10,
   },
 });
-
 export default TermsDetailScreen2;

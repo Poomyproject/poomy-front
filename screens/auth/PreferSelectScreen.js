@@ -1,5 +1,5 @@
-import React, { useState,useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import colors from '../../config/colors';
 import { fonts } from '../../config/fonts'; 
 import ApiClient from './ApiClient';
@@ -9,12 +9,11 @@ const PreferSelectScreen = ({ navigation }) => {
   const [selectedMoods, setSelectedMoods] = useState([]);
 
   useEffect(() => {
-    // 장소 데이터를 GET 요청으로 서버에서 받아옴
     const fetchMoods = async () => {
       try {
         const response = await ApiClient.get('/api/moods');
         if (response.data && response.data.success) {
-          setMoods(response.data.response); // 응답에서 'response' 배열을 상태에 저장
+          setMoods(response.data.response); 
         } else {
           console.error('Failed to fetch Moods:', response.data);
         }
@@ -26,8 +25,41 @@ const PreferSelectScreen = ({ navigation }) => {
     fetchMoods();
   }, []);
 
-   // 장소를 선택하는 함수
-   const toggleMood = (moodId) => {
+  const getImageForMood = (moodName, isSelected) => {
+    if (isSelected) {
+      switch (moodName) {
+        case '모던':
+          return require('../../assets/img_selected_modern.png');
+        case '럭셔리':
+          return require('../../assets/img_selected_luxury.png');
+        case '아기자기':
+          return require('../../assets/img_selected_cute.png');
+        case '테마별':
+          return require('../../assets/img_selected_theme.png');
+        case '빈티지':
+          return require('../../assets/img_selected_vintage.png');
+        default:
+          return require('../../assets/img_default.png');
+      }
+    } else {
+      switch (moodName) {
+        case '모던':
+          return require('../../assets/img_modern.png');
+        case '럭셔리':
+          return require('../../assets/img_luxury.png');
+        case '아기자기':
+          return require('../../assets/img_cute.png');
+        case '테마별':
+          return require('../../assets/img_theme.png');
+        case '빈티지':
+          return require('../../assets/img_vintage.png');
+        default:
+          return require('../../assets/img_default.png');
+      }
+    }
+  };
+  
+  const toggleMood = (moodId) => {
     if (selectedMoods.includes(moodId)) {
       setSelectedMoods((prev) => prev.filter((id) => id !== moodId));
     } else if (selectedMoods.length < 2) {
@@ -37,7 +69,6 @@ const PreferSelectScreen = ({ navigation }) => {
 
   const isButtonDisabled = selectedMoods.length === 0;
 
-
   const submitMoods = async () => {
     try {
       if (selectedMoods.length === 0) {
@@ -45,17 +76,10 @@ const PreferSelectScreen = ({ navigation }) => {
         return;
       }
   
-      const data = {
-        moodIds: selectedMoods
-      };
-  
-      //console.log('Data being sent to server:', data);
-  
+      const data = { moodIds: selectedMoods };
       const response = await ApiClient.post('/api/users/moods', data);
-      //console.log('Response:', response.data);
       
       if (response.data.success) {
-        //console.log('Places submitted successfully:', response.data);
         navigation.navigate('PreferPlace');
       } else {
         console.error('Error:', response.data);
@@ -71,8 +95,6 @@ const PreferSelectScreen = ({ navigation }) => {
     }
   };
 
-
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -86,33 +108,26 @@ const PreferSelectScreen = ({ navigation }) => {
         <Text style={styles.details}>당신의 소품샵 취향은 무엇인가요? (최대 2개)</Text>
         <View style={styles.tagsContainer}>
           {moods.length > 0 ? (
-            moods.map((moods) => (
+            moods.map((mood) => (
               <TouchableOpacity
-                key={moods.id}
-                style={[
-                  styles.tag,
-                  selectedMoods.includes(moods.id) ? styles.selectedTag : styles.unselectedTag,
-                ]}
-                onPress={() => toggleMood(moods.id)}
+                key={mood.id}
+                style={styles.tag} 
+                onPress={() => toggleMood(mood.id)}
               >
-                <Image source={{ uri: moods.imgUrl }} style={styles.placeImage} />
-                <Text
-                  style={[
-                    styles.tagText,
-                    selectedMoods.includes(moods.id) ? styles.selectedTagText : styles.unselectedTagText,
-                  ]}
-                >
-                  {moods.name}
+                <Image source={getImageForMood(mood.name, selectedMoods.includes(mood.id))} style={styles.placeImage} />
+                <Text style={styles.tagText}> 
+                  {mood.name}
                 </Text>
               </TouchableOpacity>
+
             ))
           ) : (
-            <Text>Loading Moods...</Text> // 데이터가 없을 때 보여줄 내용
+            <Text>Loading Moods...</Text>
           )}
         </View>
         <TouchableOpacity
           style={[styles.button, isButtonDisabled ? styles.buttonDisabled : styles.buttonEnabled]}
-          onPress={submitMoods} // 선택한 장소 전송
+          onPress={submitMoods}
           disabled={isButtonDisabled}
         >
           <Text style={[styles.buttonText, isButtonDisabled ? styles.buttonTextInactive : styles.buttonTextActive]}>
@@ -123,6 +138,7 @@ const PreferSelectScreen = ({ navigation }) => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -156,46 +172,36 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     marginBottom: 10,
   },
+
   details: {
     ...fonts.Body2,
     color: colors.Gray700,
     marginBottom: 20,
   },
+
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     marginBottom: 20,
   },
   tag: {
-    borderRadius: 20,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    borderRadius: 0,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
     marginVertical: 5,
     marginHorizontal: 5,
-    borderWidth: 1,
     alignItems: 'center',
   },
-  selectedTag: {
-    backgroundColor: colors.Green900,
-    borderColor: colors.Green900,
-  },
-  unselectedTag: {
-    backgroundColor: colors.Ivory100,
-    borderColor: colors.Gray100,
-  },
-  selectedTagText: {
-    color: colors.Ivory100,
-    ...fonts.Body2,
-  },
-  unselectedTagText: {
-    color: colors.Gray700,
-    ...fonts.Body2,
-  },
   placeImage: {
-    width: 50,
-    height: 50,
+    width: 90,
+    height: 90,
     marginBottom: 5,
+  },
+  tagText: {
+    color: colors.Gray700, // 항상 동일한 텍스트 색상
+    marginTop : 3,
+    ...fonts.Body2,
   },
   button: {
     width: 350,

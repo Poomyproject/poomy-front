@@ -7,13 +7,32 @@ import MypageEditScreen from './MypageEditScreen';
 import ApiClient from '../auth/ApiClient';
 import { useEffect,useState, useContext } from 'react';
 import { fonts } from '../../config/fonts';
-import { UserContext } from './UserContext';
+import { useFocusEffect } from '@react-navigation/native';
+
 
 
 const MyPageScreen = () => {
   const navigation = useNavigation(); 
 
-  const { nickname, setNickname, googleEmail, setgoogleEmail, selectedMoods ,setSelectedMoods, selectedPlaces, setSelectedPlaces } = useContext(UserContext);
+  const [nickname, setNickname] = useState('');
+  const [googleEmail, setgoogleEmail] = useState('');
+  const [imgUrl, setImgUrl] = useState(''); // 이미지 URL 관리 추가
+  const [selectedMoods, setSelectedMoods] = useState([]);
+  const [selectedPlaces, setSelectedPlaces] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // 화면이 다시 포커스될 때 닉네임 상태를 업데이트
+      const loadNickname = async () => {
+        const storedNickname = await AsyncStorage.getItem('nickname');
+        if (storedNickname) {
+          setNickname(storedNickname); // 닉네임이 변경된 상태를 반영
+        }
+      };
+      loadNickname();
+    }, [])
+  );
 
     // API에서 사용자 데이터를 가져오는 함수
     const fetchUserData = async () => {
@@ -25,13 +44,15 @@ const MyPageScreen = () => {
           setgoogleEmail(userData.googleEmail);
           setSelectedMoods(userData.moods.map(mood => mood.name));
           setSelectedPlaces(userData.spots.map(spot => spot.name));
+
+          await AsyncStorage.setItem('nickname', userData.nickname);
         }
       } catch (error) {
         console.error('데이터 가져오기 실패:', error);
-      } finally {
-        //setLoading(false); // 데이터 로드 완료 후 로딩 상태 해제
+        Alert.alert('오류', '사용자 데이터를 가져오는 중 문제가 발생했습니다.');
       }
     };
+    
   
     // 컴포넌트 마운트 시 사용자 데이터를 가져옴
     useEffect(() => {
@@ -122,12 +143,12 @@ const MyPageScreen = () => {
             <View style={styles.verticalLine}></View>
             
             {selectedMoods && selectedMoods.length > 0 ? (
-            selectedMoods.map((mood) => (
-            <Text key={mood.id} style={styles.textWithBorder}>{mood}</Text>
+            selectedMoods.map((mood, index) => (
+              <Text key={index} style={styles.textWithBorder}>{mood}</Text>
             ))
-            ) : (
+          ) : (
             <Text>관심분위기가 없습니다.</Text>
-            )}
+          )}
           </View>
         </View>
 
