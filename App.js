@@ -8,10 +8,12 @@ import { FavoriteProvider } from './screens/like/LikeContext';
 import ShopProvider from './screens/shop/ShopContext';
 import SpotProvider from './screens/keyword/KeywordContext';
 import MoodProvider from './screens/keyword/MoodContext'
+import NewsLetterProvider from './screens/context/NewsLetterContext';
 
 
 export default function App() {
   return (
+    <NewsLetterProvider>
     <MoodProvider>
     <SpotProvider>
     <ShopProvider>
@@ -25,5 +27,6 @@ export default function App() {
     </ShopProvider>
     </SpotProvider>
     </MoodProvider>
+    </NewsLetterProvider>
   );
 }
