@@ -5,6 +5,7 @@ import ApiClient, { setAxiosInterceptors } from '../auth/ApiClient';
 import { ShopContext } from '../shop/ShopContext'; // ShopContext 임포트
 import { KeywordContext } from '../keyword/KeywordContext'
 import { MoodContext } from '../keyword/MoodContext';
+import { NewsLetterContext } from '../context/NewsLetterContext'
 import styles from './styles'; // 별도 스타일 파일로 분리
 
 const { width, height } = Dimensions.get('window');
@@ -22,6 +23,7 @@ const MainScreen = ({ navigation }) => {
     const { setSelectedShopId } = useContext(ShopContext); // ShopContext에서 setSelectedShopId를 가져옴
     const { setSelectedSpotName } = useContext(KeywordContext);
     const { setSelectedMoodId } = useContext(MoodContext);
+    const { setSelectedNewsLetterId } = useContext(NewsLetterContext);
 
     const handleShopPress = (shopId) => {
         setSelectedShopId(shopId); // shopId 저장
@@ -40,6 +42,10 @@ const MainScreen = ({ navigation }) => {
         navigation.navigate('KeywordStack', { screen: 'Keyword', params: { moodId } });
     };
 
+    const handleNewsLetter = (newsletterId) => {
+        setSelectedNewsLetterId(newsletterId);
+        navigation.navigate('NewsLetterStack', { screen: 'NewsLetterDetail', params: { newsletterId } });
+    };
 
     // 가장 상단 샵 정보 불러오기
     const [homeSpotShop, setHomeSpotShop] = useState(null);
@@ -169,9 +175,9 @@ const MainScreen = ({ navigation }) => {
 
                 <ScrollView horizontal={true} style={styles.placeContainer} showsHorizontalScrollIndicator={false}>
                     {themes.map((theme, index) => (
-                        <TouchableOpacity key={theme.id} 
-                        onPress={() => handleMood(theme?.name)}
-                        style={{ alignItems: 'center', marginLeft: index === 0 ? 25 : 13 }}>
+                        <TouchableOpacity key={theme.id}
+                            onPress={() => handleMood(theme?.name)}
+                            style={{ alignItems: 'center', marginLeft: index === 0 ? 25 : 13 }}>
                             <Image source={theme.image} style={styles.themeImg} />
                             <Text style={styles.placeText}>{theme.name}</Text>
                         </TouchableOpacity>
@@ -240,21 +246,25 @@ const MainScreen = ({ navigation }) => {
                     <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
                 </TouchableOpacity>
 
-                {newsletters.slice(0, 3).map((newsletter, index) => (
-                    <TouchableOpacity key={index} style={{ flexDirection: 'row', marginBottom: 10 }}>
-                        <Image source={{ uri: newsletter?.mainImage }} style={styles.newletter} />
-                        <View style={{ marginLeft: 12 }}>
-                            <Text style={styles.newletterMainText}>{newsletter?.headline}</Text>
-                            <Text style={styles.newletterDetailText}>{newsletter?.subTopic}</Text>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text style={{ color: colors.Gray500 }}>{newsletter?.firstKeyword} </Text>
-                                <Text style={{ color: colors.Gray500 }}>{newsletter?.secondKeyword} </Text>
-                                <Text style={{ color: colors.Gray500 }}>{newsletter?.thirdKeyword} </Text>
+                <View style={{marginTop:10,}}>
+                    {newsletters.slice(0, 3).map((newsletter, index) => (
+                        <TouchableOpacity
+                            key={index}
+                            style={{ flexDirection: 'row', marginBottom: 10 }}
+                            onPress={() => handleNewsLetter(newsletter?.id)}>
+                            <Image source={{ uri: newsletter?.mainImage }} style={styles.newletter} />
+                            <View style={{ marginLeft: 15 }}>
+                                <Text style={styles.newletterMainText}>{newsletter?.headline}</Text>
+                                <Text style={styles.newletterDetailText}>{newsletter?.subTopic}</Text>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={{ color: colors.Gray500 }}>{newsletter?.firstKeyword} </Text>
+                                    <Text style={{ color: colors.Gray500 }}>{newsletter?.secondKeyword} </Text>
+                                    <Text style={{ color: colors.Gray500 }}>{newsletter?.thirdKeyword} </Text>
+                                </View>
                             </View>
-                        </View>
-                    </TouchableOpacity>
-                ))}
-
+                        </TouchableOpacity>
+                    ))}
+                </View>
 
 
 
