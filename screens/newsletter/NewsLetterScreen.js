@@ -94,8 +94,6 @@ const NewsLetterScreen = ({ navigation }) => {
         />
 
       </View>
-
-
     </Provider>
   );
 };
@@ -121,12 +119,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#F1F1F1',
-
-    // 그림자 효과 (iOS)
-    // shadowColor: '#000',       // 그림자 색상
-    // shadowOffset: { width: 0, height: 2 }, // 그림자의 오프셋 (x, y)
-    // shadowOpacity: 0.2,        // 그림자의 불투명도
-    // shadowRadius: 4,           // 그림자 반경
   },
   image: {
     width: (Dimensions.get('window').width / 2) - 32, // 각 아이템의 너비 설정

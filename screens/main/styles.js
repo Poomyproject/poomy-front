@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         height: 190,
         alignItems: 'center',
-        marginLeft: 25,
+        marginLeft: 23,
         // iOS 그림자 효과
         shadowColor: '#000',
         shadowOffset: {

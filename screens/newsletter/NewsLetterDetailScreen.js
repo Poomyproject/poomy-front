@@ -1,66 +1,182 @@
-import React from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import colors from '../../config/colors';
-
-const shopData = [
-    {
-        id: 1,
-        name: '소품샵 이름 1',
-        description: '소품샵 한줄 소개 1',
-        longDescription: '3번 소품샵 콘텐츠 글 3번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글',
-        location: '3번 소품샵 위치',
-        imageUri: 'https://via.placeholder.com/600x400',
-        smallImages: [
-            'https://via.placeholder.com/100',
-            'https://via.placeholder.com/100',
-            'https://via.placeholder.com/100'
-        ],
-    },
-    {
-        id: 2,
-        name: '소품샵 이름 2',
-        description: '소품샵 한줄 소개 2',
-        longDescription: '3번 소품샵 콘텐츠 글 3번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글',
-        location: '2번 소품샵 위치',
-        imageUri: 'https://via.placeholder.com/600x400',
-        smallImages: [
-            'https://via.placeholder.com/100',
-            'https://via.placeholder.com/100',
-            'https://via.placeholder.com/100'
-        ],
-    },
-    {
-        id: 3,
-        name: '소품샵 이름 3',
-        description: '소품샵 한줄 소개 3',
-        longDescription: '3번 소품샵 콘텐츠 글 3번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글',
-        location: '3번 소품샵 위치',
-        imageUri: 'https://via.placeholder.com/600x400',
-        smallImages: [
-            'https://via.placeholder.com/100',
-            'https://via.placeholder.com/100',
-            'https://via.placeholder.com/100'
-        ],
-    }
-];
+import ApiClient from '../auth/ApiClient';
+import { ActivityIndicator } from 'react-native-paper';
+import { NewsLetterContext } from '../context/NewsLetterContext';
+import num1Circle from '../../assets/num1_circle.png';
+import num2Circle from '../../assets/num2_circle.png';
+import num3Circle from '../../assets/num3_circle.png';
 
 const NewsLetterDetailScreen = () => {
+
+    const { selectedNewsLetterId } = useContext(NewsLetterContext);
+    const [newsletterData, setNewsletterData] = useState(null);
+    const [shopData, setShopData] = useState([]);
+    const [isLike, setIsLike] = useState(false); // 좋아요 상태 관리
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const scrollViewRef = useRef(null); // ScrollView의 ref 생성
+    const [scrollPosition, setScrollPosition] = useState(0); // 현재 스크롤 위치 저장
+
+    // 스크롤 이벤트 핸들러: 스크롤 위치 추적
+    const handleScroll = (event) => {
+        setScrollPosition(event.nativeEvent.contentOffset.y); // 스크롤 위치 저장
+    };
+
+
+    // 스타일 변경을 위한 조건부 스타일링
+    const btnStyle = isLike ? styles.likedBtn : styles.usefulBtn;
+    const textStyle = isLike ? styles.likedText : styles.usefultext;
+
+    useEffect(() => {
+        const fetchNewletterData = async () => {
+            try {
+                const response = await ApiClient.get(`/api/newsLetter/${selectedNewsLetterId}`); // shopId를 이용해 API 호출
+                setNewsletterData(response.data.response);  // API 응답 데이터를 상태에 저장
+
+                // 데이터 로그 출력
+                console.log('API 응답:', response.data);
+
+            } catch (err) {
+                console.error('API 요청 중 에러 발생:', err);
+                setError(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (selectedNewsLetterId) {
+            fetchNewletterData(); // selectedNewsLetterId가 존재할 때만 API 호출
+        }
+    }, [selectedNewsLetterId]);
+
+
+    // 좋아요 상태를 토글하는 함수
+    const toggleLike = async () => {
+        try {
+            setLoading(true); // 로딩 상태 설정
+
+            let response;
+
+            // 스크롤 위치 추적 후 저장
+            const currentPosition = scrollPosition;
+
+            if (isLike) {
+                // 현재 좋아요가 되어 있다면, unlike 엔드포인트 호출
+                response = await ApiClient.post(`/api/newsLetter/${selectedNewsLetterId}/unlike`);
+            } else {
+                // 좋아요가 안 되어 있다면, like 엔드포인트 호출
+                response = await ApiClient.post(`/api/newsLetter/${selectedNewsLetterId}/like`);
+            }
+
+            // 서버 응답에 따라 isLike 상태 업데이트
+            setIsLike(response.data.response.isLike);
+
+            // 스크롤 위치 복원 (버튼 클릭 후에도 스크롤이 유지되도록)
+            if (scrollViewRef.current) {
+                scrollViewRef.current.scrollTo({ y: currentPosition, animated: false });
+            }
+
+            console.log('API 응답:', response.data);
+
+        } catch (err) {
+            console.error('API 요청 중 에러 발생:', err);
+            setError(err);
+        } finally {
+            setLoading(false); // 로딩 상태 해제
+        }
+    };
+
+
+    // newsletterData가 업데이트될 때마다 shopData를 업데이트하는 useEffect 추가
+    useEffect(() => {
+        if (newsletterData) {
+            setShopData([
+                {
+                    id: 1,
+                    circleImg: num1Circle,
+                    name: newsletterData?.firstShopName,
+                    description: newsletterData?.firstShopTitle,
+                    longDescription: newsletterData?.firstShopText,
+                    location: newsletterData?.firstShopLocation,
+                    imageUri: newsletterData?.firstShopImage1,
+                    smallImages: [
+                        newsletterData?.firstShopImage2,
+                        'https://via.placeholder.com/100',
+                        'https://via.placeholder.com/100'
+                    ],
+                },
+                {
+                    id: 2,
+                    circleImg: num2Circle,
+                    name: newsletterData?.secondShopId,
+                    description: newsletterData?.secondShopTitle,
+                    longDescription: newsletterData?.secondShopText,
+                    location: newsletterData?.secondShopLocation,
+                    imageUri: newsletterData?.secondShopImage1,
+                    smallImages: [
+                        newsletterData?.secondShopImage2,
+                        'https://via.placeholder.com/100',
+                        'https://via.placeholder.com/100'
+                    ],
+                },
+                {
+                    id: 3,
+                    circleImg: num3Circle,
+                    name: newsletterData?.thirdShopId,
+                    description: newsletterData?.thirdShopTitle,
+                    longDescription: newsletterData?.thirdShopText,
+                    location: newsletterData?.thirdShopLocation,
+                    imageUri: newsletterData?.thirdShopImage1,
+                    smallImages: [
+                        newsletterData?.thirdShopImage2,
+                        'https://via.placeholder.com/100',
+                        'https://via.placeholder.com/100'
+                    ],
+                }
+            ]);
+        }
+    }, [newsletterData]); // newsletterData가 변경될 때 shopData 업데이트
+
+    if (loading) {
+        return <ActivityIndicator size="large" color={colors.Green900} />;
+    }
+
+    if (error) {
+        return (
+            <View>
+                <Text>에러 발생: {error.message}</Text>
+            </View>
+        );
+    }
+
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView
+            ref={scrollViewRef}
+            style={styles.container}
+            showsVerticalScrollIndicator={false}
+            onScroll={handleScroll} // 스크롤 이벤트 핸들러 추가
+            scrollEventThrottle={16} // 스크롤 이벤트 호출 빈도 설정
+        >
             {/* Main Section with Image, Title, and Description */}
             <Image
-                source={{ uri: 'https://via.placeholder.com/600x400' }}
+                source={{ uri: newsletterData?.mainPhoto }}
                 style={styles.mainImage}
             />
             <View style={{ padding: 10, alignSelf: 'center' }}>
-                <Text style={styles.mainTitle}>데이트하기 좋은 성수 근처</Text>
-                <Text style={styles.mainDescription}>5~6월에 하기 좋은 데이트들을 전부 모아</Text>
-                <Text style={styles.hashtag}>#데이트 #연인과 #친구와</Text>
+                <Text style={styles.mainTitle}>{newsletterData?.headline}</Text>
+                <Text style={styles.mainDescription}>{newsletterData?.subtopic}</Text>
+                <View style={{ flexDirection: 'row' }}>
+                    <Text style={styles.hashtag}>#{newsletterData?.keyword1}</Text>
+                    <Text style={styles.hashtag}>#{newsletterData?.keyword2}</Text>
+                    <Text style={styles.hashtag}>#{newsletterData?.keyword3}</Text>
+                </View>
+
                 <Text style={styles.longDescription}>
-                    안녕하세요. Poomy입니다. 많이 날씨가 더워졌죠? 네 너무 더워요.
-                    지금 너무 더워서 피곤하고 근데 날씨는 안풀리고 뭔소린지 모르겠죠?
-                    네 저도 모릅니다. 왜냐하면 지금 그냥 예시로 한 번 써보고 있거든요.
-                    그렇다면 데이트하기 좋은 성수 근처 한 번 알아볼까요^^
+                    {newsletterData?.textTop}
                 </Text>
             </View>
 
@@ -68,9 +184,11 @@ const NewsLetterDetailScreen = () => {
                 {/* Mapping over shopData array */}
                 {shopData.map((shop, index) => (
                     <View key={shop.id}>
+
+                        {/* 샵 헤더 */}
                         <View style={styles.sectionHeader}>
                             <View style={{ width: '76%', flexDirection: 'row' }}>
-                                <Image source={require('../../assets/num1_circle.png')} style={styles.rightIcon} />
+                                <Image source={shop.circleImg} style={styles.rightIcon} />
                                 <Text style={styles.sectionTitle}>{shop.name}</Text>
                             </View>
                             <TouchableOpacity style={{ flexDirection: 'row' }}>
@@ -79,6 +197,7 @@ const NewsLetterDetailScreen = () => {
                             </TouchableOpacity>
                         </View>
 
+                        {/* 샵 이미지 */}
                         <Image
                             source={{ uri: shop.imageUri }}
                             style={styles.bigImage}
@@ -89,40 +208,41 @@ const NewsLetterDetailScreen = () => {
                             ))}
                         </View>
 
+                        {/* 샵 설명 */}
                         <Text style={styles.sectionMainDescription}>{shop.description}</Text>
                         <Text style={styles.sectionDescription}>{shop.longDescription}</Text>
 
+                        {/* 샵 위치 */}
                         <View style={styles.locationContainer}>
                             <Image source={require('../../assets/pin.png')} style={styles.rightIcon} />
                             <Text style={styles.locationText}>{shop.location}</Text>
                         </View>
-                        
-                        {/* Add spacing between sections */}
+
                         {index !== shopData.length - 1 && <View style={{ marginTop: 70 }} />}
                     </View>
                 ))}
             </View>
 
+            {/* 마무리 멘트 */}
             <View style={styles.enddingContainer}>
                 <Image source={require('../../assets/NewsPoomy.png')} style={styles.poomyIcon} />
                 <View style={{ marginTop: 50 }}>
-                    <Text style={styles.enddingText}>오늘 Poomy가 추천해준</Text>
-                    <Text style={styles.enddingText}>빈티지 분위기 소품샵, 어떠셨나요? {"\n"}</Text>
-                    <Text style={styles.enddingText}>추천드린 소품샵들을 다니면서</Text>
-                    <Text style={styles.enddingText}>여러분들의 추억여행도 떠나면 좋겠어요! {"\n"}</Text>
-                    <Text style={styles.enddingText}>다음 뉴스레터에서는</Text>
-                    <Text style={styles.enddingText}>또 어떤 숨겨진 소품샵들을 소개할지 기대해주세요! {"\n"}</Text>
+                    <Text style={styles.enddingText}>{newsletterData?.textBottom}</Text>
                 </View>
             </View>
 
+            {/* 유용해요 버튼설명 */}
             <Image source={require('../../assets/Newsline.png')} style={styles.line} />
             <Text style={styles.enddingBtnText}>오늘의 뉴스레터는 어떠했나요?</Text>
             <Text style={styles.enddingText}>당신의 의견을 알려주세요. {"\n"}</Text>
-            <TouchableOpacity style={styles.usefulBtn}>
+
+            {/* 유용해요 버튼 */}
+            <TouchableOpacity style={btnStyle} onPress={toggleLike} disabled={loading}>
                 <Image source={require('../../assets/thumb.png')} style={styles.thumb} />
-                <Text style={styles.usefultext}>유용해요</Text>
+                <Text style={textStyle}>{isLike ? '유용해요' : '유용해요'}</Text>
                 <Text style={styles.usefulcnt}>0</Text>
             </TouchableOpacity>
+
         </ScrollView>
     );
 };
@@ -150,11 +270,14 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: '#6e6e6e',
         marginTop: 10,
+        fontWeight: '500',
     },
     hashtag: {
         fontSize: 15,
         color: colors.Green900,
         marginTop: 5,
+        marginRight: 2,
+        fontWeight: '500',
     },
     longDescription: {
         marginTop: 20,
@@ -173,15 +296,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 10,
-    },
-    sectionNumber: {
-        backgroundColor: colors.Green900,
-        color: 'white',
-        paddingHorizontal: 10,
-        paddingVertical: 2,
-        borderRadius: 100,
-        fontSize: 14,
-        fontWeight: 'bold',
     },
     sectionTitle: {
         fontSize: 16,
@@ -228,12 +342,13 @@ const styles = StyleSheet.create({
     },
     locationText: {
         marginLeft: 7,
-        fontSize: 14,
-        color: colors.Gray700,
+        fontSize: 13,
+        color: colors.Gray400,
+        marginLeft: 3,
     },
     rightIcon: {
-        width: 24,
-        height: 24,
+        width: 22,
+        height: 22,
         marginTop: 1,
     },
     enddingContainer: {
@@ -241,50 +356,67 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     poomyIcon: {
-        width: 170,
-        height: 170,
-        marginTop: 1,
+        width: 155,
+        height: 155,
+        marginTop: 10,
         alignSelf: 'center',
     },
     enddingText: {
         color: colors.Gray900,
         textAlign: 'center',
-        marginVertical:2,
-        fontWeight:'500'
+        marginVertical: 2,
+        fontWeight: '500'
     },
     line: {
         width: '95%',
         marginVertical: 60,
         alignSelf: 'center',
     },
-    enddingBtnText:{
-        fontWeight:'bold',
+    enddingBtnText: {
+        fontWeight: 'bold',
         textAlign: 'center',
         color: colors.Gray900
     },
-    usefulBtn:{
-        flexDirection:'row',
+    thumb: {
+        width: 15,
+        height: 15,
+        color: colors.Green700,
+    },
+    usefulBtn: {
+        flexDirection: 'row',
         textAlign: 'center',
         alignSelf: 'center',
-        borderWidth:1,
-        borderColor:colors.Gray200,
-        borderRadius:5,
-        padding:10,
-        paddingHorizontal:15,
-        marginBottom:130,
-        marginTop:20,
+        borderWidth: 1,
+        borderColor: colors.Gray200,
+        borderRadius: 5,
+        padding: 10,
+        paddingHorizontal: 15,
+        marginBottom: 130,
+        marginTop: 20,
     },
-    usefultext:{
-        color:colors.Gray300,
-        paddingHorizontal:5,
+    usefultext: {
+        color: colors.Gray300,
+        paddingHorizontal: 5,
     },
-    thumb:{
-        width:15,
-        height:15,
+    usefulcnt: {
+        color: colors.Gray300,
     },
-    usefulcnt:{
-        color:colors.Gray300,
-    }
+    likedBtn: {
+        flexDirection: 'row',
+        textAlign: 'center',
+        alignSelf: 'center',
+        borderWidth: 1,
+        borderColor: colors.Green500,
+        borderRadius: 5,
+        padding: 10,
+        paddingHorizontal: 15,
+        marginBottom: 130,
+        marginTop: 20,
+    },
+    likedText: {
+        color: colors.Green500, // 좋아요가 눌렸을 때 텍스트 스타일
+    },
+
 });
 
 export default NewsLetterDetailScreen;
