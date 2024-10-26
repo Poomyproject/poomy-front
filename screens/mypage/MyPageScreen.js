@@ -111,11 +111,6 @@ const MyPageScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>마이페이지</Text>
-        </View>
-      </View>
       <View style={styles.content}>
         <View style={[styles.profile, { marginTop: -60 }]}>
           <Image source={require('../../assets/profile.png')} style={styles.profileImage} />
@@ -191,24 +186,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.Ivory100,
   },
-  headerContainer: {
-    flex: 0.18,
-    justifyContent: 'flex-end',
-  },
-  header: {
-    height: 20,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: 20,
-    color: 'black',
-    fontWeight: 'bold',
-  },
   content: {
     flex: 1,
     padding: 20,
-    paddingTop: 100,
+    paddingTop: 90,
   },
   profile: {
     flex: 0.2,

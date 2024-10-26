@@ -35,19 +35,10 @@ import SearchStackNavigator from './SearchStackNavigator';
 import KeywordStackNavigator from './KeywordStackNavigator';
 import ReviewStackNavigator from './ReviewStackNavigator';
 
-import ShopProvider from '../shop/ShopContext';
-import SpotProvider from '../keyword/KeywordContext';
-import MoodProvider from '../keyword/MoodContext'
-import NewsLetterProvider from '../context/NewsLetterContext';
-
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
-    <NewsLetterProvider>
-    <MoodProvider>
-    <SpotProvider>
-    <ShopProvider>
     <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
@@ -186,10 +177,6 @@ const AppNavigator = () => {
       <Stack.Screen name="SearchStack" component={SearchStackNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="Keyword" component={KeywordList} options={{ headerShown: false }} />
     </Stack.Navigator>
-    </ShopProvider>
-    </SpotProvider>
-    </MoodProvider>
-    </NewsLetterProvider>
   );
 };
 
