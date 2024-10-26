@@ -9,9 +9,7 @@ import { ShopContext } from './ShopContext';
 import ApiClient from '../auth/ApiClient';
 import { ActivityIndicator } from 'react-native-paper';
 
-
 const ShopDetailScreen = () => {
-
   const navigation = useNavigation();
   const { selectedShopId } = useContext(ShopContext); // ShopContext에서 shopId를 가져옴
   const [shopData, setShopData] = useState(null);
@@ -23,8 +21,10 @@ const ShopDetailScreen = () => {
       try {
         const response = await ApiClient.get(`/api/shop/${selectedShopId}`); // shopId를 이용해 API 호출
         setShopData(response.data.response);  // API 응답 데이터를 상태에 저장
-        console.log('API 응답:', response.data); // 응답 데이터 출력
-        console.log('shopImageList 데이터:', response.data.response.shopImageList); // 확인용 로그
+
+        // 데이터 로그 출력
+        console.log('API 응답:', response.data);
+        
       } catch (err) {
         console.error('API 요청 중 에러 발생:', err);
         setError(err);
@@ -39,7 +39,7 @@ const ShopDetailScreen = () => {
   }, [selectedShopId]);
 
   if (loading) {
-    return <ActivityIndicator size="large" color={colors.Green900}/>;
+    return <ActivityIndicator size="large" color={colors.Green900} />;
   }
 
   if (error) {
@@ -50,76 +50,93 @@ const ShopDetailScreen = () => {
     );
   }
 
-
-    return (
-      <ScrollView contentContainerStyle={{ backgroundColor : colors.Ivory100 , alignItems: 'center', flexGrow: 1 }}>
-        
+  return (
+    <ScrollView contentContainerStyle={{ backgroundColor: colors.Ivory100, alignItems: 'left', flexGrow: 1 , padding : 20, }}>
       {shopData && shopData.shopImageList && shopData.shopImageList.length > 0 ? (
-      <Swiper 
-      style={styles.swiper} 
-      showsPagination={true} 
-      dotColor= "#D4D4D4" // 기본 점 색상
-      activeDotColor="#666666"  // 활성 점 색상
-      paginationStyle={styles.pagination}  // 점의 위치 조정
-    >
-      {shopData.shopImageList.map((image, index) => (
-      <View key={index} style={styles.slide}>
+        <Swiper 
+          style={styles.swiper} 
+          showsPagination={true} 
+          dotColor="#D4D4D4" // 기본 점 색상
+          activeDotColor="#666666"  // 활성 점 색상
+          paginationStyle={styles.pagination}  // 점의 위치 조정
+        >
+          {shopData.shopImageList.map((image, index) => (
+            <View key={index} style={styles.slide}>
+              <Image 
+                source={{ uri: image.url }}  // 각 이미지의 URL을 사용
+                style={styles.shopImage}
+              />
+            </View>
+          ))}
+        </Swiper>
+      ) : (
         <Image 
-          source={{ uri: image.url }}  // 각 이미지의 URL을 사용
+          source={require('../../assets/photo.png')}  // 기본 이미지
           style={styles.shopImage}
         />
+      )}
+
+      <View style={styles.header}>
+        {shopData ? (
+          <>
+            <Text style={styles.shopName}>{shopData.name || '이름 없음'}</Text>
+            <TouchableOpacity>
+              <Image source={require('../../assets/heart.png')} style={styles.icon} />
+            </TouchableOpacity>
+          </>
+        ) : (
+          <Text>상점 이름 없음</Text>
+        )}
       </View>
-    ))}
-  </Swiper>
-  ) : (
-  <Image 
-    source={require('../../assets/photo.png')}  // 기본 이미지
-    style={styles.shopImage}
-  />
-)}
 
-              <View style={styles.header}>
-                
-              {shopData ? (
-                <>
-                <Text style={styles.shopName}>{shopData.name || '이름 없음'}</Text>
-                  <TouchableOpacity>
-                    <Image source={require('../../assets/heart.png')} style={styles.icon} />
-                  </TouchableOpacity>
-                </>
-              ) : (
-                <Text>상점 이름 없음</Text>
-              )}
+      {shopData && (
+        <>
+          <View style={styles.infoContainer}>
+            <View style={styles.infoRow}>
+              <Image source={require('../../assets/img_clock.png')} style={styles.icon} />
+              <Text style={styles.infoText}>{shopData.openingHours ? shopData.openingHours : '영업시간 정보 없음'}</Text>
             </View>
+            <View style={styles.infoRow}>
+              <Image source={require('../../assets/img_phone.png')} style={styles.icon} />
+              <Text style={styles.infoText}>{shopData.phoneNumber ? shopData.phoneNumber : '번호 정보 없음'}</Text>
+            </View>
+            <View style={styles.infoRow}>
+              <Image source={require('../../assets/img_mappin.png')} style={styles.icon} />
+              <Text style={styles.infoText}>
+                {shopData.location ? shopData.location : '위치 정보 없음'}
+                {'\n'}{shopData.nearbyStation ? shopData.nearbyStation : '인근 지하철 정보 없음'}
+              </Text>
+            </View>
+          </View>
 
-            {shopData && (
-              <>
-                <View style={styles.infoContainer}>
-                  <View style={styles.infoRow}>
-                    <Image source={require('../../assets/clock.png')} style={styles.icon} />
-                    <Text style={styles.infoText}>{shopData.openingHours ? shopData.openingHours : '영업시간 정보 없음'}</Text>
-                  </View>
-                  <View style={styles.infoRow}>
-                    <Image source={require('../../assets/phone.png')} style={styles.icon} />
-                    <Text style={styles.infoText}>{shopData.phoneNumber ? shopData.phoneNumber: '번호 정보 없음' }</Text>
-                  </View>
-                  <View style={styles.infoRow}>
-                    <Image source={require('../../assets/map-pin_gray.png')} style={styles.icon} />
-                    <Text style={styles.infoText}>
-                    {shopData.location ? shopData.location : '위치 정보 없음'}
-                    {'\n'}{shopData.nearbyStation ? shopData.nearbyStation : '인근 지하철 정보 없음'}
-                    </Text>
-                  </View>
-                </View>
-
-                <Image source={require('../../assets/img_map.png')} style={{ marginTop: 10 }} />
-              </>
+          {/* mood와 spot 데이터를 라운드 박스 내에 할당 */}
+          <View style={styles.tagContainer}>
+          <Image source={require('../../assets/img_logo_symbol.png')} style = {styles.symbol}></Image>
+            {shopData.mood ? (
+              <View style={styles.tag}>
+                <Text style={styles.tagText}>{shopData.mood}</Text>
+              </View>
+            ) : (
+              <Text>무드 정보 없음</Text>
             )}
 
+            {shopData.spot ? (
+              <View style={styles.tag}>
+                <Text style={styles.tagText}>{shopData.spot}</Text>
+              </View>
+            ) : (
+              <Text>장소 정보 없음</Text>
+            )}
+          </View>
+          <Image source={require('../../assets/img_map.png')} style={{ marginTop: 10 }} />
+        </>
+      )}
+
+<View style={styles.divider} />
 
 <TouchableOpacity
   style={{ flexDirection: 'row', alignItems: 'center' }}
-  onPress={() => navigation.navigate('UserReview1', { screen: 'UserReview1' })} // UserReviewScreen1로 이동
+  onPress={() => navigation.navigate('UserReview1', { screen: 'UserReview1', selectedShopId })} // selectedShopId를 함께 전달
 >
   <Text style={styles.shopName}>리뷰</Text>
   <Image source={require('../../assets/edit.png')} style={{ marginLeft: 230 }} />
@@ -228,8 +245,6 @@ const ShopDetailScreen = () => {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingLeft: 25,
-        paddingRight : 25,
         width: 380,
         marginBottom: 10,
         marginTop : 10,
@@ -243,7 +258,7 @@ const ShopDetailScreen = () => {
         alignItems: 'center',
       },
       shopImage: {
-        width: '90%',  // 부모 너비에 맞춤 (match_parent)
+        width: '100%',  // 부모 너비에 맞춤 (match_parent)
         height: 168,    // 세로는 고정된 168
         resizeMode: 'cover',  // 이미지가 잘리지 않도록 커버
         borderRadius: 4,
@@ -257,26 +272,62 @@ const ShopDetailScreen = () => {
         resizeMode: 'contain', // 이미지의 크기 조정 모드
       },
       shopName: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#5A4E4E', // 텍스트 색상
+        color : colors.Gray900,
+        ...fonts.Title2
       },
       infoContainer: {
         marginTop: 10,
-        alignItems: 'flex-start',
-        marginLeft : -90 , 
+        alignItems: 'flex-start', // 왼쪽 정렬
+        width: '90%', // 전체 화면의 90%에 맞추기 (너무 넓어지지 않도록 제한)
       },
       infoRow: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 5,
+        flexWrap: 'wrap', // 긴 텍스트가 있을 경우 자동으로 줄바꿈되도록 설정
       },
       infoText: {
-        fontSize: 14,
         color: colors.Gray700,
         ...fonts.Body4,
         marginLeft: 8,
+        flex: 1, 
+        flexWrap: 'wrap', 
       },
+      tagContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'flex-start',  // 왼쪽 정렬
+        alignItems: 'center',  // 수직 가운데 정렬
+        marginTop: 5,
+      },
+      tag: {
+        backgroundColor: colors.Ivory100,
+        borderRadius: 24,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        marginRight: 10,
+        marginBottom: 10,
+        borderColor: colors.Green900,
+        borderWidth: 1,
+        flexDirection: 'row',  // 아이콘과 텍스트를 같은 줄에 배치
+        alignItems: 'center',  // 아이콘과 텍스트 수직 가운데 정렬
+      },
+      tagText: {
+        color: colors.Green900,
+        ...fonts.Body3,
+      },
+      symbol: {
+        width: 20,
+        height: 20,
+        marginRight: 5,
+      }, 
+      divider: {
+        height: 1, // 라인의 높이
+        backgroundColor: colors.Gray300, // 라인의 색상
+        marginVertical: 10, // 위아래 간격을 추가하여 공간 확보
+        width: '100%', // 라인이 전체 너비를 차지하게 설정
+      },
+      //여기서부터 리뷰 css     
       review : {
         marginTop: 10,
         alignItems: 'left',

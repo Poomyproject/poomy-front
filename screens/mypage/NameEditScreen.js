@@ -3,6 +3,7 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert , Image } fr
 import colors from '../../config/colors';
 import { fonts } from '../../config/fonts'; 
 import ApiClient from '../auth/ApiClient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const NameEditScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -33,15 +34,12 @@ const NameEditScreen = ({ navigation }) => {
     setIsDuplicateChecked(false); // 중복 확인 초기화
   };
 
-  const clearInput = () => {
-    setName('');
-    setIsLengthValid(false);
-    setIsContentValid(false);
-    setIsTouched(false);
-    setIsDuplicateChecked(false);
-  };
-
   const checkDuplicate = async () => {
+    if (name === '') {
+      Alert.alert('오류', '닉네임을 입력해주세요.');
+      return;
+    }
+  
     try {
       const response = await ApiClient.post('/api/users/check/nickname', { nickname: name });
       if (response.data.isDuplicate) {
@@ -51,35 +49,35 @@ const NameEditScreen = ({ navigation }) => {
         setIsDuplicate(false);
         Alert.alert('사용 가능한 닉네임', '해당 닉네임을 사용할 수 있습니다.');
       }
-      setIsDuplicateChecked(true);
+      setIsDuplicateChecked(true); // 중복 확인이 완료되었음을 표시
     } catch (error) {
       console.error('Error during nickname check:', error);
       Alert.alert('오류', '닉네임 중복 확인 중 오류가 발생했습니다.');
     }
   };
-
+  
   const handleSaveNickname = async () => {
     try {
       const response = await ApiClient.post('/api/users/nickname', { nickname: name });
       if (response.data.success) {
         console.log('Nickname saved successfully');
-        navigation.goBack(); // 저장 후 이전 화면으로 이동
+        
+        // 로컬 스토리지에 닉네임 저장
+        await AsyncStorage.setItem('nickname', name);
+        
+        // 저장 후 이전 화면으로 이동
+        Alert.alert('성공', '닉네임이 성공적으로 저장되었습니다.');
+        navigation.goBack();
       } else {
         console.error('Error saving nickname');
+        Alert.alert('오류', '닉네임 저장 중 문제가 발생했습니다.');
       }
     } catch (error) {
       console.error('Error during nickname save:', error);
+      Alert.alert('오류', '닉네임 저장 중 문제가 발생했습니다.');
     }
   };
-
-   // 클라이언트 내 상태 저장
-   const handleSaveNicknameLocally = () => {
-    // 로컬 상태 저장 후 이전 페이지로 닉네임을 전달
-    navigation.navigate('MypageEdit', { nickname });
-  };
-
-  const isAllChecked = isLengthValid && isContentValid && isDuplicateChecked && !isDuplicate;
-
+  
   const getIcon = (valid) => {
     if (!isTouched) return require('../../assets/check_gray.png');
     return valid ? require('../../assets/check_green.png') : require('../../assets/check_red.png');

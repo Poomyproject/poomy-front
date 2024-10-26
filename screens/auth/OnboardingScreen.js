@@ -27,26 +27,38 @@ const OnboardingScreen = ({ navigation }) => {
             반가워요!{'\n'}소품샵 찾아주는 앱{'\n'}
             <Text style={styles.highlight}>Pommy</Text>예요.
           </Text>
-          <Image source={require('../../assets/onboarding1.png')} style={styles.image} />
+          <Image source={require('../../assets/onboarding1.png')} style={[
+    styles.image, 
+    { width: 338, height: 338 } 
+  ]} />
         </View>
         <View style={styles.slide}>
           <Text style={[styles.text, styles.textPosition]}>
             <Text style={styles.highlight}>Pommy</Text>는{'\n'}여러분의 취향에 맞는 소품{'\n'}소품샵을 추천해줘요.
           </Text>
-          <Image source={require('../../assets/onboarding2.png')} style={styles.image} />
+          <Image source={require('../../assets/onboarding2.png')} style={[
+    styles.image, 
+    { width: 317, height: 300 } 
+  ]} />
         </View>
         <View style={styles.slide}>
           <Text style={[styles.text, styles.textPosition]}>
             생생한 소품샵 후기,{'\n'}
             <Text style={styles.highlight}>Pommy</Text>에서 찾아보세요.
           </Text>
-          <Image source={require('../../assets/onboarding3.png')} style={styles.image} />
+          <Image source={require('../../assets/onboarding3.png')} style={[
+    styles.image, 
+    { width: 278, height: 351 } 
+  ]} />
         </View>
         <View style={styles.slide}>
           <Text style={[styles.text, styles.textPosition]}>
             <Text style={styles.highlight}>Pommy</Text>와{'\n'} 내 마음에 쏙 드는 {'\n'} 소품샵을 찾으러 떠나볼까요?
           </Text>
-          <Image source={require('../../assets/onboarding4.png')} style={styles.image} />
+          <Image source={require('../../assets/onboarding4.png')} style={[
+    styles.image, 
+    { width: 264, height: 352 } 
+  ]} />
         </View>
       </Swiper>
       <TouchableOpacity style={styles.button} onPress={() => navigation.replace('Login')}>
@@ -64,6 +76,7 @@ const styles = StyleSheet.create({
   swiper: {
   flex: 1,
   },
+
   slide: {
   flex: 1,
   justifyContent: 'center',
@@ -76,7 +89,7 @@ const styles = StyleSheet.create({
   ...fonts.Heading1,
   position: 'absolute',
   textAlign: 'left',
-  marginTop: 42,
+  marginTop: 32,
   marginHorizontal: 20,
   },
 
@@ -91,8 +104,8 @@ const styles = StyleSheet.create({
   },
 
   image: {
-  width: 300,
-  height: 300,
+  width: 400,
+  height: 400,
   position: 'absolute',
   marginTop: 42,
   },

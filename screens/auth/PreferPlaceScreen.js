@@ -13,7 +13,7 @@ const PreferPlaceScreen = ({ navigation }) => {
       try {
         const response = await ApiClient.get('/api/spots');
         if (response.data && response.data.success) {
-          setPlaces(response.data.response); // 응답에서 'response' 배열을 상태에 저장
+          setPlaces(response.data.response); 
         } else {
           console.error('Failed to fetch places:', response.data);
         }
@@ -21,7 +21,7 @@ const PreferPlaceScreen = ({ navigation }) => {
         console.error('Error fetching places:', error);
       }
     };
-    fetchPlaces(); // 컴포넌트 마운트 시 장소 데이터 가져오기
+    fetchPlaces(); 
   }, []);
 
   // 장소를 선택하는 함수
@@ -90,7 +90,7 @@ const PreferPlaceScreen = ({ navigation }) => {
                 ]}
                 onPress={() => togglePlace(place.id)}
               >
-                <Image source={{ uri: place.imgUrl }} style={styles.placeImage} />
+                {/* <Image source={{ uri: place.imgUrl }} style={styles.placeImage} /> */}
                 <Text
                   style={[
                     styles.tagText,
@@ -159,14 +159,15 @@ const styles = StyleSheet.create({
   tagsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     marginBottom: 20,
+    marginTop : 10,
   },
   tag: {
     borderRadius: 20,
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    marginVertical: 5,
+    paddingVertical: 8,
+    paddingHorizontal: 18,
+    marginVertical: 6,
     marginHorizontal: 5,
     borderWidth: 1,
     alignItems: 'center',
