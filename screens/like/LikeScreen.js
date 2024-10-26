@@ -4,8 +4,11 @@ import colors from '../../config/colors';
 import { fonts } from '../../config/fonts';
 import Modal from 'react-native-modal';
 import ApiClient from '../auth/ApiClient';
+import { useFocusEffect } from '@react-navigation/native';
 
-const LikeScreen = () => {
+
+
+const LikeScreen = ({ }) => {
     const [interestPlace, setInterestPlace] = useState('');
     const [interestMood, setInterestMood] = useState('');
     const [places, setPlaces] = useState([]);  // 장소 데이터 상태
@@ -16,57 +19,63 @@ const LikeScreen = () => {
     const [tempSelectedMood, setTempSelectedMood] = useState('');
     const [favorites, setFavorites] = useState([]);
 
-    useEffect(() => {
-        const fetchPlaces = async () => {
-            try {
-                const response = await ApiClient.get('/api/spots');
-                if (response.data && response.data.success) {
-                    setPlaces(response.data.response); 
-                } else {
-                    console.error('Failed to fetch places:', response.data);
-                }
-            } catch (error) {
-                console.error('Error fetching places:', error);
-            }
-        };
-        fetchPlaces(); 
-    }, []);
 
-    useEffect(() => {
-        const fetchMoods = async () => {
-            try {
-                const response = await ApiClient.get('/api/moods');
-                if (response.data && response.data.success) {
-                    setMoods(response.data.response);
-                } else {
-                    console.error('Failed to fetch Moods:', response.data);
-                }
-            } catch (error) {
-                console.error('Error fetching Moods:', error);
-            }
-        };
-        fetchMoods();
-    }, []);
 
-    useEffect(() => {
-        const fetchFavorites = async () => {
-            try {
-                const response = await ApiClient.get('/api/favorite');
-                if (response.data && response.data.success) {
-                    setFavorites(response.data.response);
-                } else {
-                    console.error('Failed to fetch favorite list:', response.data);
-                }
-            } catch (error) {
-                console.error('Error fetching favorites:', error);
+// 장소 데이터 로딩
+useEffect(() => {
+    const fetchPlaces = async () => {
+        try {
+            const response = await ApiClient.get('/api/spots');
+            if (response.data && response.data.success) {
+                setPlaces(response.data.response); 
+            } else {
+                console.error('Failed to fetch places:', response.data);
             }
-        };
+        } catch (error) {
+            console.error('Error fetching places:', error);
+        }
+    };
+    fetchPlaces(); 
+}, []);
 
+// 분위기 데이터 로딩
+useEffect(() => {
+    const fetchMoods = async () => {
+        try {
+            const response = await ApiClient.get('/api/moods');
+            if (response.data && response.data.success) {
+                setMoods(response.data.response);
+            } else {
+                console.error('Failed to fetch Moods:', response.data);
+            }
+        } catch (error) {
+            console.error('Error fetching Moods:', error);
+        }
+    };
+    fetchMoods();
+}, []);
+
+// 찜 데이터 로딩
+const fetchFavorites = async () => {
+    try {
+        const response = await ApiClient.get('/api/favorite');
+        if (response.data && response.data.success) {
+            setFavorites(response.data.response);
+            console.log(response.data)
+        } else {
+            console.error('Failed to fetch favorite list:', response.data);
+        }
+    } catch (error) {
+        console.error('Error fetching favorites:', error);
+    }
+};
+
+// 페이지 포커스 시마다 찜 데이터 새로 로드
+useFocusEffect(
+    React.useCallback(() => {
         fetchFavorites();
-    }, []);
-
-
-
+    }, [])
+);
     const toggleModal = (isPlace = false) => {
         setIsSelectingPlace(isPlace);
         setTempSelectedPlace(interestPlace);
@@ -96,26 +105,73 @@ const LikeScreen = () => {
         setTempSelectedMood('');
         setModalVisible(false);
     };
+    const handleFavoriteToggle = async (shopId) => {
+        try {
+            const isAlreadyFavorite = isFavorite(shopId);
+    
+            if (isAlreadyFavorite) {
+                // 찜 취소 요청
+                const response = await ApiClient.post(`/api/favorite/${shopId}/unlike`);
+                if (response.data.success) {
+                    setFavorites((prevFavorites) =>
+                        prevFavorites.filter((favorite) => favorite.shopId !== shopId)
+                    );
+                    console.log(`찜 취소 성공: ${shopId}`);
+                } else {
+                    console.error('찜 취소 실패:', response.data);
+                }
+            } else {
+                // 찜 추가 요청
+                const response = await ApiClient.post(`/api/favorite/${shopId}/like`);
+                if (response.data.success) {
+                    const newFavorite = { shopId: shopId, isFavorite: true };
+                    setFavorites((prevFavorites) => [...prevFavorites, newFavorite]);
+                    console.log(`찜 추가 성공: ${shopId}`);
+                } else {
+                    console.error('찜 추가 실패:', response.data);
+                }
+            }
+        } catch (error) {
+            console.error("찜 상태 전환 중 오류 발생:", error);
+        }
+    };
+    
 
-    const renderItem = ({ item }) => (
-        <View style={styles.favoriteItem}>
-            <Image source={{ uri: item.image }} style={styles.shopImage} />
-            <View style={styles.shopInfo}>
-                <Text style={styles.shopName}>{item.shopName}</Text>
-                <View style={styles.tagContainer}>
-                    <View style={styles.tag}><Text style={styles.tagText}>{item.spot}</Text></View>
-                    <View style={styles.tag}><Text style={styles.tagText}>{item.mood}</Text></View>
-                </View>
-                <View style={styles.locationContainer}>
-                    <Image source={require('../../assets/pin.png')} style={styles.locationIcon} />
-                    <Text style={styles.locationText}>{item.location}</Text>
-                </View>
+// 찜 상태 확인 함수
+const isFavorite = (shopId) => {
+    return favorites.some((favorite) => favorite.shopId === shopId);
+};
+
+
+
+// renderItem에서 찜 상태 확인 및 아이콘 표시
+const renderItem = ({ item }) => (
+    <View style={styles.favoriteItem}>
+        <Image source={{ uri: item.image }} style={styles.shopImage} />
+        <View style={styles.shopInfo}>
+            <Text style={styles.shopName}>{item.shopName}</Text>
+            <View style={styles.tagContainer}>
+                <View style={styles.tag}><Text style={styles.tagText}>{item.spot}</Text></View>
+                <View style={styles.tag}><Text style={styles.tagText}>{item.mood}</Text></View>
             </View>
-            <TouchableOpacity>
-                <Image source={require('../../assets/img_liked_heart.png')} style={styles.favoriteIcon} />
-            </TouchableOpacity>
+            <View style={styles.locationContainer}>
+                <Image source={require('../../assets/pin.png')} style={styles.locationIcon} />
+                <Text style={styles.locationText}>{item.location}</Text>
+            </View>
         </View>
-    );
+        
+        {/* 찜 상태에 따른 아이콘 전환 */}
+        <TouchableOpacity onPress={() => handleFavoriteToggle(item.shopId)}>
+            <Image 
+                source={isFavorite(item.shopId) 
+                    ? require('../../assets/img_liked_heart.png') 
+                    : require('../../assets/heart.png')          
+                }
+                style={styles.favoriteIcon}
+            />
+        </TouchableOpacity>
+    </View>
+);
 
     return (
         <View style={styles.container}>
@@ -309,21 +365,17 @@ const styles = StyleSheet.create({
     favoriteItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        padding: 10,
-        marginBottom: 16,
+        paddingHorizontal: 20,
+        marginTop:15,
         backgroundColor: 'white',
         borderRadius: 8,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
         elevation: 2,
     },
     shopImage: {
-        width: 60,
-        height: 60,
-        borderRadius: 8,
-        marginRight: 16,
+        width: 80,
+        height: 80,
+        borderRadius: 4,
+        marginRight: 20,
         backgroundColor: colors.Gray200,
     },
     shopInfo: {

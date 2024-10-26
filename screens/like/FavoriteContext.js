@@ -6,8 +6,10 @@ const FavoriteContext = createContext();
 
 // 2. Provider 컴포넌트 정의
 export const FavoriteProvider = ({ children }) => {
-  // 찜 상태를 관리할 상태 변수와 상태 변경 함수
   const [favorites, setFavorites] = useState([]); // 찜한 shopId 리스트
+
+  // 찜 여부 확인 함수
+  const isFavorite = (shopId) => favorites.includes(shopId);
 
   // 찜 추가 함수
   const addFavorite = async (shopId) => {
@@ -37,14 +39,14 @@ export const FavoriteProvider = ({ children }) => {
     }
   };
 
-  // 전체 찜한 리스트 초기 로드 (앱 실행 시 한 번만)
+  // 전체 찜한 리스트 초기 로드
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const response = await ApiClient.get('/api/favorite'); // 전체 찜한 목록 가져오기
+        const response = await ApiClient.get('/api/favorite');
         if (response.data && response.data.success) {
-          const favoriteIds = response.data.response.map((item) => item.shopId); // shopId 리스트 추출
-          setFavorites(favoriteIds); // 초기 찜 리스트 설정
+          const favoriteIds = response.data.response.map((item) => item.shopId);
+          setFavorites(favoriteIds);
         }
       } catch (error) {
         console.error('찜 리스트 불러오기 오류:', error);
@@ -54,13 +56,12 @@ export const FavoriteProvider = ({ children }) => {
     fetchFavorites();
   }, []);
 
-  // 3. Context 값으로 찜 상태와 관련된 함수들을 전달
   return (
-    <FavoriteContext.Provider value={{ favorites, addFavorite, removeFavorite }}>
+    <FavoriteContext.Provider value={{ favorites, addFavorite, removeFavorite, isFavorite }}>
       {children}
     </FavoriteContext.Provider>
   );
 };
 
-// 4. 커스텀 훅: 다른 컴포넌트에서 쉽게 사용할 수 있도록 도와줌
+// 커스텀 훅
 export const useFavorites = () => useContext(FavoriteContext);
