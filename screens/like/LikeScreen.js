@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView ,FlatList} from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
 import colors from '../../config/colors';
 import { fonts } from '../../config/fonts';
 import Modal from 'react-native-modal';
 import ApiClient from '../auth/ApiClient';
 import { useFocusEffect } from '@react-navigation/native';
 
-
-
-const LikeScreen = ({ }) => {
+const LikeScreen = () => {
     const [interestPlace, setInterestPlace] = useState('');
     const [interestMood, setInterestMood] = useState('');
     const [places, setPlaces] = useState([]);  // 장소 데이터 상태
@@ -18,64 +16,60 @@ const LikeScreen = ({ }) => {
     const [tempSelectedPlace, setTempSelectedPlace] = useState('');
     const [tempSelectedMood, setTempSelectedMood] = useState('');
     const [favorites, setFavorites] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-
-
-// 장소 데이터 로딩
-useEffect(() => {
-    const fetchPlaces = async () => {
-        try {
-            const response = await ApiClient.get('/api/spots');
-            if (response.data && response.data.success) {
-                setPlaces(response.data.response); 
-            } else {
-                console.error('Failed to fetch places:', response.data);
+    // 장소와 분위기 데이터 로딩
+    useEffect(() => {
+        const fetchPlaces = async () => {
+            try {
+                const response = await ApiClient.get('/api/spots');
+                if (response.data.success) setPlaces(response.data.response); 
+            } catch (error) {
+                console.error('Error fetching places:', error);
             }
+        };
+        const fetchMoods = async () => {
+            try {
+                const response = await ApiClient.get('/api/moods');
+                if (response.data.success) setMoods(response.data.response);
+            } catch (error) {
+                console.error('Error fetching moods:', error);
+            }
+        };
+        fetchPlaces();
+        fetchMoods();
+    }, []);
+
+    // 전체 찜 데이터 로딩
+    const fetchAllFavorites = async () => {
+        try {
+            const response = await ApiClient.get('/api/favorite');
+            if (response.data.success) setFavorites(response.data.response);
         } catch (error) {
-            console.error('Error fetching places:', error);
+            console.error('Error fetching favorites:', error);
         }
     };
-    fetchPlaces(); 
-}, []);
 
-// 분위기 데이터 로딩
-useEffect(() => {
-    const fetchMoods = async () => {
+    // 특정 필터를 적용하여 찜 데이터 로드
+    const fetchFilteredShops = async (filterType, filterId) => {
+        setLoading(true);
         try {
-            const response = await ApiClient.get('/api/moods');
-            if (response.data && response.data.success) {
-                setMoods(response.data.response);
-            } else {
-                console.error('Failed to fetch Moods:', response.data);
-            }
+            const response = await ApiClient.get(`/api/favorite/${filterType}/${filterId}`);
+            if (response.data.success) setFavorites(response.data.response);
         } catch (error) {
-            console.error('Error fetching Moods:', error);
+            console.error(`Error fetching filtered shops by ${filterType}:`, error);
+        } finally {
+            setLoading(false);
         }
     };
-    fetchMoods();
-}, []);
 
-// 찜 데이터 로딩
-const fetchFavorites = async () => {
-    try {
-        const response = await ApiClient.get('/api/favorite');
-        if (response.data && response.data.success) {
-            setFavorites(response.data.response);
-            console.log(response.data)
-        } else {
-            console.error('Failed to fetch favorite list:', response.data);
-        }
-    } catch (error) {
-        console.error('Error fetching favorites:', error);
-    }
-};
+    // 페이지 포커스 시마다 찜 데이터 새로 로드
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchAllFavorites();
+        }, [])
+    );
 
-// 페이지 포커스 시마다 찜 데이터 새로 로드
-useFocusEffect(
-    React.useCallback(() => {
-        fetchFavorites();
-    }, [])
-);
     const toggleModal = (isPlace = false) => {
         setIsSelectingPlace(isPlace);
         setTempSelectedPlace(interestPlace);
@@ -91,13 +85,30 @@ useFocusEffect(
         }
     };
 
-    const applySelection = () => {
+    // 필터 적용 시 선택된 `ID`를 사용하도록 변경
+    const applySelection = async () => {
+        setModalVisible(false);
+
         if (isSelectingPlace) {
             setInterestPlace(tempSelectedPlace);
+
+            const selectedPlace = places.find(place => place.name === tempSelectedPlace);
+            if (selectedPlace) {
+                await fetchFilteredShops('spot', selectedPlace.id); // ID 사용
+            } else {
+                fetchAllFavorites(); // 선택된 필터가 없으면 전체 데이터 로드
+            }
+
         } else {
             setInterestMood(tempSelectedMood);
+
+            const selectedMood = moods.find(mood => mood.name === tempSelectedMood);
+            if (selectedMood) {
+                await fetchFilteredShops('mood', selectedMood.id); // ID 사용
+            } else {
+                fetchAllFavorites();
+            }
         }
-        setModalVisible(false);
     };
 
     const cancelSelection = () => {
@@ -105,28 +116,24 @@ useFocusEffect(
         setTempSelectedMood('');
         setModalVisible(false);
     };
+
     const handleFavoriteToggle = async (shopId) => {
         try {
             const isAlreadyFavorite = isFavorite(shopId);
-    
             if (isAlreadyFavorite) {
-                // 찜 취소 요청
                 const response = await ApiClient.post(`/api/favorite/${shopId}/unlike`);
                 if (response.data.success) {
                     setFavorites((prevFavorites) =>
                         prevFavorites.filter((favorite) => favorite.shopId !== shopId)
                     );
-                    console.log(`찜 취소 성공: ${shopId}`);
                 } else {
                     console.error('찜 취소 실패:', response.data);
                 }
             } else {
-                // 찜 추가 요청
                 const response = await ApiClient.post(`/api/favorite/${shopId}/like`);
                 if (response.data.success) {
                     const newFavorite = { shopId: shopId, isFavorite: true };
                     setFavorites((prevFavorites) => [...prevFavorites, newFavorite]);
-                    console.log(`찜 추가 성공: ${shopId}`);
                 } else {
                     console.error('찜 추가 실패:', response.data);
                 }
@@ -135,73 +142,79 @@ useFocusEffect(
             console.error("찜 상태 전환 중 오류 발생:", error);
         }
     };
-    
 
-// 찜 상태 확인 함수
-const isFavorite = (shopId) => {
-    return favorites.some((favorite) => favorite.shopId === shopId);
-};
+    const isFavorite = (shopId) => {
+        return favorites.some((favorite) => favorite.shopId === shopId);
+    };
 
-
-
-// renderItem에서 찜 상태 확인 및 아이콘 표시
-const renderItem = ({ item }) => (
-    <View style={styles.favoriteItem}>
-        <Image source={{ uri: item.image }} style={styles.shopImage} />
-        <View style={styles.shopInfo}>
-            <Text style={styles.shopName}>{item.shopName}</Text>
-            <View style={styles.tagContainer}>
-                <View style={styles.tag}><Text style={styles.tagText}>{item.spot}</Text></View>
-                <View style={styles.tag}><Text style={styles.tagText}>{item.mood}</Text></View>
+    const renderItem = ({ item }) => (
+        <View style={styles.favoriteItem}>
+            <Image source={{ uri: item.image }} style={styles.shopImage} />
+            <View style={styles.shopInfo}>
+                <Text style={styles.shopName}>{item.shopName}</Text>
+                <View style={styles.tagContainer}>
+                    <View style={styles.tag}><Text style={styles.tagText}>{item.spot}</Text></View>
+                    <View style={styles.tag}><Text style={styles.tagText}>{item.mood}</Text></View>
+                </View>
+                <View style={styles.locationContainer}>
+                    <Image source={require('../../assets/pin.png')} style={styles.locationIcon} />
+                    <Text style={styles.locationText}>{item.location}</Text>
+                </View>
             </View>
-            <View style={styles.locationContainer}>
-                <Image source={require('../../assets/pin.png')} style={styles.locationIcon} />
-                <Text style={styles.locationText}>{item.location}</Text>
-            </View>
+            <TouchableOpacity onPress={() => handleFavoriteToggle(item.shopId)}>
+                <Image 
+                    source={isFavorite(item.shopId) 
+                        ? require('../../assets/img_liked_heart.png') 
+                        : require('../../assets/heart.png')          
+                    }
+                    style={styles.favoriteIcon}
+                />
+            </TouchableOpacity>
         </View>
-        
-        {/* 찜 상태에 따른 아이콘 전환 */}
-        <TouchableOpacity onPress={() => handleFavoriteToggle(item.shopId)}>
-            <Image 
-                source={isFavorite(item.shopId) 
-                    ? require('../../assets/img_liked_heart.png') 
-                    : require('../../assets/heart.png')          
-                }
-                style={styles.favoriteIcon}
-            />
-        </TouchableOpacity>
-    </View>
-);
+    );
+
+    // 필터를 초기화하고 전체 찜 리스트를 다시 로드하는 함수
+    const clearFilter = async (type) => {
+        if (type === 'place') {
+            setInterestPlace(''); // 장소 필터 해제
+            setTempSelectedPlace(''); // 모달의 임시 선택도 초기화
+        } else {
+            setInterestMood(''); // 분위기 필터 해제
+            setTempSelectedMood(''); // 모달의 임시 선택도 초기화
+        }
+        await fetchAllFavorites(); // 전체 찜 리스트 다시 로드
+    };
 
     return (
         <View style={styles.container}>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity onPress={() => toggleModal(true)} style={[styles.textInput, interestPlace ? styles.selectedButton : {}]}>
-                    <Text style={interestPlace ? styles.selectedTextStyle : styles.defaultTextStyle}>
-                        {interestPlace || "장소"}
-                    </Text>
-                    {interestPlace ? (
-                        <TouchableOpacity onPress={() => setInterestPlace('')}>
-                            <Image source={require('../../assets/85-close.png')} style={styles.closeIcon} />
-                        </TouchableOpacity>
-                    ) : (
-                        <Image source={require('../../assets/down.png')} style={styles.downIcon} />
-                    )}
-                </TouchableOpacity>
+            <TouchableOpacity onPress={() => toggleModal(true)} style={[styles.textInput, interestPlace ? styles.selectedButton : {}]}>
+                <Text style={interestPlace ? styles.selectedTextStyle : styles.defaultTextStyle}>
+                    {interestPlace || "장소"}
+                </Text>
+                {interestPlace ? (
+                    <TouchableOpacity onPress={() => clearFilter('place')}>
+                        <Image source={require('../../assets/85-close.png')} style={styles.closeIcon} />
+                    </TouchableOpacity>
+                ) : (
+                    <Image source={require('../../assets/down.png')} style={styles.downIcon} />
+                )}
+            </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => toggleModal(false)} style={[styles.textInput, interestMood ? styles.selectedButton : {}]}>
-                    <Text style={interestMood ? styles.selectedTextStyle : styles.defaultTextStyle}>
-                        {interestMood || "분위기"}
-                    </Text>
-                    {interestMood ? (
-                        <TouchableOpacity onPress={() => setInterestMood('')}>
-                            <Image source={require('../../assets/85-close.png')} style={styles.closeIcon} />
-                        </TouchableOpacity>
-                    ) : (
-                        <Image source={require('../../assets/down.png')} style={styles.downIcon} />
-                    )}
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity onPress={() => toggleModal(false)} style={[styles.textInput, interestMood ? styles.selectedButton : {}]}>
+                <Text style={interestMood ? styles.selectedTextStyle : styles.defaultTextStyle}>
+                    {interestMood || "분위기"}
+                </Text>
+                {interestMood ? (
+                    <TouchableOpacity onPress={() => clearFilter('mood')}>
+                        <Image source={require('../../assets/85-close.png')} style={styles.closeIcon} />
+                    </TouchableOpacity>
+                ) : (
+                    <Image source={require('../../assets/down.png')} style={styles.downIcon} />
+                )}
+            </TouchableOpacity>
+        </View>
+
 
             <Modal isVisible={isModalVisible} onBackdropPress={toggleModal} style={styles.bottomModal}>
                 <View style={styles.modalContent}>
@@ -239,14 +252,14 @@ const renderItem = ({ item }) => (
             <FlatList
                 data={favorites}
                 renderItem={renderItem}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item) => item.shopId.toString()}
                 ListEmptyComponent={
                     <View style={styles.emptyContainer}>
                         <Image
                             source={require('../../assets/img_empty_like.png')} 
                             style={styles.emptyImage}
                         />
-                        <Text style={styles.emptyText}>아직 찜한 소퓸샵이 없어요</Text>
+                        <Text style={styles.emptyText}>아직 찜한 소품샵이 없어요</Text>
                     </View>
                 }
             />
