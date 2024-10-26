@@ -2,6 +2,48 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import colors from '../../config/colors';
 
+const shopData = [
+    {
+        id: 1,
+        name: '소품샵 이름 1',
+        description: '소품샵 한줄 소개 1',
+        longDescription: '3번 소품샵 콘텐츠 글 3번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글',
+        location: '3번 소품샵 위치',
+        imageUri: 'https://via.placeholder.com/600x400',
+        smallImages: [
+            'https://via.placeholder.com/100',
+            'https://via.placeholder.com/100',
+            'https://via.placeholder.com/100'
+        ],
+    },
+    {
+        id: 2,
+        name: '소품샵 이름 2',
+        description: '소품샵 한줄 소개 2',
+        longDescription: '3번 소품샵 콘텐츠 글 3번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글',
+        location: '2번 소품샵 위치',
+        imageUri: 'https://via.placeholder.com/600x400',
+        smallImages: [
+            'https://via.placeholder.com/100',
+            'https://via.placeholder.com/100',
+            'https://via.placeholder.com/100'
+        ],
+    },
+    {
+        id: 3,
+        name: '소품샵 이름 3',
+        description: '소품샵 한줄 소개 3',
+        longDescription: '3번 소품샵 콘텐츠 글 3번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글',
+        location: '3번 소품샵 위치',
+        imageUri: 'https://via.placeholder.com/600x400',
+        smallImages: [
+            'https://via.placeholder.com/100',
+            'https://via.placeholder.com/100',
+            'https://via.placeholder.com/100'
+        ],
+    }
+];
+
 const NewsLetterDetailScreen = () => {
     return (
         <ScrollView style={styles.container}>
@@ -10,13 +52,9 @@ const NewsLetterDetailScreen = () => {
                 source={{ uri: 'https://via.placeholder.com/600x400' }}
                 style={styles.mainImage}
             />
-            <View style={{
-                padding: 10, alignSelf: 'center'
-            }}>
+            <View style={{ padding: 10, alignSelf: 'center' }}>
                 <Text style={styles.mainTitle}>데이트하기 좋은 성수 근처</Text>
-                <Text style={styles.mainDescription}>
-                    5~6월에 하기 좋은 데이트들을 전부 모아
-                </Text>
+                <Text style={styles.mainDescription}>5~6월에 하기 좋은 데이트들을 전부 모아</Text>
                 <Text style={styles.hashtag}>#데이트 #연인과 #친구와</Text>
                 <Text style={styles.longDescription}>
                     안녕하세요. Poomy입니다. 많이 날씨가 더워졌죠? 네 너무 더워요.
@@ -26,114 +64,48 @@ const NewsLetterDetailScreen = () => {
                 </Text>
             </View>
 
-
             <View style={styles.sectionContainer}>
-                {/* Section 1 */}
-                <View style={styles.sectionHeader}>
-                    <View style={{ width: '76%', flexDirection: 'row', }}>
-                        <Image source={require('../../assets/num1_circle.png')} style={styles.rightIcon} />
-                        <Text style={styles.sectionTitle}>소품샵 이름 </Text>
+                {/* Mapping over shopData array */}
+                {shopData.map((shop, index) => (
+                    <View key={shop.id}>
+                        <View style={styles.sectionHeader}>
+                            <View style={{ width: '76%', flexDirection: 'row' }}>
+                                <Image source={require('../../assets/num1_circle.png')} style={styles.rightIcon} />
+                                <Text style={styles.sectionTitle}>{shop.name}</Text>
+                            </View>
+                            <TouchableOpacity style={{ flexDirection: 'row' }}>
+                                <Text style={styles.sectionLink}>바로가기</Text>
+                                <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
+                            </TouchableOpacity>
+                        </View>
+
+                        <Image
+                            source={{ uri: shop.imageUri }}
+                            style={styles.bigImage}
+                        />
+                        <View style={styles.imageRow}>
+                            {shop.smallImages.map((smallImageUri, idx) => (
+                                <Image key={idx} source={{ uri: smallImageUri }} style={styles.smallImage} />
+                            ))}
+                        </View>
+
+                        <Text style={styles.sectionMainDescription}>{shop.description}</Text>
+                        <Text style={styles.sectionDescription}>{shop.longDescription}</Text>
+
+                        <View style={styles.locationContainer}>
+                            <Image source={require('../../assets/pin.png')} style={styles.rightIcon} />
+                            <Text style={styles.locationText}>{shop.location}</Text>
+                        </View>
+                        
+                        {/* Add spacing between sections */}
+                        {index !== shopData.length - 1 && <View style={{ marginTop: 70 }} />}
                     </View>
-                    <TouchableOpacity style={{ flexDirection: 'row', }}>
-                        <Text style={styles.sectionLink}> 바로가기</Text>
-                        <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
-                    </TouchableOpacity>
-                </View>
-
-                <Image
-                    source={{ uri: 'https://via.placeholder.com/600x400' }}
-                    style={styles.bigImage}
-                />
-                <View style={styles.imageRow}>
-                    <Image source={{ uri: 'https://via.placeholder.com/100' }} style={styles.smallImage} />
-                    <Image source={{ uri: 'https://via.placeholder.com/100' }} style={styles.smallImage} />
-                    <Image source={{ uri: 'https://via.placeholder.com/100' }} style={styles.smallImage} />
-                </View>
-
-                <Text style={styles.sectionMainDescription}>소품샵 한줄 소개 !</Text>
-                <Text style={styles.sectionDescription}>
-                    3번 소품샵 콘텐츠 글 3번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글
-                    3번 소품샵 콘텐츠 글 3번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글
-                </Text>
-
-                <View style={styles.locationContainer}>
-                    <Image source={require('../../assets/pin.png')} style={styles.rightIcon} />
-                    <Text style={styles.locationText}>3번 소품샵 위치</Text>
-                </View>
-
-                {/* Section 2 */}
-                <View style={{ marginTop: 70, }} />
-                <View style={styles.sectionHeader}>
-                    <View style={{ width: '76%', flexDirection: 'row', }}>
-                        <Image source={require('../../assets/num2_circle.png')} style={styles.rightIcon} />
-                        <Text style={styles.sectionTitle}>소품샵 이름 </Text>
-                    </View>
-                    <TouchableOpacity style={{ flexDirection: 'row', }}>
-                        <Text style={styles.sectionLink}> 바로가기</Text>
-                        <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
-                    </TouchableOpacity>
-                </View>
-
-                <Image
-                    source={{ uri: 'https://via.placeholder.com/600x400' }}
-                    style={styles.bigImage}
-                />
-                <View style={styles.imageRow}>
-                    <Image source={{ uri: 'https://via.placeholder.com/100' }} style={styles.smallImage} />
-                    <Image source={{ uri: 'https://via.placeholder.com/100' }} style={styles.smallImage} />
-                    <Image source={{ uri: 'https://via.placeholder.com/100' }} style={styles.smallImage} />
-                </View>
-
-                <Text style={styles.sectionMainDescription}>소품샵 한줄 소개 !</Text>
-                <Text style={styles.sectionDescription}>
-                    3번 소품샵 콘텐츠 글 3번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글
-                    3번 소품샵 콘텐츠 글 3번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글
-                </Text>
-
-                <View style={styles.locationContainer}>
-                    <Image source={require('../../assets/pin.png')} style={styles.rightIcon} />
-                    <Text style={styles.locationText}>3번 소품샵 위치</Text>
-                </View>
-
-                {/* Section 3 */}
-                <View style={{ marginTop: 70, }} />
-                <View style={styles.sectionHeader}>
-                    <View style={{ width: '76%', flexDirection: 'row', }}>
-                        <Image source={require('../../assets/num3_circle.png')} style={styles.rightIcon} />
-                        <Text style={styles.sectionTitle}>소품샵 이름 </Text>
-                    </View>
-                    <TouchableOpacity style={{ flexDirection: 'row', }}>
-                        <Text style={styles.sectionLink}> 바로가기</Text>
-                        <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
-                    </TouchableOpacity>
-                </View>
-
-                <Image
-                    source={{ uri: 'https://via.placeholder.com/600x400' }}
-                    style={styles.bigImage}
-                />
-                <View style={styles.imageRow}>
-                    <Image source={{ uri: 'https://via.placeholder.com/100' }} style={styles.smallImage} />
-                    <Image source={{ uri: 'https://via.placeholder.com/100' }} style={styles.smallImage} />
-                    <Image source={{ uri: 'https://via.placeholder.com/100' }} style={styles.smallImage} />
-                </View>
-
-                <Text style={styles.sectionMainDescription}>소품샵 한줄 소개 !</Text>
-                <Text style={styles.sectionDescription}>
-                    3번 소품샵 콘텐츠 글 3번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글
-                    3번 소품샵 콘텐츠 글 3번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글 1번 소품샵 콘텐츠 글
-                </Text>
-
-                <View style={styles.locationContainer}>
-                    <Image source={require('../../assets/pin.png')} style={styles.rightIcon} />
-                    <Text style={styles.locationText}>3번 소품샵 위치</Text>
-                </View>
-                <View style={{ marginBottom: 20, }} />
+                ))}
             </View>
 
             <View style={styles.enddingContainer}>
                 <Image source={require('../../assets/NewsPoomy.png')} style={styles.poomyIcon} />
-                <View style={{ marginTop: 50, }}>
+                <View style={{ marginTop: 50 }}>
                     <Text style={styles.enddingText}>오늘 Poomy가 추천해준</Text>
                     <Text style={styles.enddingText}>빈티지 분위기 소품샵, 어떠셨나요? {"\n"}</Text>
                     <Text style={styles.enddingText}>추천드린 소품샵들을 다니면서</Text>
@@ -147,11 +119,10 @@ const NewsLetterDetailScreen = () => {
             <Text style={styles.enddingBtnText}>오늘의 뉴스레터는 어떠했나요?</Text>
             <Text style={styles.enddingText}>당신의 의견을 알려주세요. {"\n"}</Text>
             <TouchableOpacity style={styles.usefulBtn}>
-                <Image source={require('../../assets/thumb.png')}  style={styles.thumb}/>
+                <Image source={require('../../assets/thumb.png')} style={styles.thumb} />
                 <Text style={styles.usefultext}>유용해요</Text>
                 <Text style={styles.usefulcnt}>0</Text>
             </TouchableOpacity>
-
         </ScrollView>
     );
 };
