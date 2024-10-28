@@ -9,6 +9,7 @@ import ShopNavigatior from './ShopNavigatior';
 import ShopProvider from '../shop/ShopContext';
 import { fonts } from '../../config/fonts';
 import { Text } from 'react-native-paper';
+import LikeStackNavigator from './LikeStackNavigator';
 
 
 const Tab = createBottomTabNavigator();
@@ -17,14 +18,14 @@ const MainTabNavigator = () => {
   return (
     <Tab.Navigator initialRouteName="Main">
       <Tab.Screen
-        name="찜"
-        component={LikeScreen}
+        name="짬"
+        component={LikeStackNavigator} 
         options={{
           tabBarLabel: '찜',
           tabBarIcon: ({ color, size }) => (
             <Image source={require('../../assets/ic_todo.png')} style={{ width: size, height: size, tintColor: color }} />
           ),
-          headerShown: true,
+          headerShown: false, 
           headerTitleStyle: {
             ...fonts.Body1,
             color: colors.Gray900,

@@ -27,6 +27,7 @@ import UserReviewScreen1 from '../review/UserReviewScreen1';
 import UserReviewScreen2 from '../review/UserReviewScreen2';
 import UserReviewScreen3 from '../review/UserReviewScreen3';
 import UserReviewScreen4 from '../review/UserReviewScreen4';
+import ShopReviewScreen from '../shop/ShopReviewScreen';
 
 
 import NewsLetterStackNavigator from './NewsLetterStackNavigator';
@@ -170,6 +171,19 @@ const AppNavigator = () => {
           ...fonts.Body1
         })}
       />
+
+      <Stack.Screen name="ShopReview" component={ShopReviewScreen} options={({ navigation }) => ({
+          headerTitle: '리뷰',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
+            </TouchableOpacity>
+          ),
+          headerTitleAlign: 'center',
+          headerStyle: { backgroundColor: colors.Ivory100 },
+          headerTintColor: colors.Gray900,
+          ...fonts.Body1
+        })}/>
 
       <Stack.Screen name="KeywordStack" component={KeywordStackNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NewsLetterStack" component={NewsLetterStackNavigator} options={{ headerShown: false }} />
