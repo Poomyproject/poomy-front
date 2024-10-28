@@ -25,7 +25,7 @@ const LikeScreen = () => {
                 const response = await ApiClient.get('/api/spots');
                 if (response.data.success) setPlaces(response.data.response); 
             } catch (error) {
-                console.error('Error fetching places:', error);
+                //console.error('Error fetching places:', error);
             }
         };
         const fetchMoods = async () => {
@@ -33,7 +33,7 @@ const LikeScreen = () => {
                 const response = await ApiClient.get('/api/moods');
                 if (response.data.success) setMoods(response.data.response);
             } catch (error) {
-                console.error('Error fetching moods:', error);
+                //console.error('Error fetching moods:', error);
             }
         };
         fetchPlaces();
@@ -46,7 +46,7 @@ const LikeScreen = () => {
             const response = await ApiClient.get('/api/favorite');
             if (response.data.success) setFavorites(response.data.response);
         } catch (error) {
-            console.error('Error fetching favorites:', error);
+            //console.error('Error fetching favorites:', error);
         }
     };
 
@@ -57,7 +57,7 @@ const LikeScreen = () => {
             const response = await ApiClient.get(`/api/favorite/${filterType}/${filterId}`);
             if (response.data.success) setFavorites(response.data.response);
         } catch (error) {
-            console.error(`Error fetching filtered shops by ${filterType}:`, error);
+            //console.error(`Error fetching filtered shops by ${filterType}:`, error);
         } finally {
             setLoading(false);
         }
@@ -127,7 +127,7 @@ const LikeScreen = () => {
                         prevFavorites.filter((favorite) => favorite.shopId !== shopId)
                     );
                 } else {
-                    console.error('찜 취소 실패:', response.data);
+                    //console.error('찜 취소 실패:', response.data);
                 }
             } else {
                 const response = await ApiClient.post(`/api/favorite/${shopId}/like`);
@@ -135,11 +135,11 @@ const LikeScreen = () => {
                     const newFavorite = { shopId: shopId, isFavorite: true };
                     setFavorites((prevFavorites) => [...prevFavorites, newFavorite]);
                 } else {
-                    console.error('찜 추가 실패:', response.data);
+                    //console.error('찜 추가 실패:', response.data);
                 }
             }
         } catch (error) {
-            console.error("찜 상태 전환 중 오류 발생:", error);
+            //console.error("찜 상태 전환 중 오류 발생:", error);
         }
     };
 
