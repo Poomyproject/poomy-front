@@ -18,15 +18,6 @@ const NewsLetterDetailScreen = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const scrollViewRef = useRef(null); // ScrollView의 ref 생성
-    const [scrollPosition, setScrollPosition] = useState(0); // 현재 스크롤 위치 저장
-
-    // 스크롤 이벤트 핸들러: 스크롤 위치 추적
-    const handleScroll = (event) => {
-        setScrollPosition(event.nativeEvent.contentOffset.y); // 스크롤 위치 저장
-    };
-
-
     // 스타일 변경을 위한 조건부 스타일링
     const btnStyle = isLike ? styles.likedBtn : styles.usefulBtn;
     const textStyle = isLike ? styles.likedText : styles.usefultext;
@@ -61,9 +52,6 @@ const NewsLetterDetailScreen = () => {
 
             let response;
 
-            // 스크롤 위치 추적 후 저장
-            const currentPosition = scrollPosition;
-
             if (isLike) {
                 // 현재 좋아요가 되어 있다면, unlike 엔드포인트 호출
                 response = await ApiClient.post(`/api/newsLetter/${selectedNewsLetterId}/unlike`);
@@ -75,12 +63,7 @@ const NewsLetterDetailScreen = () => {
             // 서버 응답에 따라 isLike 상태 업데이트
             setIsLike(response.data.response.isLike);
 
-            // 스크롤 위치 복원 (버튼 클릭 후에도 스크롤이 유지되도록)
-            if (scrollViewRef.current) {
-                scrollViewRef.current.scrollTo({ y: currentPosition, animated: false });
-            }
-
-            console.log('API 응답:', response.data);
+            console.log('API 좋아요 응답:', response.data);
 
         } catch (err) {
             console.error('API 요청 중 에러 발생:', err);
@@ -105,8 +88,8 @@ const NewsLetterDetailScreen = () => {
                     imageUri: newsletterData?.firstShopImage1,
                     smallImages: [
                         newsletterData?.firstShopImage2,
-                        'https://via.placeholder.com/100',
-                        'https://via.placeholder.com/100'
+                        newsletterData?.firstShopImage3,
+                        newsletterData?.firstShopImage4
                     ],
                 },
                 {
@@ -119,8 +102,8 @@ const NewsLetterDetailScreen = () => {
                     imageUri: newsletterData?.secondShopImage1,
                     smallImages: [
                         newsletterData?.secondShopImage2,
-                        'https://via.placeholder.com/100',
-                        'https://via.placeholder.com/100'
+                        newsletterData?.secondShopImage3,
+                        newsletterData?.secondShopImage4
                     ],
                 },
                 {
@@ -133,8 +116,8 @@ const NewsLetterDetailScreen = () => {
                     imageUri: newsletterData?.thirdShopImage1,
                     smallImages: [
                         newsletterData?.thirdShopImage2,
-                        'https://via.placeholder.com/100',
-                        'https://via.placeholder.com/100'
+                        newsletterData?.thirdShopImage3,
+                        newsletterData?.thirdShopImage4,
                     ],
                 }
             ]);
@@ -155,11 +138,8 @@ const NewsLetterDetailScreen = () => {
 
     return (
         <ScrollView
-            ref={scrollViewRef}
             style={styles.container}
             showsVerticalScrollIndicator={false}
-            onScroll={handleScroll} // 스크롤 이벤트 핸들러 추가
-            scrollEventThrottle={16} // 스크롤 이벤트 호출 빈도 설정
         >
             {/* Main Section with Image, Title, and Description */}
             <Image
@@ -239,8 +219,8 @@ const NewsLetterDetailScreen = () => {
             {/* 유용해요 버튼 */}
             <TouchableOpacity style={btnStyle} onPress={toggleLike} disabled={loading}>
                 <Image source={require('../../assets/thumb.png')} style={styles.thumb} />
-                <Text style={textStyle}>{isLike ? '유용해요' : '유용해요'}</Text>
-                <Text style={styles.usefulcnt}>0</Text>
+                <Text style={textStyle}>유용해요</Text>
+                <Text style={styles.usefulcnt}>{newsletterData?.userFeedbackCount} </Text>
             </TouchableOpacity>
 
         </ScrollView>
@@ -301,12 +281,13 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginLeft: 10,
         marginTop: 3,
+        fontWeight:'500'
     },
     sectionLink: {
         color: colors.Green900,
-        fontSize: 16,
-        marginTop: 3,
-        fontWeight: '600',
+        fontSize: 15,
+        marginTop: 4,
+        fontWeight: '500',
     },
     imageRow: {
         flexDirection: 'row',
