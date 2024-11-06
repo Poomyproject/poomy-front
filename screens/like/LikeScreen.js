@@ -24,6 +24,7 @@ const LikeScreen = () => {
     const [tempSelectedMood, setTempSelectedMood] = useState('');
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(false);
+    // useFavorites에서 addFavorite과 removeFavorite을 가져옵니다.
 
     // 장소와 분위기 데이터 로딩
     useEffect(() => {
@@ -122,7 +123,8 @@ const LikeScreen = () => {
         setTempSelectedPlace('');
         setTempSelectedMood('');
         setModalVisible(false);
-    };
+    };      
+    
 
     const renderItem = ({ item }) => {
         const navigateToShopDetail = (shopId) => {
