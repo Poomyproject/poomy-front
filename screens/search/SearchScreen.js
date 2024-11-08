@@ -7,14 +7,14 @@ import SearchResultItem from './SearchResultItem';
 import SearchRankings from './SearchRankings';
 import { showToast } from './toastHelper';
 
-const SearchScreen = () => {
+const SearchScreen = ({ navigation }) => {
     const [searchText, setSearchText] = useState('');
     const [filteredStores, setFilteredStores] = useState([]);
     const [isSearchResultsVisible, setIsSearchResultsVisible] = useState(false);
 
     const searchFilterFunction = () => {
-        const newData = searchText 
-            ? stores.filter((item) => item.name?.toUpperCase().includes(searchText.toUpperCase())) 
+        const newData = searchText
+            ? stores.filter((item) => item.name?.toUpperCase().includes(searchText.toUpperCase()))
             : stores;
         setFilteredStores(newData);
         setIsSearchResultsVisible(true);
@@ -23,7 +23,7 @@ const SearchScreen = () => {
     return (
         <View style={styles.container}>
             <View style={styles.searchContainer}>
-                <TouchableOpacity style={{ marginTop: "3%" }}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginTop: "3%" }}>
                     <Image source={require('../../assets/top_bar.png')} style={styles.leftArrow} />
                 </TouchableOpacity>
                 <TextInput
@@ -32,12 +32,15 @@ const SearchScreen = () => {
                     onChangeText={setSearchText}
                     value={searchText}
                 />
-                <TouchableOpacity onPress={searchFilterFunction}>
+                <TouchableOpacity onPress={() => navigation.navigate('SearchResult')}>
                     <Image source={require('../../assets/search_img.png')} style={styles.searchImg} />
                 </TouchableOpacity>
             </View>
 
-            {!isSearchResultsVisible ? (
+            <KeywordList onInfoPress={showToast} />
+            <SearchRankings />
+
+            {/* {!isSearchResultsVisible ? (
                 <>
                     <KeywordList onInfoPress={showToast} />
                     <SearchRankings />
@@ -48,7 +51,7 @@ const SearchScreen = () => {
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({ item }) => <SearchResultItem item={item} />}
                 />
-            )}
+            )} */}
         </View>
     );
 };

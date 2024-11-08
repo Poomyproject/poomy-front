@@ -94,6 +94,7 @@ const MainScreen = ({ navigation }) => {
             Alert.alert('데이터 로딩 실패', '분위기 데이터를 불러오는 데 실패했습니다.');
         }
     };
+    
 
     const fetchData = async () => {
         setLoading(true);
@@ -107,6 +108,7 @@ const MainScreen = ({ navigation }) => {
             setLoading(false);
         }
     };
+    
 
     useFocusEffect(
         useCallback(() => {
@@ -176,12 +178,14 @@ const MainScreen = ({ navigation }) => {
 
     return (
         <View style={{ backgroundColor: 'white', marginTop: 10 }}>
+            {/* 맨 상단 로고 */}
             <Image source={require('../../assets/MainLogo.png')} style={styles.logo} />
             <ScrollView
                 style={styles.scrollView}
                 contentContainerStyle={styles.scrollContainer}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             >
+                {/* 검색바 */}
                 <TouchableOpacity
                     style={styles.searchContainer}
                     onPress={() => navigation.navigate('SearchStack', { screen: 'Search' })}
@@ -190,6 +194,7 @@ const MainScreen = ({ navigation }) => {
                     <Image source={require('../../assets/search.png')} style={styles.searchIcon} />
                 </TouchableOpacity>
 
+                {/* 분위기 카테고리 상단 */}
                 <View style={styles.rightIconContainer}>
                     <Text style={styles.sectionTitle}>분위기 추천</Text>
                 </View>
@@ -203,6 +208,7 @@ const MainScreen = ({ navigation }) => {
                     ))}
                 </ScrollView>
 
+                {/* 소품샵 이미지 추천 */}
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
                         <Text style={styles.sectionTitle_sec}>{homeSpotShop?.prefix} </Text>
@@ -212,6 +218,7 @@ const MainScreen = ({ navigation }) => {
                     <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
                 </TouchableOpacity>
 
+                {/* 소품샵 이미지 */}
                 <ScrollView horizontal style={styles.placeContainer2} showsHorizontalScrollIndicator={false}>
                     <View style={{ marginLeft: 15 }} />
                     {homeSpotShop?.shopList?.slice(0, 6).map((shop, index) => (
@@ -240,10 +247,12 @@ const MainScreen = ({ navigation }) => {
                     ))}
                 </ScrollView>
 
+                {/* 지역 랜덤 6개 박스 */}
                 <View style={styles.LocationRcmd}>
                     <Text style={styles.sectionTitle}>지역별 추천</Text>
                 </View>
-
+                
+                {/* 지역 랜덤 6개 박스 */}
                 <ScrollView horizontal style={styles.placeContainer3} showsHorizontalScrollIndicator={false}>
                     <View style={{ marginLeft: 20 }} />
                     {homeSpot.map((spot, index) => (
@@ -253,6 +262,7 @@ const MainScreen = ({ navigation }) => {
                     ))}
                 </ScrollView>
 
+                {/* 뉴스레터 상단바*/}
                 <TouchableOpacity
                     style={styles.rightIconContainer}
                     onPress={() => navigation.navigate('NewsLetterStack', { screen: 'NewsLetter' })}
@@ -263,6 +273,7 @@ const MainScreen = ({ navigation }) => {
                     <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
                 </TouchableOpacity>
 
+                {/* 뉴스레터 3개 사진 */}
                 <View style={{ marginTop: 10 }}>
                     {newsletters.slice(0, 3).map((newsletter, index) => (
                         <TouchableOpacity key={index} style={{ flexDirection: 'row', marginBottom: 10 }} onPress={() => handleNewsLetter(newsletter.id)}>
@@ -280,6 +291,7 @@ const MainScreen = ({ navigation }) => {
                     ))}
                 </View>
 
+                {/* 소품샵 1번째 추천 */}
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
                         <Text style={styles.sectionTitle_sec}>{moodItem1?.prefix} </Text>
@@ -289,6 +301,7 @@ const MainScreen = ({ navigation }) => {
                     <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
                 </TouchableOpacity>
 
+                {/* 소품샵 1번째 추천 사진 */}
                 <ScrollView horizontal style={styles.placeContainer4} showsHorizontalScrollIndicator={false}>
                     {moodItem1?.shopList?.slice(0, 7).map((shop, index) => (
                         <TouchableOpacity key={index} style={styles.lastView}>
@@ -306,6 +319,7 @@ const MainScreen = ({ navigation }) => {
                     ))}
                 </ScrollView>
 
+                {/* 소품샵 2번째 추천 */}
                 <TouchableOpacity style={styles.rightIconContainer}>
                     <View style={styles.sectionTitle_sec_view}>
                         <Text style={styles.sectionTitle_sec}>{moodItem2?.prefix} </Text>
@@ -315,6 +329,7 @@ const MainScreen = ({ navigation }) => {
                     <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
                 </TouchableOpacity>
 
+                {/* 소품샵 2번째 추천 사진 */}
                 <ScrollView horizontal style={styles.placeContainer4} showsHorizontalScrollIndicator={false}>
                     {moodItem2?.shopList?.slice(0, 7).map((shop, index) => (
                         <TouchableOpacity key={index} style={styles.lastView}>

@@ -1,71 +1,72 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { TouchableOpacity, View, Text, FlatList, Image, StyleSheet, Dimensions } from 'react-native';
 import { Menu, Button, Provider } from 'react-native-paper';
-
-const sampleData = [
-  {
-    id: 1,
-    title: '우리들의 Pick',
-    image: 'https://via.placeholder.com/150',
-  },
-  {
-    id: 2,
-    title: '데이트하기 좋은 성수역 근처 소품샵',
-    image: 'https://via.placeholder.com/150',
-  },
-  {
-    id: 3,
-    title: '주말 데이트 추천 서울',
-    image: 'https://via.placeholder.com/150',
-  },
-  {
-    id: 4,
-    title: '성수역 근처 추천 소품샵',
-    image: 'https://via.placeholder.com/150',
-  },
-  {
-    id: 5,
-    title: '소품샵 Road 추천',
-    image: 'https://via.placeholder.com/150',
-  },
-  {
-    id: 6,
-    title: '우리들의 PICK 2',
-    image: 'https://via.placeholder.com/150',
-  },
-];
+import ApiClient from '../auth/ApiClient';
+import { NewsLetterContext } from '../context/NewsLetterContext';
 
 const NewsLetterScreen = ({ navigation }) => {
   const [visible, setVisible] = useState(false);
   const [selectedOption, setSelectedOption] = useState('최신순');
-  const [newsletters, setNewsletters] = useState(sampleData);
+  const [newsletters, setNewsletters] = useState([]);
 
   const openMenu = () => setVisible(true);
   const closeMenu = () => setVisible(false);
 
+  // API에서 데이터 가져오기
+  const fetchData = async (option) => {
+    try {
+      let response;
+      if (option === '최신순') {
+        response = await ApiClient.get('/api/newsLetter/new'); // 최신순 API 호출
+      } else if (option === '오래된순') {
+        response = await ApiClient.get('/api/newsLetter/old'); // 오래된 순 API 호출
+      } else if (option === '유용한순') {
+        response = await ApiClient.get('/api/newsLetter/hot'); // 오래된 순 API 호출
+      }
+      if (response.data.success) {
+        setNewsletters(response.data.response);
+      }
+      console.log('API 응답:', response.data);
+    } catch (error) {
+      console.error('Error fetching newsletters:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(selectedOption); 
+  }, []);
+
   const handleMenuSelect = (option) => {
     setSelectedOption(option);
     closeMenu();
-    // 여기에서 추가적인 정렬 로직을 처리할 수 있습니다.
+    fetchData(option); 
   };
 
+  // 상세 페이지 이름, 사진
   const numColumns = 2;
-  const renderItem = ({ item }) => (
-      <TouchableOpacity style={styles.newsletterItem}
-      onPress={() => navigation.navigate('NewsLetterDetail', { screen: 'NewsLetterDetail', id: item.id })}
+  const renderItem = ({ item }) => {  
+    return (
+      <TouchableOpacity
+        style={styles.newsletterItem}
+        onPress={() => handleNewsLetter(item.id)}
       >
-        <Image source={{ uri: item.image }}
-          style={styles.image}
-        />
-        <Text
-          style={styles.title}
-          numberOfLines={1}        // 최대 2줄로 제한
-          ellipsizeMode='tail'     // 말줄임표를 텍스트 끝에 추가
-        >{item.title}</Text>
+        <Image source={{ uri: item.image }} style={styles.image} />
+        <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+          {item.headline}
+        </Text>
       </TouchableOpacity>
+    );
+  };
 
-  );
+  const { setSelectedNewsLetterId } = useContext(NewsLetterContext);
 
+  // 뉴스레터 상세페이지로 네비게이션 시 정보 넘기기
+  const handleNewsLetter = (newsletterId) => {
+    setSelectedNewsLetterId(newsletterId);
+    navigation.navigate('NewsLetterStack', { screen: 'NewsLetterDetail', params: { newsletterId } });
+};
+
+  
   return (
     <Provider>
       <View style={styles.container}>
@@ -78,7 +79,7 @@ const NewsLetterScreen = ({ navigation }) => {
                 {selectedOption} ▼
               </Button>
             }
-            style={[styles.menuDropdown,]}
+            style={[styles.menuDropdown]}
           >
             <Menu.Item onPress={() => handleMenuSelect('최신순')} title="최신순" titleStyle={{ fontSize: 14 }} />
             <Menu.Item onPress={() => handleMenuSelect('오래된순')} title="오래된순" titleStyle={{ fontSize: 14 }} />
@@ -90,9 +91,8 @@ const NewsLetterScreen = ({ navigation }) => {
           data={newsletters}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
-          numColumns={numColumns} // 그리드로 배치하기 위한 설정
+          numColumns={numColumns}
         />
-
       </View>
     </Provider>
   );
@@ -105,11 +105,11 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   menuContainer: {
-    alignItems: 'flex-end',  // 메뉴가 오른쪽에 배치되도록 설정
+    alignItems: 'flex-end',
     marginBottom: 10,
   },
   menuButton: {
-    alignSelf: 'flex-end',  // 버튼을 오른쪽에 배치
+    alignSelf: 'flex-end',
   },
   newsletterItem: {
     flex: 1,
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     borderColor: '#F1F1F1',
   },
   image: {
-    width: (Dimensions.get('window').width / 2) - 32, // 각 아이템의 너비 설정
+    width: (Dimensions.get('window').width / 2) - 32,
     height: 120,
     borderRadius: 0,
   },
@@ -132,10 +132,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   menuDropdown: {
-    position: 'absolute',  // 절대 위치 설정
-    top: 55,               // 버튼 아래로 드롭다운 이동 (버튼 높이에 따라 조정 필요)
-    width: 'auto',         // 드롭다운 폭 조정
-    zIndex: 1,             // 드롭다운을 다른 요소 위로 표시하기 위한 설정
+    position: 'absolute',
+    top: 55,
+    width: 'auto',
+    zIndex: 1,
   },
 });
 
