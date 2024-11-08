@@ -1,33 +1,29 @@
 import React , {useContext , useState , useEffect} from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity,ScrollView, FlatList } from 'react-native';
-import { MaterialIcons, FontAwesome } from '@expo/vector-icons'; // 아이콘 사용
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import Swiper from 'react-native-swiper';
 import colors from '../../config/colors';
-import { fonts } from '../../config/fonts'; 
 import { useNavigation } from '@react-navigation/native';
 import { ShopContext } from './ShopContext';
 import ApiClient from '../auth/ApiClient';
-import { ActivityIndicator } from 'react-native-paper';
 import { useFavorites } from '../like/FavoriteContext';
+import { fonts } from '../../config/fonts';
 
 const ShopDetailScreen = () => {
   const navigation = useNavigation();
-  const { selectedShopId } = useContext(ShopContext); // ShopContext에서 shopId를 가져옴
+  const { selectedShopId } = useContext(ShopContext);
   const [shopData, setShopData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { isFavorite, addFavorite, removeFavorite } = useFavorites(); // 찜 관련 함수 가져오기
-
+  const { isFavorite, addFavorite, removeFavorite } = useFavorites();
+  const [reviewData, setReviewData] = useState(null);
+  const [page, setPage] = useState(1);
+  const limit = 3;
 
   useEffect(() => {
     const fetchShopData = async () => {
       try {
-        const response = await ApiClient.get(`/api/shop/${selectedShopId}`); // shopId를 이용해 API 호출
-        setShopData(response.data.response);  // API 응답 데이터를 상태에 저장
-
-        // 데이터 로그 출력
-        console.log('API 응답:', response.data);
-        
+        const response = await ApiClient.get(`/api/shop/${selectedShopId}`);
+        setShopData(response.data.response);
       } catch (err) {
         console.error('API 요청 중 에러 발생:', err);
         setError(err);
@@ -37,56 +33,74 @@ const ShopDetailScreen = () => {
     };
 
     if (selectedShopId) {
-      fetchShopData(); // selectedShopId가 존재할 때만 API 호출
+      fetchShopData();
     }
   }, [selectedShopId]);
 
-  if (loading) {
-    return <ActivityIndicator size="large" color={colors.Green900} />;
-  }
-
-  if (error) {
-    return (
-      <View>
-        <Text>에러 발생: {error.message}</Text>
-      </View>
-    );
-  }
-
-    // 찜 여부를 확인하여 이미지 토글 및 토글 함수 실행
-    const toggleFavorite = () => {
-      if (isFavorite(selectedShopId)) {
-        removeFavorite(selectedShopId);
+  const fetchReviews = async (limit, page) => {
+    try {
+      console.log("Fetching reviews with selectedShopId:", selectedShopId); 
+      const response = await ApiClient.get(`/api/reviews?poomShopId=${selectedShopId}&limit=${limit}&page=${page}`);
+      if (response.data.success) {
+        return response.data.response;
       } else {
-        addFavorite(selectedShopId);
+        throw new Error("Failed to fetch reviews");
+      }
+    } catch (error) {
+      console.error("Review API Error:", error);
+      return null;
+    }
+  };
+  
+  useEffect(() => {
+    const loadReviews = async () => {
+      if (selectedShopId) { // selectedShopId가 존재할 때만 호출
+        const data = await fetchReviews(limit, page);
+        if (data) setReviewData(data);
       }
     };
-  
+    loadReviews();
+  }, [selectedShopId, page]);
+
+  const toggleFavorite = () => {
+    isFavorite(selectedShopId) ? removeFavorite(selectedShopId) : addFavorite(selectedShopId);
+  };
+
+  const renderMoodAndSpotTags = () => (
+    <View style={styles.tagContainer}>
+      <Image source={require('../../assets/img_logo_symbol.png')} style={styles.symbol} />
+      {shopData.mood ? (
+        <View style={styles.tag}>
+          <Text style={styles.tagText}>{shopData.mood}</Text>
+        </View>
+      ) : (
+        <Text>무드 정보 없음</Text>
+      )}
+      {shopData.spot ? (
+        <View style={styles.tag}>
+          <Text style={styles.tagText}>{shopData.spot}</Text>
+        </View>
+      ) : (
+        <Text>장소 정보 없음</Text>
+      )}
+    </View>
+  );
+
+  if (loading) return <ActivityIndicator size="large" color={colors.Green900} />;
+  if (error) return <View><Text>에러 발생: {error.message}</Text></View>;
 
   return (
-    <ScrollView contentContainerStyle={{ backgroundColor: colors.Ivory100, alignItems: 'left', flexGrow: 1 , padding : 20, }}>
+    <ScrollView contentContainerStyle={{ backgroundColor: colors.Ivory100, alignItems: 'left', flexGrow: 1, padding: 20 }}>
       {shopData && shopData.shopImageList && shopData.shopImageList.length > 0 ? (
-        <Swiper 
-          style={styles.swiper} 
-          showsPagination={true} 
-          dotColor="#D4D4D4" // 기본 점 색상
-          activeDotColor="#666666"  // 활성 점 색상
-          paginationStyle={styles.pagination}  // 점의 위치 조정
-        >
+        <Swiper style={styles.swiper} showsPagination dotColor="#D4D4D4" activeDotColor="#666666">
           {shopData.shopImageList.map((image, index) => (
             <View key={index} style={styles.slide}>
-              <Image 
-                source={{ uri: image.url }}  // 각 이미지의 URL을 사용
-                style={styles.shopImage}
-              />
+              <Image source={{ uri: image.url }} style={styles.shopImage} />
             </View>
           ))}
         </Swiper>
       ) : (
-        <Image 
-          source={require('../../assets/photo.png')}  // 기본 이미지
-          style={styles.shopImage}
-        />
+        <Image source={require('../../assets/photo.png')} style={styles.shopImage} />
       )}
 
       <View style={styles.header}>
@@ -95,10 +109,7 @@ const ShopDetailScreen = () => {
             <Text style={styles.shopName}>{shopData.name || '이름 없음'}</Text>
             <TouchableOpacity onPress={toggleFavorite}>
               <Image 
-                source={isFavorite(selectedShopId)
-                  ? require('../../assets/img_liked_heart.png') // 찜 상태일 때 이미지
-                  : require('../../assets/heart.png') // 찜 상태가 아닐 때 이미지
-                }
+                source={isFavorite(selectedShopId) ? require('../../assets/img_liked_heart.png') : require('../../assets/heart.png')}
                 style={styles.like}
               />
             </TouchableOpacity>
@@ -113,145 +124,106 @@ const ShopDetailScreen = () => {
           <View style={styles.infoContainer}>
             <View style={styles.infoRow}>
               <Image source={require('../../assets/img_clock.png')} style={styles.icon} />
-              <Text style={styles.infoText}>{shopData.openingHours ? shopData.openingHours : '영업시간 정보 없음'}</Text>
+              <Text style={styles.infoText}>{shopData.openingHours || '영업시간 정보 없음'}</Text>
             </View>
             <View style={styles.infoRow}>
               <Image source={require('../../assets/img_phone.png')} style={styles.icon} />
-              <Text style={styles.infoText}>{shopData.phoneNumber ? shopData.phoneNumber : '번호 정보 없음'}</Text>
+              <Text style={styles.infoText}>{shopData.phoneNumber || '번호 정보 없음'}</Text>
             </View>
             <View style={styles.infoRow}>
               <Image source={require('../../assets/img_mappin.png')} style={styles.icon} />
               <Text style={styles.infoText}>
-                {shopData.location ? shopData.location : '위치 정보 없음'}
-                {'\n'}{shopData.nearbyStation ? shopData.nearbyStation : '인근 지하철 정보 없음'}
+                {shopData.location || '위치 정보 없음'}{'\n'}{shopData.nearbyStation || '인근 지하철 정보 없음'}
               </Text>
             </View>
           </View>
 
-          {/* mood와 spot 데이터를 라운드 박스 내에 할당 */}
-          <View style={styles.tagContainer}>
-          <Image source={require('../../assets/img_logo_symbol.png')} style = {styles.symbol}></Image>
-            {shopData.mood ? (
-              <View style={styles.tag}>
-                <Text style={styles.tagText}>{shopData.mood}</Text>
-              </View>
-            ) : (
-              <Text>무드 정보 없음</Text>
-            )}
-
-            {shopData.spot ? (
-              <View style={styles.tag}>
-                <Text style={styles.tagText}>{shopData.spot}</Text>
-              </View>
-            ) : (
-              <Text>장소 정보 없음</Text>
-            )}
-          </View>
+          {renderMoodAndSpotTags()}
           <Image source={require('../../assets/img_map.png')} style={{ marginTop: 10 }} />
         </>
       )}
 
-<View style={styles.divider} />
+      <View style={styles.divider} />
 
-<TouchableOpacity
-  style={{ flexDirection: 'row', alignItems: 'center' }}
-  onPress={() => navigation.navigate('UserReview1', { screen: 'UserReview1', selectedShopId })} // selectedShopId를 함께 전달
->
-  <Text style={styles.shopName}>리뷰</Text>
-  <Image source={require('../../assets/edit.png')} style={{ marginLeft: 230 }} />
-  <Text style={styles.infoText}>작성하기</Text>
-</TouchableOpacity>
+      <TouchableOpacity
+        style={{ flexDirection: 'row', alignItems: 'center' }}
+        onPress={() => navigation.navigate('UserReview1', { screen: 'UserReview1', selectedShopId })}
+      >
+        <Text style={styles.shopName}>리뷰</Text>
+        <Image source={require('../../assets/edit.png')} style={{ marginLeft: 230 }} />
+        <Text style={styles.infoText}>작성하기</Text>
+      </TouchableOpacity>
 
-<View style={styles.reviewSection}>
-  <Text style={styles.subTitle}>13명의 추천을 받은 소품샵이에요</Text>
-
-  {/* 이미지 및 리뷰 상단 */}
-  <View style={styles.imageRow}>
-    <Image source={require('../../assets/img_sample.png')} style={styles.reviewImage} />
-    <Image source={require('../../assets/img_sample.png')} style={styles.reviewImage} />
-    <Image source={require('../../assets/img_sample.png')} style={styles.reviewImage} />
-    <View style={styles.moreImages}>
-      <Text style={styles.moreText}>+10</Text>
-    </View>
-  </View>
-
-  {/* 리뷰 리스트 */}
-  <View style={styles.reviewBox}>
-    <View style={styles.reviewItem}>
-      <Image source={require('../../assets/img_user_sample.png')} style={styles.userImage} />
-      <View style={styles.reviewContent}>
-        <Text style={styles.reviewUser}>민지</Text>
-        <Text style={styles.reviewDate}>2024.07.11</Text>
-        <Text style={styles.reviewText}>사장님이 너무 친절했어요! TTT 그립지만 좋아하는 카페에 물품이 많아서 구경하기 너무 좋았어요~</Text>
+      <View style={styles.reviewSection}>
+        {reviewData ? (
+          <>
+            <Text style={styles.subTitle}>{reviewData.totalRecommend}명의 추천을 받은 소품샵이에요</Text>
+            <View style={styles.imageRow}>
+              {reviewData.imgUrls.slice(0, 3).map((img, index) => (
+                <Image key={img.id} source={{ uri: img.url }} style={styles.reviewImage} />
+              ))}
+            </View>
+            {reviewData.reviews.length > 0 ? (
+              reviewData.reviews.map(review => (
+                <View key={review.id} style={styles.reviewBox}>
+                  <View style={styles.reviewItem}>
+                    <Image source={{ uri: review.userImgUrl || require('../../assets/profile.png') }} style={styles.userImage} />
+                    <View style={styles.reviewContent}>
+                      <View style={styles.headerRow}>
+                        <Text style={styles.reviewUser}>{review.userNickName}</Text>
+                        <Text style={styles.reviewDate}>{review.date}</Text>
+                      </View>
+                      <Text style={styles.reviewText}>{review.content}</Text>
+                    </View>
+                    <Image 
+                      source={review.isRecommend ? require('../../assets/img_thumbs_up.png') : require('../../assets/img_thumbs_down.png')} 
+                      style={styles.like} 
+                    />
+                  </View>
+                </View>
+              ))
+            ) : (
+            <View style={styles.noReviewContainer}>
+              <Image 
+                source={require('../../assets/img_review_none.png')} 
+                style={styles.noneReviewImage} 
+              />
+              <Text style={styles.noReviewText}>등록된 리뷰가 없어요</Text>
+            </View>
+            )}
+          </>
+        ) : (
+          <Text>리뷰 데이터를 불러오는 중입니다...</Text>
+        )}
       </View>
-      <Image source={require('../../assets/heart.png')} style={styles.like}/>
-    </View>
 
-    <View style={styles.reviewItem}>
-      <Image source={require('../../assets/img_user_sample.png')} style={styles.userImage} />
-      <View style={styles.reviewContent}>
-        <Text style={styles.reviewUser}>해강</Text>
-        <Text style={styles.reviewDate}>2024.07.11</Text>
-        <Text style={styles.reviewText}>아기자기한 소품들이 많고 예뻐서 구경하는 데 시간 가는 줄 몰랐습니다! 꿀!</Text>
-      </View>
-      <FontAwesome name="thumbs-o-up" size={24} color={colors.Green500} />
-    </View>
+      <TouchableOpacity style={styles.viewAllButton}>
+        <Text style={styles.viewAllText}>리뷰 전체보기</Text>
+      </TouchableOpacity>
 
-    {/* 추가 이미지가 있는 리뷰 */}
-    <View style={styles.reviewItem}>
-      <Image source={require('../../assets/img_user_sample.png')} style={styles.userImage} />
-      <View style={styles.reviewContent}>
-        <Text style={styles.reviewUser}>민지</Text>
-        <Text style={styles.reviewDate}>2024.07.11</Text>
-        <Text style={styles.reviewText}>사장님이 너무 친절했어요! TTT 그립지만 좋아하는 카페에 물품이 많아서 구경하기 너무 좋았어요~</Text>
-        <View style={styles.extraImageRow}>
-          <Image source={require('../../assets/img_user_sample.png')} style={styles.extraImage} />
-          <View style={styles.moreImages}>
-            <Text style={styles.moreText}>+2</Text>
+      <View style={styles.divider} />
+      {renderMoodAndSpotTags()}
+
+      <View style={styles.recommendSection}>  
+        <Text style={styles.subTitle}>소품샵 추천</Text>
+        <View style={styles.shopRecommendationRow}>
+          <View style={styles.shopRecommendation}>
+            <Image source={require('../../assets/img_sample.png')} style={styles.recommendImage} />
+            <Text style={styles.shopName}>선민이네 샵</Text>
+          </View>
+          <View style={styles.shopRecommendation}>
+            <Image source={require('../../assets/img_sample.png')} style={styles.recommendImage} />
+            <Text style={styles.shopName}>선민이네 샵</Text>
+          </View>
+          <View style={styles.shopRecommendation}>
+            <Image source={require('../../assets/img_sample.png')} style={styles.recommendImage} />
+            <Text style={styles.shopName}>선민이네 샵</Text>
           </View>
         </View>
       </View>
-      <FontAwesome name="heart-o" size={24} color={colors.Gray500} />
-    </View>
-  </View>
-
-  <TouchableOpacity style={styles.viewAllButton}>
-    <Text style={styles.viewAllText}>리뷰 전체보기</Text>
-  </TouchableOpacity>
-</View>
-
-{/* 소품샵 추천 */}
-<View style={styles.recommendSection}>
-  <View style={styles.chipRow}>
-    <View style={styles.chip}>
-      <Text style={styles.chipText}>이태원</Text>
-    </View>
-    <View style={styles.chip}>
-      <Text style={styles.chipText}>홍대</Text>
-    </View>
-  </View>
-  
-  <Text style={styles.subTitle}>소품샵 추천</Text>
-
-  {/* 추천 소품샵 */}
-  <View style={styles.shopRecommendationRow}>
-    <View style={styles.shopRecommendation}>
-      <Image source={require('../../assets/img_sample.png')} style={styles.recommendImage} />
-      <Text style={styles.shopName}>선민이네 샵</Text>
-    </View>
-    <View style={styles.shopRecommendation}>
-      <Image source={require('../../assets/img_sample.png')} style={styles.recommendImage} />
-      <Text style={styles.shopName}>선민이네 샵</Text>
-    </View>
-    <View style={styles.shopRecommendation}>
-      <Image source={require('../../assets/img_sample.png')} style={styles.recommendImage} />
-      <Text style={styles.shopName}>선민이네 샵</Text>
-    </View>
-  </View>
-</View>
-</ScrollView>
+    </ScrollView>
   );
- };
+};
 
  const styles = StyleSheet.create({
     container : {
@@ -353,12 +325,12 @@ const ShopDetailScreen = () => {
       },
       //여기서부터 리뷰 css     
       review : {
-        marginTop: 10,
-        alignItems: 'left',
-        alignItems: 'left',
+        justifyContent: 'center',
+        alignItems: 'center',
       },
       reviewSection: {
         marginTop: 20,
+        justifyContent: 'center',
       },
       subTitle: {
         fontSize: 16,
@@ -370,55 +342,65 @@ const ShopDetailScreen = () => {
         marginBottom: 15,
       },
       reviewImage: {
-        width: 60,
-        height: 60,
+        width: 108,
+        height: 108,
         marginRight: 10,
-        borderRadius: 8,
+        borderRadius: 4,
       },
-      moreImages: {
-        width: 60,
-        height: 60,
-        backgroundColor: colors.Gray100,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 8,
-      },
-      moreText: {
-        fontSize: 16,
-        color: colors.Gray500,
-      },
+
       reviewBox: {
-        marginBottom: 15,
+        padding: 10,
+        borderRadius: 10,
+        marginVertical: 5,
       },
+      
       reviewItem: {
         flexDirection: 'row',
-        paddingVertical: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: colors.Gray300,
-        alignItems: 'center',
+        alignItems: 'flex-start',
       },
+      
       userImage: {
         width: 40,
         height: 40,
         borderRadius: 20,
         marginRight: 10,
       },
+      
       reviewContent: {
         flex: 1,
       },
-      reviewUser: {
-        fontWeight: 'bold',
-        fontSize: 14,
+      headerRow: {
+        marginBottom: 4,
       },
+      reviewUser: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#333333',
+        marginRight: 6,
+        marginTop : 5,
+      },
+      
       reviewDate: {
         fontSize: 12,
-        color: colors.Gray500,
-        marginVertical: 4,
+        marginTop : 3,
+        color: '#999999',
       },
+      
       reviewText: {
         fontSize: 14,
-        color: colors.Gray900,
+        color: '#333333',
+        marginTop: 10,
+        marginLeft : - 46, 
       },
+      
+      like: {
+        width: 20,
+        height: 20,
+        tintColor: '#32CD32',
+        marginLeft: 8,
+        alignSelf: 'flex-start',
+      },
+      
       extraImageRow: {
         flexDirection: 'row',
         marginTop: 10,
@@ -432,9 +414,6 @@ const ShopDetailScreen = () => {
       viewAllButton: {
         marginTop: 10,
         padding: 10,
-        borderWidth: 1,
-        borderColor: colors.Gray300,
-        borderRadius: 8,
         alignItems: 'center',
       },
       viewAllText: {
@@ -444,21 +423,6 @@ const ShopDetailScreen = () => {
       recommendSection: {
         marginTop: 20,
       },
-      chipRow: {
-        flexDirection: 'row',
-        marginBottom: 15,
-      },
-      chip: {
-        backgroundColor: colors.Gray100,
-        paddingVertical: 6,
-        paddingHorizontal: 12,
-        borderRadius: 20,
-        marginRight: 10,
-      },
-      chipText: {
-        fontSize: 12,
-        color: colors.Gray500,
-      },
       shopRecommendationRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -466,14 +430,30 @@ const ShopDetailScreen = () => {
       shopRecommendation: {
         width: 90,
         alignItems: 'center',
+        marginRight : 30 , 
       },
       recommendImage: {
-        width: 90,
-        height: 90,
-        borderRadius: 8,
-        marginBottom: 5,
+        width: 108,
+        height: 108,
+        borderRadius: 4,
+        marginBottom: 5, 
+        marginLeft : 14, 
       },
-    
+      noReviewContainer: {
+        justifyContent: 'center', // 수직 중앙 정렬
+        alignItems: 'center', // 수평 중앙 정렬
+        padding: 10, // 상하좌우 여백 (선택 사항)
+      },
+      noneReviewImage: {
+        width: 130, // 원하는 너비
+        height: 130, // 원하는 높이
+        resizeMode: 'contain', // 이미지 크기 비율을 유지
+      },
+      noReviewText: {
+        marginTop: 10, // 이미지와 텍스트 사이의 간격
+        fontSize: 16, // 텍스트 크기
+        color: '#888', // 텍스트 색상 (예: 회색)
+      },
  })
 
 export default ShopDetailScreen;
