@@ -19,7 +19,7 @@ const UserReviewScreen4= () => {
       {/* 버튼 */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('ShopReviewScreen')} // 작성한 리뷰 보기 페이지로 이동
+        onPress={() => navigation.navigate('ShopReview')} // 작성한 리뷰 보기 페이지로 이동
       >
         <Text style={styles.buttonText}>작성한 리뷰 보기</Text>
       </TouchableOpacity>
