@@ -27,6 +27,7 @@ import UserReviewScreen1 from '../review/UserReviewScreen1';
 import UserReviewScreen2 from '../review/UserReviewScreen2';
 import UserReviewScreen3 from '../review/UserReviewScreen3';
 import UserReviewScreen4 from '../review/UserReviewScreen4';
+import ShopReviewScreen from '../shop/ShopReviewScreen';
 
 
 import NewsLetterStackNavigator from './NewsLetterStackNavigator';
@@ -35,19 +36,10 @@ import SearchStackNavigator from './SearchStackNavigator';
 import KeywordStackNavigator from './KeywordStackNavigator';
 import ReviewStackNavigator from './ReviewStackNavigator';
 
-import ShopProvider from '../shop/ShopContext';
-import SpotProvider from '../keyword/KeywordContext';
-import MoodProvider from '../keyword/MoodContext'
-import NewsLetterProvider from '../context/NewsLetterContext';
-
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
-    <NewsLetterProvider>
-    <MoodProvider>
-    <SpotProvider>
-    <ShopProvider>
     <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
@@ -180,16 +172,25 @@ const AppNavigator = () => {
         })}
       />
 
+      <Stack.Screen name="ShopReview" component={ShopReviewScreen} options={({ navigation }) => ({
+          headerTitle: '리뷰',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
+            </TouchableOpacity>
+          ),
+          headerTitleAlign: 'center',
+          headerStyle: { backgroundColor: colors.Ivory100 },
+          headerTintColor: colors.Gray900,
+          ...fonts.Body1
+        })}/>
+
       <Stack.Screen name="KeywordStack" component={KeywordStackNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NewsLetterStack" component={NewsLetterStackNavigator} options={{ headerShown: false }} />
       {/* <Stack.Screen name="ReviewStack" component={ReviewStackNavigator} options={{ headerShown: false }} /> */}
       <Stack.Screen name="SearchStack" component={SearchStackNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="Keyword" component={KeywordList} options={{ headerShown: false }} />
     </Stack.Navigator>
-    </ShopProvider>
-    </SpotProvider>
-    </MoodProvider>
-    </NewsLetterProvider>
   );
 };
 

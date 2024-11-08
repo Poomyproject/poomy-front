@@ -1,5 +1,6 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native'; // Alert 추가
 
 // Axios 인스턴스 생성
 const ApiClient = axios.create({
@@ -40,6 +41,7 @@ ApiClient.interceptors.request.use(
 );
 
 
+
 // 응답 인터셉터 설정 (에러 처리)
 export const setAxiosInterceptors = (navigation) => {
   ApiClient.interceptors.response.use(
@@ -48,17 +50,18 @@ export const setAxiosInterceptors = (navigation) => {
     },
     async (error) => {
       const status = error.response ? error.response.status : null;
-
       
       if (status === 401 || status === 500) {
 
-        console.log(error.config.url);
-
-        console.error(`${status} Error - 로그아웃 또는 재로그인 필요`);
-
         // 엑세스 토큰 삭제
         await AsyncStorage.removeItem('accessToken');
-        console.log('Access Token removed. Redirecting to Splash.');
+
+        // // 로그아웃 알림을 사용자에게 표시
+        // Alert.alert(
+        //   "로그아웃 되었습니다",
+        //   "다시 로그인해 주세요",
+        //   [{ text: "확인" }] // 확인 버튼만 있는 간단한 알림
+        // );
 
         // 401 또는 500 에러 발생 시 Splash 화면으로 이동
         if (navigation && typeof navigation.replace === 'function') {
@@ -71,6 +74,7 @@ export const setAxiosInterceptors = (navigation) => {
     }
   );
 };
+
  
 
 // 토큰을 AsyncStorage에 저장하는 함수

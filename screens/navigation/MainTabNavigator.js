@@ -7,23 +7,29 @@ import MypageStackNavigator from './MypageStackNavigator';
 import colors from '../../config/colors';
 import ShopNavigatior from './ShopNavigatior';
 import ShopProvider from '../shop/ShopContext';
+import { fonts } from '../../config/fonts';
+import { Text } from 'react-native-paper';
+import LikeStackNavigator from './LikeStackNavigator';
 
 
 const Tab = createBottomTabNavigator();
 
 const MainTabNavigator = () => {
   return (
-    <ShopProvider>
     <Tab.Navigator initialRouteName="Main">
       <Tab.Screen
-        name="Like"
-        component={LikeScreen}
+        name="짬"
+        component={LikeStackNavigator} 
         options={{
           tabBarLabel: '찜',
           tabBarIcon: ({ color, size }) => (
             <Image source={require('../../assets/ic_todo.png')} style={{ width: size, height: size, tintColor: color }} />
           ),
-          headerShown: false,
+          headerShown: false, 
+          headerTitleStyle: {
+            ...fonts.Body1,
+            color: colors.Gray900,
+          },
         }}
       />
       <Tab.Screen
@@ -34,7 +40,7 @@ const MainTabNavigator = () => {
         tabBarIcon: ({ color, size }) => (
         <Image source={require('../../assets/ic_home.png')} style={{ width: size, height: size, tintColor: color }} />
         ),
-        headerShown: false,  // 헤더 없애기
+        headerShown: false, 
         }}
       />
 
@@ -46,11 +52,14 @@ const MainTabNavigator = () => {
           tabBarIcon: ({ color, size }) => (
             <Image source={require('../../assets/ic_mypage.png')} style={{ width: size, height: size, tintColor: color }} />
           ),
-          headerShown: false,
+          headerShown: true,
+          headerTitleStyle: {
+            ...fonts.Body1,
+            color: colors.Gray900,
+          },
         }}
       />
     </Tab.Navigator>
-    </ShopProvider>
   );
 };
 

@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { ShopContext } from './ShopContext';
 import ApiClient from '../auth/ApiClient';
 import { ActivityIndicator } from 'react-native-paper';
+import { useFavorites } from '../like/FavoriteContext';
 
 const ShopDetailScreen = () => {
   const navigation = useNavigation();
@@ -15,6 +16,8 @@ const ShopDetailScreen = () => {
   const [shopData, setShopData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { isFavorite, addFavorite, removeFavorite } = useFavorites(); // 찜 관련 함수 가져오기
+
 
   useEffect(() => {
     const fetchShopData = async () => {
@@ -50,6 +53,16 @@ const ShopDetailScreen = () => {
     );
   }
 
+    // 찜 여부를 확인하여 이미지 토글 및 토글 함수 실행
+    const toggleFavorite = () => {
+      if (isFavorite(selectedShopId)) {
+        removeFavorite(selectedShopId);
+      } else {
+        addFavorite(selectedShopId);
+      }
+    };
+  
+
   return (
     <ScrollView contentContainerStyle={{ backgroundColor: colors.Ivory100, alignItems: 'left', flexGrow: 1 , padding : 20, }}>
       {shopData && shopData.shopImageList && shopData.shopImageList.length > 0 ? (
@@ -80,8 +93,14 @@ const ShopDetailScreen = () => {
         {shopData ? (
           <>
             <Text style={styles.shopName}>{shopData.name || '이름 없음'}</Text>
-            <TouchableOpacity>
-              <Image source={require('../../assets/heart.png')} style={styles.icon} />
+            <TouchableOpacity onPress={toggleFavorite}>
+              <Image 
+                source={isFavorite(selectedShopId)
+                  ? require('../../assets/img_liked_heart.png') // 찜 상태일 때 이미지
+                  : require('../../assets/heart.png') // 찜 상태가 아닐 때 이미지
+                }
+                style={styles.like}
+              />
             </TouchableOpacity>
           </>
         ) : (
@@ -165,7 +184,7 @@ const ShopDetailScreen = () => {
         <Text style={styles.reviewDate}>2024.07.11</Text>
         <Text style={styles.reviewText}>사장님이 너무 친절했어요! TTT 그립지만 좋아하는 카페에 물품이 많아서 구경하기 너무 좋았어요~</Text>
       </View>
-      <FontAwesome name="heart-o" size={24} color={colors.Gray500} />
+      <Image source={require('../../assets/heart.png')} style={styles.like}/>
     </View>
 
     <View style={styles.reviewItem}>
@@ -274,6 +293,11 @@ const ShopDetailScreen = () => {
       shopName: {
         color : colors.Gray900,
         ...fonts.Title2
+      },
+      like:{
+        marginEnd : 30, 
+        width: 24, 
+        height: 24, 
       },
       infoContainer: {
         marginTop: 10,
