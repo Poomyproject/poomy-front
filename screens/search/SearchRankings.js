@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Alert, Image } from 'react-native';
 import ApiClient from '../../screens/auth/ApiClient'; // ApiClient 가져오기
 import styles from './styles'; // styles 가져오기
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ShopContext } from '../shop/ShopContext';
+import { useNavigation } from '@react-navigation/native';
 
 const SearchRankings = () => {
     const [searchRankings, setSearchRankings] = useState([]);
     const [error, setError] = useState(null);
+    const { setSelectedShopId } = useContext(ShopContext);
+    const navigation = useNavigation();
+
 
     // API에서 상위 5개의 랭킹 데이터를 불러오는 함수
     const fetchTopFiveRankings = async () => {
@@ -28,15 +34,22 @@ const SearchRankings = () => {
         fetchTopFiveRankings();
     }, []);
 
+    // 상세페이지로 네비게이션
+    const handleShopPress = (shopId) => {
+        setSelectedShopId(shopId);
+        navigation.navigate('ShopDetail', { shopId });
+    };
+
+
     return (
         <View>
             {searchRankings.map((item, index) => (
                 <React.Fragment key={item.id}>
-                    <View style={styles.searchRankingItem}>
+                    <TouchableOpacity style={styles.searchRankingItem} onPress={() => handleShopPress(item.id)}>
                         <Text style={styles.number}>{index + 1}</Text>
                         <Text style={styles.searchRankText}>{item.name}</Text>
-                    </View>
-                    <Image source={require('../../assets/Newsline.png')} style={styles.line}/>
+                    </TouchableOpacity>
+                    <Image source={require('../../assets/Newsline.png')} style={styles.line} />
                 </React.Fragment>
             ))}
         </View>
