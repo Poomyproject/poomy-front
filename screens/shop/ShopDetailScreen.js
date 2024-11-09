@@ -239,7 +239,7 @@ const ShopDetailScreen = ({ route }) => {
         {reviewData.reviews.map(review => (
           <View key={review.id} style={styles.reviewBox}>
             <View style={styles.reviewItem}>
-              <Image source={{ uri: review.userImgUrl || require('../../assets/profile.png') }} style={styles.userImage} />
+            <Image source= {require('../../assets/profile.png')} style={{width : 40 , height : 40 , marginRight : 10, }}/>
               <View style={styles.reviewContent}>
                 <View style={styles.headerRow}>
                   <Text style={styles.reviewUser}>{review.userNickName}</Text>
