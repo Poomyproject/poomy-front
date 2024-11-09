@@ -11,6 +11,7 @@ import  MoodProvider from './screens/keyword/MoodContext';
 import  NewsLetterProvider  from './screens/context/NewsLetterContext';
 import SearchProvider from './screens/context/SearchContext';
 import { SearchContext } from './screens/context/SearchContext';
+import { UserProvider } from './screens/mypage/MypageEditScreen';
 
 
 export default function App() {

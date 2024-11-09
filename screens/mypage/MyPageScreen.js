@@ -1,64 +1,91 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity , Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../../config/colors';
-import MypageEditScreen from './MypageEditScreen';
 import ApiClient from '../auth/ApiClient';
-import { useEffect,useState, useContext } from 'react';
 import { fonts } from '../../config/fonts';
-import { useFocusEffect } from '@react-navigation/native';
-
-
 
 const MyPageScreen = () => {
   const navigation = useNavigation(); 
-
   const [nickname, setNickname] = useState('');
-  const [googleEmail, setgoogleEmail] = useState('');
-  const [imgUrl, setImgUrl] = useState(''); // 이미지 URL 관리 추가
+  const [googleEmail, setGoogleEmail] = useState('');
+  const [imgUrl, setImgUrl] = useState('');
   const [selectedMoods, setSelectedMoods] = useState([]);
   const [selectedPlaces, setSelectedPlaces] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     const loadUserData = async () => {
+  //       try {
+  //         // 닉네임 불러오기
+  //         const storedNickname = await AsyncStorage.getItem('nickname');
+  //         if (storedNickname) {
+  //           setNickname(storedNickname);
+  //           console.log('로컬 스토리지에서 불러온 닉네임:', storedNickname);
+  //         }
+
+  //         // 무드 및 장소 불러오기
+  //         const storedMoods = await AsyncStorage.getItem('selectedMoods');
+  //         const storedPlaces = await AsyncStorage.getItem('selectedPlaces');
+  //         if (storedMoods) {
+  //           setSelectedMoods(JSON.parse(storedMoods));
+  //           console.log('로컬 스토리지에서 불러온 무드:', JSON.parse(storedMoods));
+  //         }
+  //         if (storedPlaces) {
+  //           setSelectedPlaces(JSON.parse(storedPlaces));
+  //           console.log('로컬 스토리지에서 불러온 장소:', JSON.parse(storedPlaces));
+  //         }
+  //       } catch (error) {
+  //         console.error('로컬 스토리지에서 데이터 불러오기 오류:', error);
+  //       }
+  //     };
+  //     loadUserData();
+  //   }, [])
+  // );
+
   useFocusEffect(
     React.useCallback(() => {
-      // 화면이 다시 포커스될 때 닉네임 상태를 업데이트
-      const loadNickname = async () => {
-        const storedNickname = await AsyncStorage.getItem('nickname');
-        if (storedNickname) {
-          setNickname(storedNickname); // 닉네임이 변경된 상태를 반영
+      const loadUserData = async () => {
+        try {
+          await fetchUserData(); // 서버에서 사용자 데이터 가져오기
+        } catch (error) {
+          console.error('데이터 가져오기 실패:', error);
         }
       };
-      loadNickname();
+      loadUserData();
     }, [])
   );
-
-    // API에서 사용자 데이터를 가져오는 함수
-    const fetchUserData = async () => {
-      try {
-        const response = await ApiClient.get('/api/users'); // API 호출
-        if (response.data.success) {
-          const userData = response.data.response;
-          setNickname(userData.nickname);
-          setgoogleEmail(userData.googleEmail);
-          setSelectedMoods(userData.moods.map(mood => mood.name));
-          setSelectedPlaces(userData.spots.map(spot => spot.name));
-
-          await AsyncStorage.setItem('nickname', userData.nickname);
-        }
-      } catch (error) {
-        console.error('데이터 가져오기 실패:', error);
-        Alert.alert('오류', '사용자 데이터를 가져오는 중 문제가 발생했습니다.');
-      }
-    };
-    
   
-    // 컴포넌트 마운트 시 사용자 데이터를 가져옴
-    useEffect(() => {
-      fetchUserData();
-    }, []);
 
+  // API에서 사용자 데이터를 가져오는 함수
+  const fetchUserData = async () => {
+    try {
+      const response = await ApiClient.get('/api/users');
+      if (response.data.success) {
+        const userData = response.data.response;
+        setNickname(userData.nickname);
+        setGoogleEmail(userData.googleEmail);
+        setSelectedMoods(userData.moods); 
+        setSelectedPlaces(userData.spots); 
+
+        await AsyncStorage.setItem('nickname', userData.nickname);
+        await AsyncStorage.setItem('selectedMoods', JSON.stringify(userData.moods));
+        await AsyncStorage.setItem('selectedPlaces', JSON.stringify(userData.spots));
+
+        console.log(userData.spots)
+      }
+    } catch (error) {
+      console.error('데이터 가져오기 실패:', error);
+      Alert.alert('오류', '사용자 데이터를 가져오는 중 문제가 발생했습니다.');
+    }
+  };
+
+  // // 컴포넌트 마운트 시 사용자 데이터를 가져옴
+  // useEffect(() => {
+  //   fetchUserData();
+  // }, []);
 
   const goToMypageEdit = () => {
     navigation.navigate('MypageEdit');
@@ -73,22 +100,18 @@ const MyPageScreen = () => {
   };
 
   const goToInquiry = () => {
-    navigation.navigate('Inquiry')
+    navigation.navigate('Inquiry');
   };
 
   const handleLogout = async () => {
     try {
-      // AsyncStorage에서 accessToken 제거
       await AsyncStorage.removeItem('accessToken');
-
-      // 로그인 화면으로 이동
       navigation.replace('Splash');
     } catch (error) {
       console.error('로그아웃 오류:', error);
       Alert.alert('로그아웃 오류', '로그아웃 중 문제가 발생했습니다.');
     }
   };
-
 
   const confirmLogout = () => {
     Alert.alert(
@@ -112,44 +135,43 @@ const MyPageScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-      <Text style={styles.headerText}>마이페이지</Text>
+        <Text style={styles.headerText}>마이페이지</Text>
       </View>
       <View style={styles.content}>
         <View style={[styles.profile, { marginTop: -60 }]}>
           <Image source={require('../../assets/profile.png')} style={styles.profileImage} />
           <Text style={styles.profileText}>
-          <Text style={styles.nicknameText}>{nickname}</Text>
-           님, {'\n'}행운을 빌어요!
-        </Text>
+            <Text style={styles.nicknameText}>{nickname}</Text>
+            님, {'\n'}행운을 빌어요!
+          </Text>
           <TouchableOpacity onPress={goToMypageEdit}>
-      <Image source={require('../../assets/edit.png')} style={styles.editImage} />
-    </TouchableOpacity>
+            <Image source={require('../../assets/edit.png')} style={styles.editImage} />
+          </TouchableOpacity>
         </View>
         <View style={styles.preferContainer}>
-        <View style={styles.preferBox}>
-    <Image source={require('../../assets/mappin.png')} style={styles.preferIcon} />
-    <Text style={styles.preferText}>관심장소</Text>
-    <View style={styles.verticalLine}></View>
-    {selectedPlaces && selectedPlaces.length > 0 ? (
-      selectedPlaces.map((place, index) => (
-        <Text key={index} style={styles.textWithBorder}>{place}</Text>
-      ))
-    ) : (
-      <Text>관심장소가 없습니다.</Text>
-    )}
-  </View>
+          <View style={styles.preferBox}>
+            <Image source={require('../../assets/mappin.png')} style={styles.preferIcon} />
+            <Text style={styles.preferText}>관심장소</Text>
+            <View style={styles.verticalLine}></View>
+            {selectedPlaces && selectedPlaces.length > 0 ? (
+              selectedPlaces.map((place, index) => (
+                <Text key={index} style={styles.textWithBorder}>{place.name || 'N/A'}</Text>
+              ))
+            ) : (
+              <Text>관심장소가 없습니다.</Text>
+            )}
+          </View>
           <View style={[styles.preferBox, { marginTop: -30 }]}>
             <Image source={require('../../assets/headphones.png')} style={styles.preferIcon} />
             <Text style={styles.preferText}>관심분위기</Text>
             <View style={styles.verticalLine}></View>
-            
             {selectedMoods && selectedMoods.length > 0 ? (
-            selectedMoods.map((mood, index) => (
-              <Text key={index} style={styles.textWithBorder}>{mood}</Text>
-            ))
-          ) : (
-            <Text>관심분위기가 없습니다.</Text>
-          )}
+              selectedMoods.map((mood, index) => (
+                <Text key={index} style={styles.textWithBorder}>{mood.name || 'N/A'}</Text>
+              ))
+            ) : (
+              <Text>관심분위기가 없습니다.</Text>
+            )}
           </View>
         </View>
 
@@ -173,7 +195,7 @@ const MyPageScreen = () => {
           <View style={styles.line}></View>
           <TouchableOpacity style={[styles.buttonBox, { marginTop: 60 }]} onPress={confirmLogout}>
             <Text style={styles.buttonText}>로그아웃</Text>
-            <Image source={require('../../assets/right_black.png')} style={styles.buttonImage}  />
+            <Image source={require('../../assets/right_black.png')} style={styles.buttonImage} />
           </TouchableOpacity>
           <View style={styles.line}></View>
           <TouchableOpacity style={styles.buttonBox}>
@@ -199,8 +221,8 @@ const styles = StyleSheet.create({
   },
   headerText: {
     ...fonts.Body1,
-    fontWeight : '600',
-    color : colors.Gray900,
+    fontWeight: '600',
+    color: colors.Gray900,
   },
   content: {
     flex: 1,
@@ -230,16 +252,15 @@ const styles = StyleSheet.create({
     color: colors.Green500,
     ...fonts.Title1,
   },
-   editImage : {
-    marginTop : -25,
-    marginRight : 15, 
-   },
+  editImage: {
+    marginTop: -25,
+    marginRight: 15,
+  },
   preferContainer: {
     flex: 0.4,
     marginTop: 40,
-    alignItems: 'left',
+    alignItems: 'flex-start',
   },
-
   preferBox: {
     flex: 0.3,
     flexDirection: 'row',
@@ -247,12 +268,10 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: -30,
   },
-
   preferIcon: {
     width: 24,
     height: 24,
   },
-
   preferText: {
     flex: 1,
     fontSize: 16,
@@ -260,14 +279,12 @@ const styles = StyleSheet.create({
     color: colors.Gray700,
     marginLeft: 8,
   },
-  
   verticalLine: {
     width: 1,
     height: '40%',
     backgroundColor: colors.Gray200,
     marginRight: 40,
   },
-
   textWithBorder: {
     borderWidth: 1,
     borderColor: colors.Green500,
@@ -276,7 +293,6 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     fontSize: 12,
   },
-
   buttonBox: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -284,18 +300,14 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 380,
   },
-
   buttonText: {
-    ...fonts.Body1
+    ...fonts.Body1,
   },
-
   buttonImage: {
     width: 20,
     height: 20,
     marginRight: 10,
-
   },
-
   line: {
     height: 1,
     width: '100%',

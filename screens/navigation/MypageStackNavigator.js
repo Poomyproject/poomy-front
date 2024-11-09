@@ -11,6 +11,7 @@ import AnnounceScreen from '../mypage/AnnounceScreen';
 import NameEditScreen from '../mypage/NameEditScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // 로컬 스토리지 사용
 import ApiClient from '../auth/ApiClient';
+import { handleSave } from '../mypage/SaveFunction';
 
 
 const MypageStack = createStackNavigator();
@@ -44,10 +45,12 @@ const MypageStackNavigator = ({ navigation, route }) => {
           component={MyPageScreen}
           options={{ headerShown: false }} // 시작 화면 설정
         />
+
         <MypageStack.Screen
           name="MypageEdit"
           component={MypageEditScreen}
           options={({ navigation, route }) => ({
+            headerShown : false,
             headerTitle: '마이페이지 수정',
             headerLeft: () => (
               <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -72,10 +75,7 @@ const MypageStackNavigator = ({ navigation, route }) => {
               </TouchableOpacity>
             ),
             headerRight: () => (
-              <TouchableOpacity onPress={() => {
-                // NameEditScreen의 닉네임 저장 함수 호출
-                route.params?.handleSaveNicknameToServer();
-              }}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Text style={{ marginRight: 20, color: colors.Green900, ...fonts.Body2 }}>완료</Text>
               </TouchableOpacity>
             ),
