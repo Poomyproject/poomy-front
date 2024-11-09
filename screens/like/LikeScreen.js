@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import colors from '../../config/colors';
 import { fonts } from '../../config/fonts';
@@ -24,7 +24,7 @@ const LikeScreen = () => {
     const [tempSelectedMood, setTempSelectedMood] = useState('');
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(false);
-    // useFavorites에서 addFavorite과 removeFavorite을 가져옵니다.
+    const [refreshing, setRefreshing] = useState(false);
 
     // 장소와 분위기 데이터 로딩
     useEffect(() => {
@@ -77,6 +77,12 @@ const LikeScreen = () => {
             fetchAllFavorites();
         }, [])
     );
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await fetchAllFavorites();
+        setRefreshing(false);
+    };
 
     const toggleModal = (isPlace = false) => {
         setIsSelectingPlace(isPlace);
@@ -241,6 +247,13 @@ const LikeScreen = () => {
                 data={favorites}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.shopId.toString()}
+                refreshControl={
+                    <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    tintColor="#1FAA67" 
+                />
+                }
                 ListEmptyComponent={
                     <View style={styles.emptyContainer}>
                         <Image
@@ -251,6 +264,7 @@ const LikeScreen = () => {
                     </View>
                 }
             />
+
         </View>
     );
 };

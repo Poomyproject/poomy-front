@@ -10,6 +10,7 @@ import { fonts } from '../../config/fonts';
 import { NaverMapView, Marker } from '@mj-studio/react-native-naver-map';
 
 
+
 const ShopDetailScreen = ({ route }) => {
   const navigation = useNavigation();
   const { selectedShopId } = useContext(ShopContext);
@@ -94,7 +95,7 @@ const ShopDetailScreen = ({ route }) => {
   if (error) return <View><Text>에러 발생: {error.message}</Text></View>;
 
   return (
-    <ScrollView contentContainerStyle={{ backgroundColor: colors.Ivory100, alignItems: 'left', flexGrow: 1, padding: 20 }}>
+    <ScrollView contentContainerStyle={{ backgroundColor: colors.Ivory100, alignItems: 'left', flexGrow: 1, padding: 20 , }}>
       {shopData && shopData.shopImageList && shopData.shopImageList.length > 0 ? (
         <Swiper style={styles.swiper} showsPagination dotColor="#D4D4D4" activeDotColor="#666666">
           {shopData.shopImageList.map((image, index) => (
@@ -141,10 +142,9 @@ const ShopDetailScreen = ({ route }) => {
               </Text>
             </View>
           </View>
-
-          {renderMoodAndSpotTags()}
+          
           {/* NaverMapView 적용 */}
-        <View style={{ marginTop: 10, width: '100%', height: 100 }}>
+        <View style={{ marginTop: 10, width: '100%', height: 100 , marginBottom : 10,  }}>
         <NaverMapView
                 ref={mapRef}
                 style={{ flex: 1 }}
@@ -189,8 +189,11 @@ const ShopDetailScreen = ({ route }) => {
                 width={50}
                 height={50}
               /> */}
-            </NaverMapView>
-          </View>
+        </NaverMapView>
+        </View>
+
+        {renderMoodAndSpotTags()}
+
             </>
           )}
 
@@ -201,56 +204,74 @@ const ShopDetailScreen = ({ route }) => {
         onPress={() => navigation.navigate('UserReview1', { screen: 'UserReview1', selectedShopId })}
       >
         <Text style={styles.shopName}>리뷰</Text>
-        <Image source={require('../../assets/edit.png')} style={{ marginLeft: 230 }} />
+        <Image source={require('../../assets/icon_edit.png')} style={{ height: 20 , width: 20 , marginLeft: 240 }} />
         <Text style={styles.infoText}>작성하기</Text>
       </TouchableOpacity>
 
-      <View style={styles.reviewSection}>
-        {reviewData ? (
-          <>
-            <Text style={styles.subTitle}>{reviewData.totalRecommend}명의 추천을 받은 소품샵이에요</Text>
-            <View style={styles.imageRow}>
-              {reviewData.imgUrls.slice(0, 3).map((img, index) => (
-                <Image key={img.id} source={{ uri: img.url }} style={styles.reviewImage} />
-              ))}
+      <View style={[styles.reviewSection, { width: '100%' }]}>
+      {reviewData ? (
+  <>
+    <Text style={styles.subTitle}>{reviewData.totalRecommend}명의 추천을 받은 소품샵이에요</Text>
+    <View style={styles.imageRow}>
+      {reviewData.imgUrls.slice(0, 3).map((img, index) => (
+        index === 2 && reviewData.imgUrls.length > 3 ? (
+          <TouchableOpacity 
+            key={img.id} 
+            onPress={() => {
+              console.log('Navigating to ReviewPictures with images:', reviewData.imgUrls);
+              navigation.navigate('ReviewPictures', { imgUrls: reviewData.imgUrls });
+            }}
+            style={styles.overlayContainer}
+          >
+            <Image source={{ uri: img.url }} style={styles.reviewImage} />
+            <View style={styles.overlay}>
+              <Text style={styles.overlayText}>+{reviewData.imgUrls.length - 3}</Text>
             </View>
-            {reviewData.reviews.length > 0 ? (
-              reviewData.reviews.map(review => (
-                <View key={review.id} style={styles.reviewBox}>
-                  <View style={styles.reviewItem}>
-                    <Image source={{ uri: review.userImgUrl || require('../../assets/profile.png') }} style={styles.userImage} />
-                    <View style={styles.reviewContent}>
-                      <View style={styles.headerRow}>
-                        <Text style={styles.reviewUser}>{review.userNickName}</Text>
-                        <Text style={styles.reviewDate}>{review.date}</Text>
-                      </View>
-                      <Text style={styles.reviewText}>{review.content}</Text>
-                    </View>
-                    <Image 
-                      source={review.isRecommend ? require('../../assets/img_thumbs_up.png') : require('../../assets/img_thumbs_down.png')} 
-                      style={styles.like} 
-                    />
-                  </View>
-                </View>
-              ))
-            ) : (
-            <View style={styles.noReviewContainer}>
-              <Image 
-                source={require('../../assets/img_review_none.png')} 
-                style={styles.noneReviewImage} 
-              />
-              <Text style={styles.noReviewText}>등록된 리뷰가 없어요</Text>
-            </View>
-            )}
-          </>
+          </TouchableOpacity>
         ) : (
-          <Text>리뷰 데이터를 불러오는 중입니다...</Text>
-        )}
-      </View>
+          <Image key={img.id} source={{ uri: img.url }} style={styles.reviewImage} />
+        )
+      ))}
+    </View>
 
-      <TouchableOpacity style={styles.viewAllButton}>
-        <Text style={styles.viewAllText}>리뷰 전체보기</Text>
-      </TouchableOpacity>
+    {reviewData.reviews.length > 0 ? (
+      <>
+        {reviewData.reviews.map(review => (
+          <View key={review.id} style={styles.reviewBox}>
+            <View style={styles.reviewItem}>
+              <Image source={{ uri: review.userImgUrl || require('../../assets/profile.png') }} style={styles.userImage} />
+              <View style={styles.reviewContent}>
+                <View style={styles.headerRow}>
+                  <Text style={styles.reviewUser}>{review.userNickName}</Text>
+                  <Text style={styles.reviewDate}>{review.date}</Text>
+                </View>
+                <Text style={styles.reviewText}>{review.content}</Text>
+              </View>
+              <Image 
+                source={review.isRecommend ? require('../../assets/img_thumbs_up.png') : require('../../assets/img_thumbs_down.png')} 
+                style={styles.like} 
+              />
+            </View>
+          </View>
+        ))}
+
+        {/* 리뷰가 있을 경우에만 '리뷰 전체보기' 버튼 렌더링 */}
+        <TouchableOpacity style={styles.viewAllButton} onPress={() => navigation.navigate('ShopReview')}>
+          <Text style={styles.viewAllText}>리뷰 전체보기</Text>
+          <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
+        </TouchableOpacity>
+      </>
+    ) : (
+      <View style={styles.noReviewContainer}>
+        <Text style={styles.noReviewText}>아직 등록된 리뷰가 없어요. {'\n'}이 소품샵의 첫번째 리뷰를 작성해보세요. </Text>
+      </View>
+    )}
+  </>
+) : (
+  <Text>리뷰 데이터를 불러오는 중입니다...</Text>
+)}
+
+</View>
 
       <View style={styles.divider} />
       {renderMoodAndSpotTags()}
@@ -290,6 +311,7 @@ const ShopDetailScreen = ({ route }) => {
         width: 380,
         marginBottom: 10,
         marginTop : 10,
+        paddingRight : 25 , 
       },
       swiper: {
         height: 200,  // Swiper의 높이 조정
@@ -336,7 +358,7 @@ const ShopDetailScreen = ({ route }) => {
       infoText: {
         color: colors.Gray700,
         ...fonts.Body4,
-        marginLeft: 8,
+        marginLeft: 6,
         flex: 1, 
         flexWrap: 'wrap', 
       },
@@ -369,10 +391,10 @@ const ShopDetailScreen = ({ route }) => {
         marginRight: 5,
       }, 
       divider: {
-        height: 1, // 라인의 높이
-        backgroundColor: colors.Gray300, // 라인의 색상
-        marginVertical: 10, // 위아래 간격을 추가하여 공간 확보
-        width: '100%', // 라인이 전체 너비를 차지하게 설정
+        height: 0.7,
+        backgroundColor: colors.Gray200, 
+        marginVertical: 30,
+        width: '100%', 
       },
       //여기서부터 리뷰 css     
       review : {
@@ -380,23 +402,45 @@ const ShopDetailScreen = ({ route }) => {
         alignItems: 'center',
       },
       reviewSection: {
-        marginTop: 20,
-        justifyContent: 'center',
-      },
-      subTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 10,
+        width: '100%',
       },
       imageRow: {
         flexDirection: 'row',
         marginBottom: 15,
+      },
+      overlayContainer: {
+        position: 'relative',
+      },
+      overlayImage: {
+        opacity: 0.7,
+      },
+      overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      overlayText: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: 'bold',
       },
       reviewImage: {
         width: 108,
         height: 108,
         marginRight: 10,
         borderRadius: 4,
+      },
+
+      subTitle: {
+        marginTop : 15 , 
+        ...fonts.Body1,
+        color : colors.Gray900,
+        marginBottom : 10, 
       },
 
       reviewBox: {
@@ -463,14 +507,22 @@ const ShopDetailScreen = ({ route }) => {
         marginRight: 10,
       },
       viewAllButton: {
-        marginTop: 10,
-        padding: 10,
-        alignItems: 'center',
+        flexDirection: 'row',       // 텍스트와 아이콘을 가로로 정렬
+        alignItems: 'center',       // 세로 중앙 정렬
+        justifyContent: 'center',   // 가로 중앙 정렬
+        paddingVertical: 10,
+        width: '100%',  
       },
       viewAllText: {
-        fontSize: 14,
+        ...fonts.Body2,
         color: colors.Gray700,
+        textAlign: 'center',
+        marginRight: 5,             // 아이콘과 텍스트 사이 간격 추가
       },
+      rightIcon: {
+        width: 16,                  // 아이콘 너비
+        height: 16,                 // 아이콘 높이
+      },      
       recommendSection: {
         marginTop: 20,
       },
@@ -492,18 +544,19 @@ const ShopDetailScreen = ({ route }) => {
       },
       noReviewContainer: {
         justifyContent: 'center', // 수직 중앙 정렬
-        alignItems: 'center', // 수평 중앙 정렬
-        padding: 10, // 상하좌우 여백 (선택 사항)
+        alignItems: 'flex-start', // 수평 중앙 정렬
+        padding: 0, // 상하좌우 여백 (선택 사항)
+        marginBottom : 10, 
       },
-      noneReviewImage: {
-        width: 130, // 원하는 너비
-        height: 130, // 원하는 높이
-        resizeMode: 'contain', // 이미지 크기 비율을 유지
-      },
+      // noneReviewImage: {
+      //   width: 130, // 원하는 너비
+      //   height: 130, // 원하는 높이
+      //   resizeMode: 'contain', // 이미지 크기 비율을 유지
+      // },
       noReviewText: {
         marginTop: 10, // 이미지와 텍스트 사이의 간격
-        fontSize: 16, // 텍스트 크기
-        color: '#888', // 텍스트 색상 (예: 회색)
+        ...fonts.Body3,
+        color : colors.Gray400,
       },
  })
 
