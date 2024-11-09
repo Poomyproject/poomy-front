@@ -11,14 +11,14 @@ const MypageEditScreen = () => {
   const [nickname, setNickname] = useState('');
   const [googleEmail, setGoogleEmail] = useState('');
   const [selectedMoods, setSelectedMoods] = useState([]);
-  const [selectedPlaces, setSelectedPlaces] = useState([]);
+  // const [selectedPlaces, setSelectedPlaces] = useState([]); // 장소 관련 부분 주석 처리
   const [moodsList, setMoodsList] = useState([]);
-  const [placesList, setPlacesList] = useState([]);
+  // const [placesList, setPlacesList] = useState([]); // 장소 관련 부분 주석 처리
   const [isFirstModalVisible, setFirstModalVisible] = useState(false);
   const [isSecondModalVisible, setSecondModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [initialMoods, setInitialMoods] = useState([]);
-  const [initialPlaces, setInitialPlaces] = useState([]);
+  // const [initialPlaces, setInitialPlaces] = useState([]); // 장소 관련 부분 주석 처리
   
   const navigation = useNavigation();
 
@@ -31,12 +31,12 @@ const MypageEditScreen = () => {
         setGoogleEmail(userData.googleEmail);
         
         const moods = userData.moods.map(mood => ({ id: mood.id, name: mood.name }));
-        const places = userData.spots.map(spot => ({ id: spot.id, name: spot.name }));
+        // const places = userData.spots.map(spot => ({ id: spot.id, name: spot.name })); // 장소 관련 부분 주석 처리
   
         setSelectedMoods(moods);
-        setSelectedPlaces(places);
+        // setSelectedPlaces(places); // 장소 관련 부분 주석 처리
         setInitialMoods(moods);
-        setInitialPlaces(places);
+        // setInitialPlaces(places); // 장소 관련 부분 주석 처리
       }
     } catch (error) {
       console.error('Failed to fetch user data:', error);
@@ -51,10 +51,10 @@ const MypageEditScreen = () => {
       if (moodsResponse.data.success) {
         setMoodsList(moodsResponse.data.response);
       }
-      const placesResponse = await ApiClient.get('/api/spots');
-      if (placesResponse.data.success) {
-        setPlacesList(placesResponse.data.response);
-      }
+      // const placesResponse = await ApiClient.get('/api/spots'); // 장소 관련 부분 주석 처리
+      // if (placesResponse.data.success) {
+      //   setPlacesList(placesResponse.data.response);
+      // }
     } catch (error) {
       console.error('Failed to fetch moods or places:', error);
     }
@@ -79,21 +79,21 @@ const MypageEditScreen = () => {
     });
   };
 
-  const handleSelectPlace = (place) => {
-    setSelectedPlaces((prevPlaces) => {
-      if (prevPlaces.some(p => p.id === place.id)) {
-        return prevPlaces.filter(p => p.id !== place.id);
-      } else if (prevPlaces.length < 2) {
-        return [...prevPlaces, { ...place }];
-      }
-      return prevPlaces;
-    });
-  };
+  // const handleSelectPlace = (place) => { // 장소 관련 부분 주석 처리
+  //   setSelectedPlaces((prevPlaces) => {
+  //     if (prevPlaces.some(p => p.id === place.id)) {
+  //       return prevPlaces.filter(p => p.id !== place.id);
+  //     } else if (prevPlaces.length < 2) {
+  //       return [...prevPlaces, { ...place }];
+  //     }
+  //     return prevPlaces;
+  //   });
+  // };
 
   const loadSelectedDataFromStorage = async () => {
     try {
       const storedMoods = await AsyncStorage.getItem('selectedMoods');
-      const storedPlaces = await AsyncStorage.getItem('selectedPlaces');
+      // const storedPlaces = await AsyncStorage.getItem('selectedPlaces'); // 장소 관련 부분 주석 처리
 
       if (storedMoods) {
         const parsedMoods = JSON.parse(storedMoods);
@@ -101,11 +101,11 @@ const MypageEditScreen = () => {
         console.log('Loaded moods from storage:', parsedMoods);
       }
 
-      if (storedPlaces) {
-        const parsedPlaces = JSON.parse(storedPlaces);
-        setSelectedPlaces(parsedPlaces);
-        console.log('Loaded places from storage:', parsedPlaces);
-      }
+      // if (storedPlaces) { // 장소 관련 부분 주석 처리
+      //   const parsedPlaces = JSON.parse(storedPlaces);
+      //   setSelectedPlaces(parsedPlaces);
+      //   console.log('Loaded places from storage:', parsedPlaces);
+      // }
     } catch (error) {
       console.error('Error loading data from storage:', error);
     }
@@ -114,10 +114,10 @@ const MypageEditScreen = () => {
   const applyChanges = async () => {
     try {
       console.log('Storing selectedMoods to local storage:', selectedMoods);
-      console.log('Storing selectedPlaces to local storage:', selectedPlaces);
+      // console.log('Storing selectedPlaces to local storage:', selectedPlaces); // 장소 관련 부분 주석 처리
 
       await AsyncStorage.setItem('selectedMoods', JSON.stringify(selectedMoods));
-      await AsyncStorage.setItem('selectedPlaces', JSON.stringify(selectedPlaces));
+      // await AsyncStorage.setItem('selectedPlaces', JSON.stringify(selectedPlaces)); // 장소 관련 부분 주석 처리
 
       console.log('Changes successfully applied to local storage');
       setFirstModalVisible(false);
@@ -127,69 +127,26 @@ const MypageEditScreen = () => {
     }
   };
 
-  // 중복 확인 함수: 서버에 중복된 moodId, placeId가 존재하는지 확인
-const checkDuplicateOnServer = async (type, ids) => {
-  try {
-    const response = await ApiClient.post(`/api/users/check-${type}`, { ids });
-    return response.data.exists; // 서버가 존재 여부를 boolean으로 반환한다고 가정
-  } catch (error) {
-    console.error(`Failed to check ${type} duplicates on server:`, error);
-    return false;
-  }
-};
+  const handleSaveChanges = async () => {
+    try {
+      const moodIds = selectedMoods.map(mood => mood.id);
+      // const placeIds = selectedPlaces.map(place => place.id); // 장소 관련 부분 주석 처리
 
-const handleSaveChanges = async () => {
-  try {
-    const initialMoodIds = initialMoods.map(mood => mood.id);
-    const initialPlaceIds = initialPlaces.map(place => place.id);
+      console.log('Sending moodIds to server:', moodIds);
+      await ApiClient.post('/api/users/moods', { moodIds });
 
-    const moodIds = selectedMoods.map(mood => mood.id);
-    const placeIds = selectedPlaces.map(place => place.id);
+      // console.log('Sending placeIds to server:', placeIds); // 장소 관련 부분 주석 처리
+      // await ApiClient.post('/api/users/spots', { spotIds: placeIds }); // 장소 관련 부분 주석 처리
 
-    // 새로 추가된 항목과 중복 항목 분리
-    const newMoodIds = moodIds.filter(id => !initialMoodIds.includes(id));
-    const duplicateMoodIds = moodIds.filter(id => initialMoodIds.includes(id));
-    
-    const newPlaceIds = placeIds.filter(id => !initialPlaceIds.includes(id));
-    const duplicatePlaceIds = placeIds.filter(id => initialPlaceIds.includes(id));
+      setInitialMoods(selectedMoods);
+      // setInitialPlaces(selectedPlaces); // 장소 관련 부분 주석 처리
 
-    console.log('New moodIds to send:', newMoodIds);
-    console.log('Duplicate moodIds to send:', duplicateMoodIds);
-    console.log('New placeIds to send:', newPlaceIds);
-    console.log('Duplicate placeIds to send:', duplicatePlaceIds);
-
-    // 새로운 항목만 서버로 전송
-    if (newMoodIds.length > 0) {
-      console.log('Sending new moodIds to server:', newMoodIds);
-      await ApiClient.post('/api/users/moods', { moodIds: newMoodIds });
+      console.log('Save changes completed, navigating back');
+      navigation.goBack();
+    } catch (error) {
+      console.error('Error saving changes:', error);
     }
-
-    if (newPlaceIds.length > 0) {
-      console.log('Sending new placeIds to server:', newPlaceIds);
-      await ApiClient.post('/api/users/spots', { spotIds: newPlaceIds });
-    }
-
-    // 중복 항목도 서버로 전송
-    if (duplicateMoodIds.length > 0) {
-      console.log('Sending duplicate moodIds to server:', duplicateMoodIds);
-      await ApiClient.post('/api/users/moods', { moodIds: duplicateMoodIds });
-    }
-
-    if (duplicatePlaceIds.length > 0) {
-      console.log('Sending duplicate placeIds to server:', duplicatePlaceIds);
-      await ApiClient.post('/api/users/spots', { spotIds: duplicatePlaceIds });
-    }
-
-    // 전송 후 초기 상태 업데이트
-    setInitialMoods(selectedMoods);
-    setInitialPlaces(selectedPlaces);
-
-    console.log('Save changes completed, navigating back');
-    navigation.goBack();
-  } catch (error) {
-    console.error('Error saving changes:', error);
-  }
-};
+  };
   
   // 로딩 상태 표시
   if (loading) {
@@ -221,7 +178,7 @@ const handleSaveChanges = async () => {
         <Text style={styles.textColor}>계정정보</Text>
         <Text style={styles.nicknameContainer}>{googleEmail ? googleEmail : 'N/A'}</Text>
   
-        <Text style={styles.textColor}>관심 장소</Text>
+        {/* <Text style={styles.textColor}>관심 장소</Text>
         <TouchableOpacity onPress={() => setFirstModalVisible(true)} style={styles.moodTextContainer}>
           {selectedPlaces.length === 0 ? (
             <Text>장소 선택</Text>
@@ -234,8 +191,8 @@ const handleSaveChanges = async () => {
               ))}
             </View>
           )}
-        </TouchableOpacity>
-  
+        </TouchableOpacity> */}
+
         <Text style={styles.textColor}>관심 분위기</Text>
         <TouchableOpacity onPress={() => setSecondModalVisible(true)} style={styles.moodTextContainer}>
           {selectedMoods.length === 0 ? (
@@ -251,7 +208,7 @@ const handleSaveChanges = async () => {
           )}
         </TouchableOpacity>
   
-        <Modal
+        {/* <Modal
           isVisible={isFirstModalVisible}
           onBackdropPress={() => setFirstModalVisible(false)}
           swipeDirection="down"
@@ -274,13 +231,14 @@ const handleSaveChanges = async () => {
             ))}
           </View>
           <TouchableOpacity onPress={() => {
-            applyChanges(); // 변경 사항을 로컬 스토리지에 저장
-            setFirstModalVisible(false); // 모달 닫기
+            applyChanges();
+            setFirstModalVisible(false);
           }} style={styles.closeButton}>
             <Text style={styles.closeButtonText}>적용하기</Text>
           </TouchableOpacity>
         </View>
-        </Modal>
+        </Modal> */}
+
         <Modal
           isVisible={isSecondModalVisible}
           onBackdropPress={() => setSecondModalVisible(false)}
@@ -341,10 +299,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.Gray900,
   },
-  // saveButton: {
-  //   paddingHorizontal: 10, // 버튼 크기 수정
-  //   justifyContent: 'center',
-  // },
   headerButtonText: {
     color: colors.Gray700,
     padding : 5, 
@@ -364,19 +318,6 @@ const styles = StyleSheet.create({
     ...fonts.Body4,
     marginTop: 35,
   },
-  textInput: {
-    height: 50,
-    width: '100%',
-    borderColor: colors.Gray300,
-    borderWidth: 1,
-    backgroundColor: colors.Gray100,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-    marginTop: 8,
-    ...fonts.Body2,
-    justifyContent: 'center',
-  },
-  
   nicknameContainer: {
     backgroundColor: colors.Ivory300,  
     borderColor: colors.Gray300,        
@@ -386,7 +327,6 @@ const styles = StyleSheet.create({
     marginTop: 10,  
     width: '100%',
   },
-
   moodTextContainer : {
     backgroundColor: colors.Ivory300,  
     borderColor: colors.Gray300,        
@@ -396,14 +336,11 @@ const styles = StyleSheet.create({
     marginTop: 10,  
     width: '100%',
   },
-
   selectedMoodsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginTop: 8,
-    
   },
-
   moodTag: {
     backgroundColor: colors.Ivory100,
     borderColor: colors.Green500,  
@@ -414,43 +351,21 @@ const styles = StyleSheet.create({
     marginRight: 10,  
     marginTop : -5, 
   },
-
   moodTagText: {
     color: colors.Gray700, 
     ...fonts.Caption1,
     fontWeight: 'bold', 
   },
-
   bottomModal: {
     justifyContent: 'flex-end',
     margin: 0,
   },
-
   modalContent: {
     backgroundColor: colors.Ivory100,
     padding: 30,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     alignItems: 'flex-start',
-  },
-
-  textContainer: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-  },
-
-  text: {
-    flex: 1,
-    ...fonts.Body1,
-  },
-
-  image: {
-    width: 20,
-    height: 20,
-    resizeMode: 'contain',
-    alignSelf: 'flex-end',
   },
   moodContainer: {
     flexDirection: 'row',
@@ -467,16 +382,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.Green900,
     borderColor: colors.Green900,
   },
-  selectedPlace: {
-    backgroundColor: colors.Green900,
-    borderColor: colors.Green900,
-  },
-
-  moodText: {
-    fontSize: 16,
-    color: colors.Gray900,
-  },
-
   closeButton: {
     width: '100%',
     height: 48,
@@ -490,20 +395,6 @@ const styles = StyleSheet.create({
     color: colors.Ivory100,
     fontSize: 15,
   },
-  saveButton: {
-    width: '100%',
-    height: 48,
-    backgroundColor: colors.Green900,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 8,
-    marginTop: 20,
-  },
-  saveButtonText: {
-    color: colors.Ivory100,
-    fontSize: 15,
-  },
-
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
