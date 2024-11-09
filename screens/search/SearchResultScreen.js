@@ -6,6 +6,7 @@ import ApiClient from '../auth/ApiClient';
 import HighlightedText from './HighlightedText';
 import { useFavorites } from '../like/FavoriteContext';
 import { ShopContext } from '../shop/ShopContext';
+import NoResults from './NoResults';
 
 const SearchResultScreen = ({ route, navigation }) => {
   const { SearchWord } = route.params;
@@ -36,16 +37,30 @@ const SearchResultScreen = ({ route, navigation }) => {
     fetchSearchResults(text); // 초기값을 기반으로 API 호출
   }, []);
 
-  // 상세페이지로 네비게이션
-  const handleShopPress = (shopId) => {
-    setSelectedShopId(shopId);
-    navigation.navigate('ShopDetail', { shopId });
-};
+  // count 증가시키는 함수
+  const incrementSearchCount = async (shopId) => {
+    try {
+      const response = await ApiClient.post(`/api/search/${shopId}`);
+      if (response.data.success) {
+        console.log(`Search count incremented for shopId: ${shopId}`);
+      } else {
+        console.error('카운트를 증가시킬 수 없습니다.');
+      }
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+    }
+  };
+
+    // 상세페이지로 네비게이션
+    const handleShopPress = (shopId) => {
+      incrementSearchCount(shopId); // shopId에 대한 count 증가
+      setSelectedShopId(shopId);
+      navigation.navigate('ShopDetail', { shopId });
+  };
 
 
   return (
     <View style={styles.container}>
-
       <View style={styles.searchContainer}>
         {/* 뒤로가기 버튼 */}
         <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginTop: "3%" }}>
@@ -71,7 +86,9 @@ const SearchResultScreen = ({ route, navigation }) => {
       </View>
 
       {/* 검색 결과 리스트 */}
-      <FlatList
+      {searchResults.length === 0 ? (
+         <NoResults />
+      ) : ( <FlatList
         data={searchResults}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
@@ -116,9 +133,9 @@ const SearchResultScreen = ({ route, navigation }) => {
           </TouchableOpacity>
         )}
       />
+      )}
     </View>
   );
 };
-
 
 export default SearchResultScreen;
