@@ -173,6 +173,9 @@ const LikeScreen = () => {
 
     return (
         <View style={styles.container}>
+            <View style={styles.header}>
+            <Text style={styles.headerText}>찜</Text>
+            </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={() => toggleModal(true)} style={[styles.textInput, interestPlace ? styles.selectedButton : {}]}>
                     <Text style={interestPlace ? styles.selectedTextStyle : styles.defaultTextStyle}>
@@ -257,6 +260,16 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: colors.Ivory100,
     },
+    header: {
+        alignItems: 'center',
+        paddingTop: 55,
+        paddingBottom: 5,
+      },
+      headerText: {
+        ...fonts.Body1,
+        fontWeight : '600',
+        color : colors.Gray900,
+      },
     downIcon: {
         width: 14,
         height: 8,

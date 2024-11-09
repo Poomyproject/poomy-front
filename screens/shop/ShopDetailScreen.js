@@ -1,4 +1,4 @@
-import React , {useContext , useState , useEffect} from 'react';
+import React , {useContext , useState , useEffect , useRef} from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import Swiper from 'react-native-swiper';
 import colors from '../../config/colors';
@@ -7,8 +7,10 @@ import { ShopContext } from './ShopContext';
 import ApiClient from '../auth/ApiClient';
 import { useFavorites } from '../like/FavoriteContext';
 import { fonts } from '../../config/fonts';
+import { NaverMapView, Marker } from '@mj-studio/react-native-naver-map';
 
-const ShopDetailScreen = () => {
+
+const ShopDetailScreen = ({ route }) => {
   const navigation = useNavigation();
   const { selectedShopId } = useContext(ShopContext);
   const [shopData, setShopData] = useState(null);
@@ -18,12 +20,14 @@ const ShopDetailScreen = () => {
   const [reviewData, setReviewData] = useState(null);
   const [page, setPage] = useState(1);
   const limit = 3;
+  const mapRef = useRef(null); // ref 설정
 
   useEffect(() => {
     const fetchShopData = async () => {
       try {
         const response = await ApiClient.get(`/api/shop/${selectedShopId}`);
         setShopData(response.data.response);
+        // console.log(response.data.response)
       } catch (err) {
         console.error('API 요청 중 에러 발생:', err);
         setError(err);
@@ -139,9 +143,56 @@ const ShopDetailScreen = () => {
           </View>
 
           {renderMoodAndSpotTags()}
-          <Image source={require('../../assets/img_map.png')} style={{ marginTop: 10 }} />
-        </>
-      )}
+          {/* NaverMapView 적용 */}
+        <View style={{ marginTop: 10, width: '100%', height: 100 }}>
+        <NaverMapView
+                ref={mapRef}
+                style={{ flex: 1 }}
+                mapType={'Basic'}
+                layerGroups={{
+                  BUILDING: true,
+                  BICYCLE: false,
+                  CADASTRAL: false,
+                  MOUNTAIN: false,
+                  TRAFFIC: false,
+                  TRANSIT: false,
+                }}
+                camera={{
+                  latitude: shopData.latitude,
+                  longitude: shopData.longitude,
+                  zoom: 19, // 초기 줌 레벨을 설정합니다.
+                }}
+                isNightModeEnabled={false}
+                isShowCompass={true}
+                isShowZoomControls={true}
+                isShowLocationButton={true}
+                logoAlign={'TopRight'}
+                locale={'ko'}
+                onInitialized={() => console.log("Naver Map initialized")}
+                onCameraChanged={(args) => console.log(`Camera Changed: ${JSON.stringify(args)}`)}
+                onTapMap={(args) => console.log(`Map Tapped: ${JSON.stringify(args)}`)}
+              >
+              {/* 오버레이 마커 설정 */}
+              {/* <NaverMapMarkerOverlay
+                latitude={shopData.latitude}
+                longitude={shopData.longitude}
+                onTap={() => console.log("Overlay tapped!")}
+                anchor={{ x: 0.5, y: 1 }}
+                caption={{
+                  text: shopData.name,
+                  color: 'blue',
+                }}
+                subCaption={{
+                  text: shopData.spot,
+                  color: 'red',
+                }}
+                width={50}
+                height={50}
+              /> */}
+            </NaverMapView>
+          </View>
+            </>
+          )}
 
       <View style={styles.divider} />
 

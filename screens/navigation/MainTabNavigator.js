@@ -18,7 +18,7 @@ const MainTabNavigator = () => {
   return (
     <Tab.Navigator initialRouteName="Main">
       <Tab.Screen
-        name="짬"
+        name="찜"
         component={LikeStackNavigator} 
         options={{
           tabBarLabel: '찜',
@@ -52,7 +52,7 @@ const MainTabNavigator = () => {
           tabBarIcon: ({ color, size }) => (
             <Image source={require('../../assets/ic_mypage.png')} style={{ width: size, height: size, tintColor: color }} />
           ),
-          headerShown: true,
+          headerShown: false,
           headerTitleStyle: {
             ...fonts.Body1,
             color: colors.Gray900,
