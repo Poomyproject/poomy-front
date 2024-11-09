@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet , Switch, TouchableOpacity, Image  } from 'react-native';
 import colors from '../../config/colors';
-import { fonts } from '../../config/fonts'; 
+import { fonts } from '../../config/fonts';
+import { useNavigation } from '@react-navigation/native';
+
 
 
 
 const SettingScreen = () => {
 
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
+  const navigation = useNavigation();
 
   const toggleNotificationSwitch = () => {
     setIsNotificationEnabled(previousState => !previousState);
@@ -44,26 +47,28 @@ const SettingScreen = () => {
       <View style = {styles.textBox}>
         <Text style = {styles.detail}>이용 약관</Text>
       <View style={[{ marginTop: 0 }]}>
-            <TouchableOpacity style={styles.buttonBox}>
+            <TouchableOpacity style={styles.buttonBox} 
+            onPress={() => navigation.navigate('TermsDetail1')}>
               <Text style={styles.buttonText}>Poomy 이용약관</Text>
               <Image source={require('../../assets/right_black.png')} style={styles.buttonImage} />
             </TouchableOpacity>
             <View style={styles.line}></View>
           </View>  
           <View>
-            <TouchableOpacity style={styles.buttonBox}>
+            <TouchableOpacity style={styles.buttonBox}
+            onPress={() => navigation.navigate('TermsDetail2')}>
               <Text style={styles.buttonText}>개인정보 수집 및 이용에 대한 동의</Text>
               <Image source={require('../../assets/right_black.png')} style={styles.buttonImage} />
             </TouchableOpacity>
             <View style={styles.line}></View>
           </View>  
-          <View style={[{ marginTop: 0 }]}>
+          {/* <View style={[{ marginTop: 0 }]}>
             <TouchableOpacity style={styles.buttonBox}>
               <Text style={styles.buttonText}>위치정보 이용동의 및 위치기반서비스 이용약관</Text>
               <Image source={require('../../assets/right_black.png')} style={styles.buttonImage} />
             </TouchableOpacity>
             <View style={styles.line}></View>
-          </View> 
+          </View>  */}
           </View>
           <View style={[{ marginTop: 50 }]}>
           <Text style = {styles.detail}>앱 버전</Text>

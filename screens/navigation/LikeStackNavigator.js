@@ -21,7 +21,7 @@ const LikeStackNavigator = () => {
         name="Like" 
         component={LikeScreen} 
         options={{ 
-          headerShown: true, 
+          headerShown: false, 
           headerTitle: '찜', 
           headerTitleStyle: { ...fonts.Body1, color: colors.Gray900 },
         }} 

@@ -111,10 +111,16 @@ const MyPageScreen = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+      <Text style={styles.headerText}>마이페이지</Text>
+      </View>
       <View style={styles.content}>
         <View style={[styles.profile, { marginTop: -60 }]}>
           <Image source={require('../../assets/profile.png')} style={styles.profileImage} />
-          <Text style={styles.profileText}>{nickname}{'\n'}행운을 빌어요!</Text>
+          <Text style={styles.profileText}>
+          <Text style={styles.nicknameText}>{nickname}</Text>
+           님, {'\n'}행운을 빌어요!
+        </Text>
           <TouchableOpacity onPress={goToMypageEdit}>
       <Image source={require('../../assets/edit.png')} style={styles.editImage} />
     </TouchableOpacity>
@@ -186,6 +192,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.Ivory100,
   },
+  header: {
+    alignItems: 'center',
+    paddingTop: 55,
+    paddingBottom: 5,
+  },
+  headerText: {
+    ...fonts.Body1,
+    fontWeight : '600',
+    color : colors.Gray900,
+  },
   content: {
     flex: 1,
     padding: 20,
@@ -208,7 +224,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: 20,
     fontSize: 20,
-    fontWeight: '600',
+    ...fonts.Title1,
+  },
+  nicknameText: {
+    color: colors.Green500,
+    ...fonts.Title1,
   },
    editImage : {
     marginTop : -25,
