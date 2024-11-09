@@ -9,6 +9,7 @@ import { NewsLetterContext } from '../context/NewsLetterContext';
 import { useFavorites } from '../like/FavoriteContext';
 import { useFocusEffect } from '@react-navigation/native';
 import styles from './styles';
+import ShopRecommendation from './ShopRecommendation';
 
 const { width, height } = Dimensions.get('window');
 
@@ -94,7 +95,7 @@ const MainScreen = ({ navigation }) => {
             Alert.alert('데이터 로딩 실패', '분위기 데이터를 불러오는 데 실패했습니다.');
         }
     };
-    
+
 
     const fetchData = async () => {
         setLoading(true);
@@ -108,7 +109,7 @@ const MainScreen = ({ navigation }) => {
             setLoading(false);
         }
     };
-    
+
 
     useFocusEffect(
         useCallback(() => {
@@ -232,7 +233,7 @@ const MainScreen = ({ navigation }) => {
                                     <Text style={styles.shopName}>{shop.name}</Text>
                                     <View style={styles.favoriteContainer}>
                                         <TouchableOpacity onPress={() => handleFavoriteToggle(shop.id)}>
-                                            <Image 
+                                            <Image
                                                 source={isFavorite(shop.id) ? require('../../assets/img_liked_heart.png') : require('../../assets/mainheart.png')}
                                                 style={styles.mainheart}
                                             />
@@ -251,7 +252,7 @@ const MainScreen = ({ navigation }) => {
                 <View style={styles.LocationRcmd}>
                     <Text style={styles.sectionTitle}>지역별 추천</Text>
                 </View>
-                
+
                 {/* 지역 랜덤 6개 박스 */}
                 <ScrollView horizontal style={styles.placeContainer3} showsHorizontalScrollIndicator={false}>
                     <View style={{ marginLeft: 20 }} />
@@ -291,61 +292,16 @@ const MainScreen = ({ navigation }) => {
                     ))}
                 </View>
 
-                {/* 소품샵 1번째 추천 */}
-                <TouchableOpacity style={styles.rightIconContainer}>
-                    <View style={styles.sectionTitle_sec_view}>
-                        <Text style={styles.sectionTitle_sec}>{moodItem1?.prefix} </Text>
-                        <Text style={styles.sectionTitle_sec_color}>#{moodItem1?.hashtag} </Text>
-                        <Text style={styles.sectionTitle_sec}>소품샵 </Text>
-                    </View>
-                    <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
-                </TouchableOpacity>
+                <ShopRecommendation
+                    moodItem={moodItem1}
+                    onShopPress={handleShopPress}
+                />
 
-                {/* 소품샵 1번째 추천 사진 */}
-                <ScrollView horizontal style={styles.placeContainer4} showsHorizontalScrollIndicator={false}>
-                    {moodItem1?.shopList?.slice(0, 7).map((shop, index) => (
-                        <TouchableOpacity key={index} style={styles.lastView}>
-                            <View>
-                                <ImageBackground source={{ uri: shop.image }} style={styles.shopImage}>
-                                    <View style={styles.hashtagContainer}>
-                                        <Text style={styles.hashtagText}>{shop.spot}</Text>
-                                    </View>
-                                </ImageBackground>
-                                <Text style={styles.lastshoptext} numberOfLines={1} ellipsizeMode="tail">
-                                    {shop.name.length > 7 ? `${shop.name.substring(0, 11)}...` : shop.name}
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    ))}
-                </ScrollView>
-
-                {/* 소품샵 2번째 추천 */}
-                <TouchableOpacity style={styles.rightIconContainer}>
-                    <View style={styles.sectionTitle_sec_view}>
-                        <Text style={styles.sectionTitle_sec}>{moodItem2?.prefix} </Text>
-                        <Text style={styles.sectionTitle_sec_color}>#{moodItem2?.hashtag} </Text>
-                        <Text style={styles.sectionTitle_sec}>소품샵 </Text>
-                    </View>
-                    <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
-                </TouchableOpacity>
-
-                {/* 소품샵 2번째 추천 사진 */}
-                <ScrollView horizontal style={styles.placeContainer4} showsHorizontalScrollIndicator={false}>
-                    {moodItem2?.shopList?.slice(0, 7).map((shop, index) => (
-                        <TouchableOpacity key={index} style={styles.lastView}>
-                            <View>
-                                <ImageBackground source={{ uri: shop.image }} style={styles.shopImage}>
-                                    <View style={styles.hashtagContainer}>
-                                        <Text style={styles.hashtagText}>{shop.spot}</Text>
-                                    </View>
-                                </ImageBackground>
-                                <Text style={styles.lastshoptext} numberOfLines={1} ellipsizeMode="tail">
-                                    {shop.name.length > 7 ? `${shop.name.substring(0, 11)}...` : shop.name}
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    ))}
-                </ScrollView>
+                <ShopRecommendation
+                    moodItem={moodItem2}
+                    onShopPress={handleShopPress}
+                />
+                
                 <View style={{ padding: '20%' }} />
             </ScrollView>
         </View>

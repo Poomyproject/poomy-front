@@ -17,48 +17,48 @@ const ShopNavigatior = () => {
     setModalVisible(!isModalVisible);
   };
 
-    return(
-        <ShopDetailStack.Navigator>
-        <ShopDetailStack.Screen name="Main" component={MainScreen} options={{ headerShown: false }} />
-        <ShopDetailStack.Screen
+  return (
+    <ShopDetailStack.Navigator>
+      <ShopDetailStack.Screen name="Main" component={MainScreen} options={{ headerShown: false }} />
+      <ShopDetailStack.Screen
         name="ShopDetail"
         component={ShopDetailScreen}
         options={({ navigation }) => ({
           headerTitle: '',
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image source={require('../../assets/left.png')} style={{ height: 24, width: 24 , marginLeft:16,}} />
+              <Image source={require('../../assets/left.png')} style={{ height: 24, width: 24, marginLeft: 16, }} />
             </TouchableOpacity>
           ),
           headerRight: () => (
             <View>
-            <TouchableOpacity onPress={toggleModal}>
-            <Image source={require('../../assets/share.png')} style={{ height: 24, width: 24 , marginRight:16,}} />
-            </TouchableOpacity>
-            <Modal
-            swipeDirection="down"
-            animationType="slide"
-            style={styles.bottomModal}
-            transparent={true}
-            visible={isModalVisible} 
-            animationIn="slideInUp"
-            animationOut="slideOutDown"
-            >
-          <View style={styles.modalBackground}>
-          <View style={styles.modalContent}>
-            <Text>모달 창입니다!</Text>
-            <Button title="닫기" onPress={toggleModal} />
-          </View>
-        </View>
-      </Modal>
+              <TouchableOpacity onPress={toggleModal}>
+                <Image source={require('../../assets/share.png')} style={{ height: 24, width: 24, marginRight: 16, }} />
+              </TouchableOpacity>
+              <Modal
+                swipeDirection="down"
+                animationType="slide"
+                style={styles.bottomModal}
+                transparent={true}
+                visible={isModalVisible}
+                animationIn="slideInUp"
+                animationOut="slideOutDown"
+              >
+                <View style={styles.modalBackground}>
+                  <View style={styles.modalContent}>
+                    <Text>모달 창입니다!</Text>
+                    <Button title="닫기" onPress={toggleModal} />
+                  </View>
+                </View>
+              </Modal>
 
 
             </View>
           ),
         })}
       />
-        </ShopDetailStack.Navigator>
-    )
+    </ShopDetailStack.Navigator>
+  )
 
 
 };
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: colors.Ivory100,
-    marginTop : 20 , 
+    marginTop: 20,
     padding: 30,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
