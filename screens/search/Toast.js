@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
   toastText1: {
     color: 'white',
     fontSize: 12,
+    fontWeight:'600'
   },
 });
 
