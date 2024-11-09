@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
         color: colors.Gray700,
         marginLeft: 16,
         marginTop: 4,
-        fontWeight:'600'
+        fontWeight:'500'
     },
     separator: {
         borderBottomWidth: 1,
