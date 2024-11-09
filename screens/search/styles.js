@@ -13,17 +13,25 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginTop: 55,
     },
+    ResultContainer:{
+        flexDirection:'row',
+    },
     textInput: {
         height: 50,
-        paddingHorizontal: 25,
-        borderRadius: 10,
+        paddingHorizontal: 20,
+        borderRadius: 7,
         width: '80%',
         backgroundColor: colors.Ivory900,
     },
     searchImg: {
         height: 25,
         width: 25,
-        marginLeft: '10%',
+        marginLeft: '25%',
+    },
+    XImg:{
+        height: 25,
+        width: 25,
+        // marginLeft: '10%',
     },
     leftArrow: {
         height: 30,
@@ -72,13 +80,19 @@ const styles = StyleSheet.create({
     storeImg: {
         width: 95,
         height: 95,
-        margin: '5%',
+        margin: '4%',
+        borderRadius:5,
     },
     storeName: {
-        marginTop: '11%',
+        marginTop: '10%',
         fontSize: 16,
-        fontWeight: 'bold',
+        fontWeight: '600',
     },
+    // store 색바뀌는부분
+    highlight: {
+        color: colors.Green900, // 원하는 색상으로 변경
+        fontWeight: 'bold',
+      },
     storeDetails: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -87,16 +101,23 @@ const styles = StyleSheet.create({
     addressContainer: {
         flexDirection: 'row',
         marginTop: '5%',
+        width:'85%',
+    },
+    addressText:{
+        fontSize:13,
+        color:colors.Gray500,
+        marginLeft:'1%',
     },
     pinImg: {
         width: 17,
         height: 17,
+        borderRadius:2,
     },
     storeInfo: {
         padding: 5,
-        paddingHorizontal: 15,
+        paddingHorizontal: 12,
         borderWidth: 1,
-        borderColor: colors.Green500,
+        borderColor: colors.Gray200,
         color: colors.Gray700,
         borderRadius: 13,
         textAlign: 'center',
@@ -112,25 +133,48 @@ const styles = StyleSheet.create({
     },
     searchRankingItem: {
         flexDirection: 'row',
-        padding: 13,
+        padding: 11,
     },
     number: {
-        fontSize: 20,
-        fontWeight: '1000',
+        fontSize: 18,
+        fontWeight: '500',
         color: colors.Green900,
-        marginLeft: 13,
+        marginLeft: 5,
+        marginTop:1,
     },
     searchRankText: {
         fontSize: 15,
-        color: colors.Gray300,
-        marginLeft: 23,
-        marginTop: 1,
+        color: colors.Gray700,
+        marginLeft: 16,
+        marginTop: 4,
+        fontWeight:'600'
     },
     separator: {
         borderBottomWidth: 1,
         borderColor: colors.Gray100,
         opacity: 0.7,
         marginHorizontal: 20,
+    },
+    line:{
+        alignSelf: 'center',
+        width:'93%',
+        opacity:0.5
+    },
+    SearchWord: {
+        flex: 1, // TextInput이 최대한 너비를 차지하도록 설정
+        height: 50,
+        paddingHorizontal: 15,
+        color: colors.Gray900,
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '87%', // 필요한 너비로 조정
+        backgroundColor: colors.Ivory900,
+        borderRadius: 10,
+    },
+    imageContainer: {
+        paddingRight: 10,
     },
 });
 

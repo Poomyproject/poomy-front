@@ -9,10 +9,13 @@ import  ShopProvider from './screens/shop/ShopContext';
 import  SpotProvider  from './screens/keyword/KeywordContext';
 import  MoodProvider from './screens/keyword/MoodContext';
 import  NewsLetterProvider  from './screens/context/NewsLetterContext';
+import SearchProvider from './screens/context/SearchContext';
+import { SearchContext } from './screens/context/SearchContext';
 
 
 export default function App() {
   return (
+    <SearchProvider>
     <NewsLetterProvider>
     <MoodProvider>
     <SpotProvider>
@@ -28,5 +31,6 @@ export default function App() {
     </SpotProvider>
     </MoodProvider>
     </NewsLetterProvider>
+    </SearchProvider>
   );
 }
