@@ -13,8 +13,10 @@ const UserReviewScreen1 = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const { selectedShopId } = route.params;
+  const { shopName } = route.params;
   
-  console.log('상점아이디', selectedShopId);
+  // console.log('상점아이디', selectedShopId);
+  // console.log(shopName);
 
   // 서버에서 moods 데이터를 가져옴
   useEffect(() => {
@@ -59,7 +61,11 @@ const UserReviewScreen1 = () => {
       console.log('선택된 분위기 저장 완료');
       console.log('selectedMoods:', selectedMoods); 
 
-      navigation.navigate('UserReview2', { selectedShopId });
+      navigation.navigate('UserReview2', { 
+        selectedShopId, 
+        shopName 
+      });
+      
     } catch (error) {
       console.error('저장 오류:', error);
     }
@@ -68,7 +74,7 @@ const UserReviewScreen1 = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>
-        <Text style={styles.highlight}>선민이네 샵</Text>
+      <Text style={styles.highlight}>{shopName || '상점 이름 없음'}</Text>
         의 {'\n'}특징을 알려주세요
       </Text>
       <Text style={styles.subHeader}>방문한 소품샵은 어떤 분위기였나요? (최대 2개)</Text>

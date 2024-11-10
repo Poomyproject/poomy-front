@@ -77,8 +77,8 @@ const MyPageScreen = () => {
         console.log(userData.spots)
       }
     } catch (error) {
-      console.error('데이터 가져오기 실패:', error);
-      Alert.alert('오류', '사용자 데이터를 가져오는 중 문제가 발생했습니다.');
+      // console.error('데이터 가져오기 실패:', error);
+      // Alert.alert('오류', '사용자 데이터를 가져오는 중 문제가 발생했습니다.');
     }
   };
 
@@ -302,6 +302,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     ...fonts.Body1,
+    color : colors.Gray900,
   },
   buttonImage: {
     width: 20,

@@ -38,10 +38,10 @@ const LoginScreen = ({ navigation }) => {
     } else if (error.code === statusCodes.IN_PROGRESS) {
       console.log('Google sign-in is already in progress');
     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-      Alert.alert('Error', 'Google Play Services are not available');
+      Alert.alert('Error', '로그인 할 수 없습니다. 네트워크 상태를 확인해 주세요.');
     } else {
       console.log('Google sign-in error:', error.message);
-      Alert.alert('Error', 'Failed to sign in with Google');
+      Alert.alert('Error', '로그인 할 수 없습니다. 네트워크 상태를 확인해 주세요.');
     }
   };
 

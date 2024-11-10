@@ -47,7 +47,7 @@ const MainScreen = ({ navigation }) => {
         } catch (err) {
             console.error('Error fetching home spot shop:', err);
             setError(err);
-            Alert.alert('데이터 로딩 실패', '소품샵 데이터를 불러오는 데 실패했습니다.');
+            //Alert.alert('데이터 로딩 실패', '소품샵 데이터를 불러오는 데 실패했습니다.');
         }
     };
 
@@ -62,7 +62,7 @@ const MainScreen = ({ navigation }) => {
         } catch (err) {
             console.error('Error fetching home spot:', err);
             setError(err);
-            Alert.alert('데이터 로딩 실패', '지역 데이터를 불러오는 데 실패했습니다.');
+            //Alert.alert('데이터 로딩 실패', '지역 데이터를 불러오는 데 실패했습니다.');
         }
     };
 
@@ -77,7 +77,7 @@ const MainScreen = ({ navigation }) => {
         } catch (err) {
             console.error('Error fetching newsletters:', err);
             setError(err);
-            Alert.alert('데이터 로딩 실패', '뉴스레터 데이터를 불러오는 데 실패했습니다.');
+            //Alert.alert('데이터 로딩 실패', '뉴스레터 데이터를 불러오는 데 실패했습니다.');
         }
     };
 
@@ -92,7 +92,7 @@ const MainScreen = ({ navigation }) => {
         } catch (err) {
             console.error('Error fetching mood shops:', err);
             setError(err);
-            Alert.alert('데이터 로딩 실패', '분위기 데이터를 불러오는 데 실패했습니다.');
+            //Alert.alert('데이터 로딩 실패', '분위기 데이터를 불러오는 데 실패했습니다.');
         }
     };
 

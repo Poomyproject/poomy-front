@@ -9,7 +9,77 @@ import { useFavorites } from '../like/FavoriteContext';
 import { fonts } from '../../config/fonts';
 import { NaverMapView, Marker } from '@mj-studio/react-native-naver-map';
 
+//영업시간 처리_기기시간 기준
+const OpeningHoursComponent = ({ openingHours }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [parsedHours, setParsedHours] = useState([]);
+  const todayIndex = new Date().getDay(); // 0: 일요일, 1: 월요일, ... , 6: 토요일
 
+  useEffect(() => {
+    const parseOpeningHours = (data) => {
+      const lines = data.split("\n");
+      return lines.map(line => {
+        const [day, ...time] = line.split(" ");
+        return { day, time: time.join(" ") };
+      });
+    };
+
+    const schedule = parseOpeningHours(openingHours);
+
+    // 현재 요일이 최상단에 위치하게 정렬
+    const sortedData = [
+      ...schedule.slice(todayIndex),
+      ...schedule.slice(0, todayIndex)
+    ];
+
+    setParsedHours(sortedData);
+  }, [openingHours]);
+
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  return (
+<View>
+  {parsedHours.length > 0 && (
+    <>
+      {/* 같은 행에 배치 */}
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        {/* 시계 이미지 */}
+        <Image 
+          source={require('../../assets/icon_clock.png')} 
+          style={{ width: 20, height: 20, marginRight: 8 }} 
+        />
+
+        {/* 현재 요일 */}
+        <Text style={[styles.infoText, { marginLeft: -3}]}>
+          {`${parsedHours[0].day} ${parsedHours[0].time}`}
+        </Text>
+
+        {/* 토글 버튼 */}
+        <TouchableOpacity onPress={toggleExpanded} style={{ marginLeft: 4 }}>
+          <Image
+            source={
+              isExpanded
+                ? require('../../assets/img_toggle_down.png')
+                : require('../../assets/icon_toggle_down.png')
+            }
+            style={{ width: 20, height: 20 }}
+          />
+        </TouchableOpacity>
+      </View>
+
+      {/* 나머지 요일: 토글 상태에 따라 표시 */}
+      {isExpanded && parsedHours.slice(1).map((item, index) => (
+        <Text key={index} style={[styles.infoText, { marginLeft: 25}]}>
+          {`${item.day} ${item.time}`}
+        </Text>
+      ))}
+    </>
+  )}
+</View>
+  );
+};
 
 const ShopDetailScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -21,51 +91,107 @@ const ShopDetailScreen = ({ route }) => {
   const [reviewData, setReviewData] = useState(null);
   const [page, setPage] = useState(1);
   const limit = 3;
-  const mapRef = useRef(null); // ref 설정
+  const mapRef = useRef(null);
+  const [recommendations, setRecommendations] = useState([]);
+  const [moodId, setMoodId] = useState(null);
+  const [spotId, setSpotId] = useState(null);
+  const [totalImgUrl, setTotalImgUrl] = useState(0);
+
 
   useEffect(() => {
-    const fetchShopData = async () => {
+    const fetchAllData = async () => {
       try {
-        const response = await ApiClient.get(`/api/shop/${selectedShopId}`);
-        setShopData(response.data.response);
-        // console.log(response.data.response)
-      } catch (err) {
-        console.error('API 요청 중 에러 발생:', err);
-        setError(err);
+        setLoading(true);
+
+        // 병렬처리
+        const fetchShopData = ApiClient.get(`/api/shop/${selectedShopId}`);
+        const fetchMoodIds = ApiClient.get('/api/moods');
+        const fetchSpotIds = ApiClient.get('/api/spots');
+        
+        const [shopResponse, moodResponse, spotResponse] = await Promise.all([
+          fetchShopData,
+          fetchMoodIds,
+          fetchSpotIds,
+        ]);
+
+        // Set shop data
+        const shopDetails = shopResponse.data.response;
+        setShopData(shopDetails);
+
+        // Map mood and spot IDs
+        const moodMap = moodResponse.data.response.reduce((acc, mood) => {
+          acc[mood.name] = mood.id;
+          return acc;
+        }, {});
+        
+        const spotMap = spotResponse.data.response.reduce((acc, spot) => {
+          acc[spot.name] = spot.id;
+          return acc;
+        }, {});
+        
+        if (shopDetails.mood && moodMap[shopDetails.mood]) {
+          setMoodId(moodMap[shopDetails.mood]);
+        }
+
+        if (shopDetails.spot && spotMap[shopDetails.spot]) {
+          setSpotId(spotMap[shopDetails.spot]);
+        }
+
+        // Fetch recommendations if moodId and spotId are set
+        if (moodMap[shopDetails.mood] && spotMap[shopDetails.spot]) {
+          const recommendationResponse = await ApiClient.get(`/api/keyword/mood/${moodMap[shopDetails.mood]}/spot/${spotMap[shopDetails.spot]}`);
+          if (recommendationResponse.data && recommendationResponse.data.success) {
+            setRecommendations(recommendationResponse.data.response);
+          }
+        }
+
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError(error);
       } finally {
         setLoading(false);
       }
     };
 
     if (selectedShopId) {
-      fetchShopData();
+      fetchAllData();
     }
   }, [selectedShopId]);
 
-  const fetchReviews = async (limit, page) => {
-    try {
-      console.log("Fetching reviews with selectedShopId:", selectedShopId); 
-      const response = await ApiClient.get(`/api/reviews?poomShopId=${selectedShopId}&limit=${limit}&page=${page}`);
-      if (response.data.success) {
-        return response.data.response;
-      } else {
-        throw new Error("Failed to fetch reviews");
-      }
-    } catch (error) {
-      console.error("Review API Error:", error);
-      return null;
-    }
-  };
-  
   useEffect(() => {
-    const loadReviews = async () => {
-      if (selectedShopId) { // selectedShopId가 존재할 때만 호출
-        const data = await fetchReviews(limit, page);
-        if (data) setReviewData(data);
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+  
+        const fetchReviews = ApiClient.get(`/api/reviews?poomShopId=${selectedShopId}&limit=${limit}&page=${page}`);
+        const fetchImages = ApiClient.get(`/api/reviews/imgs?poomShopId=${selectedShopId}&limit=3&page=1`);
+  
+        const [reviewResponse, imageResponse] = await Promise.all([fetchReviews, fetchImages]);
+  
+        if (reviewResponse.data.success) {
+          setReviewData(reviewResponse.data.response);
+        }
+  
+        if (imageResponse.data.success) {
+          setTotalImgUrl(imageResponse.data.response.totalImgUrl);
+          setReviewData(prevData => ({
+            ...prevData,
+            imgUrls: imageResponse.data.response.imgUrls,
+          }));
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setError(error);
+      } finally {
+        setLoading(false);
       }
     };
-    loadReviews();
+  
+    if (selectedShopId) {
+      fetchData();
+    }
   }, [selectedShopId, page]);
+  
 
   const toggleFavorite = () => {
     isFavorite(selectedShopId) ? removeFavorite(selectedShopId) : addFavorite(selectedShopId);
@@ -74,14 +200,14 @@ const ShopDetailScreen = ({ route }) => {
   const renderMoodAndSpotTags = () => (
     <View style={styles.tagContainer}>
       <Image source={require('../../assets/img_logo_symbol.png')} style={styles.symbol} />
-      {shopData.mood ? (
+      {shopData?.mood ? (
         <View style={styles.tag}>
           <Text style={styles.tagText}>{shopData.mood}</Text>
         </View>
       ) : (
         <Text>무드 정보 없음</Text>
       )}
-      {shopData.spot ? (
+      {shopData?.spot ? (
         <View style={styles.tag}>
           <Text style={styles.tagText}>{shopData.spot}</Text>
         </View>
@@ -90,6 +216,7 @@ const ShopDetailScreen = ({ route }) => {
       )}
     </View>
   );
+  
 
   if (loading) return <ActivityIndicator size="large" color={colors.Green900} />;
   if (error) return <View><Text>에러 발생: {error.message}</Text></View>;
@@ -97,7 +224,7 @@ const ShopDetailScreen = ({ route }) => {
   return (
     <ScrollView contentContainerStyle={{ backgroundColor: colors.Ivory100, alignItems: 'left', flexGrow: 1, padding: 20 , }}>
       {shopData && shopData.shopImageList && shopData.shopImageList.length > 0 ? (
-        <Swiper style={styles.swiper} showsPagination dotColor="#D4D4D4" activeDotColor="#666666">
+        <Swiper style={styles.swiper} showsPagination dotColor="#D4D4D4" activeDotColor="#666666" paginationStyle={{ bottom: -5 }} >
           {shopData.shopImageList.map((image, index) => (
             <View key={index} style={styles.slide}>
               <Image source={{ uri: image.url }} style={styles.shopImage} />
@@ -127,24 +254,56 @@ const ShopDetailScreen = ({ route }) => {
       {shopData && (
         <>
           <View style={styles.infoContainer}>
+            {/* 영업시간 표시 영역 */}
             <View style={styles.infoRow}>
-              <Image source={require('../../assets/img_clock.png')} style={styles.icon} />
-              <Text style={styles.infoText}>{shopData.openingHours || '영업시간 정보 없음'}</Text>
+              {shopData.openingHours ? (
+                <OpeningHoursComponent openingHours={shopData.openingHours} />
+              ) : (
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Image 
+                  source={require('../../assets/icon_clock.png')} 
+                  style={{ width: 20, height: 20, marginRight: 8 }} 
+                />
+                <Text style={[styles.infoText, { marginLeft: -2 }]}>영업시간 정보 없음</Text>
+                </View>
+              )}
             </View>
             <View style={styles.infoRow}>
               <Image source={require('../../assets/img_phone.png')} style={styles.icon} />
               <Text style={styles.infoText}>{shopData.phoneNumber || '번호 정보 없음'}</Text>
             </View>
             <View style={styles.infoRow}>
-              <Image source={require('../../assets/img_mappin.png')} style={styles.icon} />
-              <Text style={styles.infoText}>
-                {shopData.location || '위치 정보 없음'}{'\n'}{shopData.nearbyStation || '인근 지하철 정보 없음'}
+
+            <View style={{ alignItems: 'flex-start' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Image source={require('../../assets/img_mappin.png')} style={{ width: 20, height: 20, marginRight: 5 }} />
+              
+              {/* 위치 정보 */}
+              <Text style={[styles.infoText, { marginLeft: -2 }]}>
+                {shopData.location || '위치 정보 없음'}
               </Text>
             </View>
+
+            {/* 줄 바꿈 및 인근 지하철 정보 */}
+            <Text style={{ ...fonts.Body4, color: colors.Gray700, marginTop: 2 , marginLeft : 24 }}>
+              {shopData.nearbyStation
+                ? <>
+                    {shopData.nearbyStation.split(/(.*?역)/).map((part, index) => (
+                      part.endsWith('역') ? (
+                        <Text key={index} style={{ color:"#0052A4"}}>{part}</Text>
+                      ) : (
+                        <Text key={index}>{part}</Text>
+                      )
+                    ))}
+                  </>
+                : '인근 지하철 정보 없음'}
+            </Text>
           </View>
-          
-          {/* NaverMapView 적용 */}
-        <View style={{ marginTop: 10, width: '100%', height: 100 , marginBottom : 10,  }}>
+          </View>
+          </View>  
+
+         {/* NaverMapView */}
+        <View style={{ marginTop: 0, width: '100%', height: 100 , marginBottom : 20,  }}>
         <NaverMapView
                 ref={mapRef}
                 style={{ flex: 1 }}
@@ -168,9 +327,9 @@ const ShopDetailScreen = ({ route }) => {
                 isShowLocationButton={true}
                 logoAlign={'TopRight'}
                 locale={'ko'}
-                onInitialized={() => console.log("Naver Map initialized")}
-                onCameraChanged={(args) => console.log(`Camera Changed: ${JSON.stringify(args)}`)}
-                onTapMap={(args) => console.log(`Map Tapped: ${JSON.stringify(args)}`)}
+                //onInitialized={() => console.log("Naver Map initialized")}
+                //onCameraChanged={(args) => console.log(`Camera Changed: ${JSON.stringify(args)}`)}
+                //onTapMap={(args) => console.log(`Map Tapped: ${JSON.stringify(args)}`)}
               >
               {/* 오버레이 마커 설정 */}
               {/* <NaverMapMarkerOverlay
@@ -199,100 +358,102 @@ const ShopDetailScreen = ({ route }) => {
 
       <View style={styles.divider} />
 
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+      <Text style={styles.shopName}>리뷰</Text>
       <TouchableOpacity
         style={{ flexDirection: 'row', alignItems: 'center' }}
-        onPress={() => navigation.navigate('UserReview1', { screen: 'UserReview1', selectedShopId })}
+        onPress={() => navigation.navigate('UserReview1', { 
+          screen: 'UserReview1', 
+          selectedShopId, 
+          shopName: shopData.name
+        })}
       >
-        <Text style={styles.shopName}>리뷰</Text>
-        <Image source={require('../../assets/icon_edit.png')} style={{ height: 20 , width: 20 , marginLeft: 240 }} />
+        <Image source={require('../../assets/icon_edit.png')} style={{ height: 20, width: 20, marginRight: 8 }} />
         <Text style={styles.infoText}>작성하기</Text>
       </TouchableOpacity>
+    </View>
+
 
       <View style={[styles.reviewSection, { width: '100%' }]}>
-      {reviewData ? (
-  <>
-    <Text style={styles.subTitle}>{reviewData.totalRecommend}명의 추천을 받은 소품샵이에요</Text>
-    <View style={styles.imageRow}>
-      {reviewData.imgUrls.slice(0, 3).map((img, index) => (
-        index === 2 && reviewData.imgUrls.length > 3 ? (
+  {reviewData && reviewData.reviews?.length > 0 ? (
+    <>
+      <Text style={styles.subTitle}>{reviewData.totalRecommend}명의 추천을 받은 소품샵이에요</Text>
+      <View style={styles.imageRow}>
+      {reviewData?.imgUrls?.slice(0, 3).map((img, index) => (
+        index === 2 ? (
           <TouchableOpacity 
             key={img.id} 
-            onPress={() => {
-              console.log('Navigating to ReviewPictures with images:', reviewData.imgUrls);
-              navigation.navigate('ReviewPictures', { imgUrls: reviewData.imgUrls });
-            }}
+            onPress={() => navigation.navigate('ReviewPictures', { poomShopId: selectedShopId })} //리뷰 백엔드에서 품아이디로 해서 API 만듦_혼동주의
             style={styles.overlayContainer}
           >
             <Image source={{ uri: img.url }} style={styles.reviewImage} />
-            <View style={styles.overlay}>
-              <Text style={styles.overlayText}>+{reviewData.imgUrls.length - 3}</Text>
-            </View>
+            {totalImgUrl > 3 && (
+              <View style={styles.overlay}>
+                <Text style={styles.overlayText}>
+                  +{Math.max(totalImgUrl - reviewData.imgUrls.length, 0)}
+                </Text>
+              </View>
+            )}
           </TouchableOpacity>
         ) : (
-          <Image key={img.id} source={{ uri: img.url }} style={styles.reviewImage} />
+          <Image key={img.id} source={{ uri: img.url }} style={styles.reviewImage} /> 
         )
       ))}
     </View>
 
-    {reviewData.reviews.length > 0 ? (
-      <>
-        {reviewData.reviews.map(review => (
-          <View key={review.id} style={styles.reviewBox}>
-            <View style={styles.reviewItem}>
-            <Image source= {require('../../assets/profile.png')} style={{width : 40 , height : 40 , marginRight : 10, }}/>
-              <View style={styles.reviewContent}>
-                <View style={styles.headerRow}>
-                  <Text style={styles.reviewUser}>{review.userNickName}</Text>
-                  <Text style={styles.reviewDate}>{review.date}</Text>
-                </View>
-                <Text style={styles.reviewText}>{review.content}</Text>
+      {reviewData.reviews.map(review => (
+        <View key={review.id} style={styles.reviewBox}>
+          <View style={styles.reviewItem}>
+            <Image source={require('../../assets/profile.png')} style={{ width: 40, height: 40, marginRight: 10 }} />
+            <View style={styles.reviewContent}>
+              <View style={styles.headerRow}>
+                <Text style={styles.reviewUser}>{review.userNickName}</Text>
+                <Text style={styles.reviewDate}>{review.date}</Text>
               </View>
-              <Image 
-                source={review.isRecommend ? require('../../assets/img_thumbs_up.png') : require('../../assets/img_thumbs_down.png')} 
-                style={styles.like} 
-              />
+              <Text style={styles.reviewText}>{review.content}</Text>
             </View>
+            <Image 
+              source={review.isRecommend ? require('../../assets/img_thumbs_up.png') : require('../../assets/img_thumbs_down.png')} 
+              style={styles.like} 
+            />
           </View>
-        ))}
+        </View>
+      ))}
 
-        {/* 리뷰가 있을 경우에만 '리뷰 전체보기' 버튼 렌더링 */}
-        <TouchableOpacity style={styles.viewAllButton} onPress={() => navigation.navigate('ShopReview')}>
-          <Text style={styles.viewAllText}>리뷰 전체보기</Text>
-          <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
-        </TouchableOpacity>
-      </>
-    ) : (
-      <View style={styles.noReviewContainer}>
-        <Text style={styles.noReviewText}>아직 등록된 리뷰가 없어요. {'\n'}이 소품샵의 첫번째 리뷰를 작성해보세요. </Text>
-      </View>
-    )}
-  </>
-) : (
-  <Text>리뷰 데이터를 불러오는 중입니다...</Text>
-)}
-
+      <TouchableOpacity style={styles.viewAllButton} onPress={() => navigation.navigate('ShopReview')}>
+        <Text style={styles.viewAllText}>리뷰 전체보기</Text>
+        <Image source={require('../../assets/right.png')} style={styles.rightIcon} />
+      </TouchableOpacity>
+    </>
+  ) : (
+    <View style={styles.noReviewContainer}>
+      <Text style={styles.noReviewText}>{'\n'}아직 등록된 리뷰가 없어요. {'\n'}이 소품샵의 첫번째 리뷰를 작성해보세요. </Text>
+    </View>
+  )}
 </View>
 
       <View style={styles.divider} />
-      {renderMoodAndSpotTags()}
 
-      <View style={styles.recommendSection}>  
-        <Text style={styles.subTitle}>소품샵 추천</Text>
-        <View style={styles.shopRecommendationRow}>
-          <View style={styles.shopRecommendation}>
-            <Image source={require('../../assets/img_sample.png')} style={styles.recommendImage} />
-            <Text style={styles.shopName}>선민이네 샵</Text>
-          </View>
-          <View style={styles.shopRecommendation}>
-            <Image source={require('../../assets/img_sample.png')} style={styles.recommendImage} />
-            <Text style={styles.shopName}>선민이네 샵</Text>
-          </View>
-          <View style={styles.shopRecommendation}>
-            <Image source={require('../../assets/img_sample.png')} style={styles.recommendImage} />
-            <Text style={styles.shopName}>선민이네 샵</Text>
-          </View>
-        </View>
+      <View style={styles.recommendSection}>
+  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+    {renderMoodAndSpotTags()}
+    <Text style={styles.subTitle}>소품샵 추천</Text>
+  </View>
+  
+  <ScrollView 
+    horizontal 
+    showsHorizontalScrollIndicator={false} 
+    contentContainerStyle={styles.shopRecommendationRow}
+  >
+    {recommendations.map((shop) => (
+      <View key={shop.id} style={styles.shopRecommendation}>
+        <Image source={{ uri: shop.image }} style={styles.recommendImage} />
+        <Text style={styles.recommendshopName}>{shop.name}</Text>
       </View>
+    ))}
+  </ScrollView>
+      </View>
+
     </ScrollView>
   );
 };
@@ -340,12 +501,12 @@ const ShopDetailScreen = ({ route }) => {
         ...fonts.Title2
       },
       like:{
-        marginEnd : 30, 
+        marginEnd : 'flex-start',
         width: 24, 
         height: 24, 
       },
       infoContainer: {
-        marginTop: 10,
+        marginTop: 5,
         alignItems: 'flex-start', // 왼쪽 정렬
         width: '90%', // 전체 화면의 90%에 맞추기 (너무 넓어지지 않도록 제한)
       },
@@ -359,7 +520,6 @@ const ShopDetailScreen = ({ route }) => {
         color: colors.Gray700,
         ...fonts.Body4,
         marginLeft: 6,
-        flex: 1, 
         flexWrap: 'wrap', 
       },
       tagContainer: {
@@ -393,7 +553,7 @@ const ShopDetailScreen = ({ route }) => {
       divider: {
         height: 0.7,
         backgroundColor: colors.Gray200, 
-        marginVertical: 30,
+        marginVertical: 20,
         width: '100%', 
       },
       //여기서부터 리뷰 css     
@@ -410,9 +570,11 @@ const ShopDetailScreen = ({ route }) => {
       },
       overlayContainer: {
         position: 'relative',
+        borderRadius : 4,
       },
       overlayImage: {
         opacity: 0.7,
+        borderRadius : 4,
       },
       overlay: {
         position: 'absolute',
@@ -423,6 +585,7 @@ const ShopDetailScreen = ({ route }) => {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         justifyContent: 'center',
         alignItems: 'center',
+        borderRadius : 4,
       },
       overlayText: {
         color: '#fff',
@@ -451,7 +614,6 @@ const ShopDetailScreen = ({ route }) => {
       
       reviewItem: {
         flexDirection: 'row',
-        alignItems: 'flex-start',
       },
       
       userImage: {
@@ -488,13 +650,12 @@ const ShopDetailScreen = ({ route }) => {
         marginLeft : - 46, 
       },
       
-      like: {
-        width: 20,
-        height: 20,
-        tintColor: '#32CD32',
-        marginLeft: 8,
-        alignSelf: 'flex-start',
-      },
+      // like: {
+      //   width: 20,
+      //   height: 20,
+      //   marginLeft: 8,
+      //   alignSelf: 'flex-start',
+      // },
       
       extraImageRow: {
         flexDirection: 'row',
@@ -524,16 +685,22 @@ const ShopDetailScreen = ({ route }) => {
         height: 16,                 // 아이콘 높이
       },      
       recommendSection: {
-        marginTop: 20,
+        marginTop: 0,
       },
       shopRecommendationRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginTop : 14 , 
       },
       shopRecommendation: {
         width: 90,
         alignItems: 'center',
         marginRight : 30 , 
+      },
+      recommendshopName :{
+        justifyContent:'flex-start',
+        ...fonts.Body3,
+        color: colors.Gray900,
       },
       recommendImage: {
         width: 108,
