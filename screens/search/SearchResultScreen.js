@@ -76,7 +76,7 @@ const SearchResultScreen = ({ route, navigation }) => {
             placeholderTextColor={colors.Gray900}
           />
           {/* X버튼 */}
-          <TouchableOpacity onPress={() => setText('')} style={styles.imageContainer}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.imageContainer}>
             <Image
               source={require('../../assets/86-close.png')}
               style={styles.XImg}
