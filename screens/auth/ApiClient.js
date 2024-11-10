@@ -5,7 +5,7 @@ import { Alert } from 'react-native'; // Alert 추가
 // Axios 인스턴스 생성
 const ApiClient = axios.create({
   baseURL: 'http://localhost:8080', // API base URL
-  timeout: 5000, // 요청 제한 시간 설정 (밀리초)
+  timeout: 8000, // 요청 제한 시간 설정 (밀리초)
   headers: {
   },
 });
@@ -14,7 +14,7 @@ ApiClient.interceptors.request.use(
   async (config) => {
     try {
       const token = await AsyncStorage.getItem('accessToken'); // AsyncStorage에서 JWT 토큰 가져오기
-      console.log(token)
+      //console.log(token)
       if (token) {
         //console.log('Access Token:', token); 
         config.headers.accessToken = `Bearer ${token}`; 
@@ -31,7 +31,7 @@ ApiClient.interceptors.request.use(
       // console.log('Request Data:', config.data);
 
     } catch (error) {
-      console.error('Error fetching token from AsyncStorage:', error);
+      //console.error('Error fetching token from AsyncStorage:', error);
     }
     return config;
   },
@@ -56,7 +56,7 @@ export const setAxiosInterceptors = (navigation) => {
         // 엑세스 토큰 삭제
         await AsyncStorage.removeItem('accessToken');
 
-        // // 로그아웃 알림을 사용자에게 표시
+        // 로그아웃 알림을 사용자에게 표시_활성화 X
         // Alert.alert(
         //   "로그아웃 되었습니다",
         //   "다시 로그인해 주세요",

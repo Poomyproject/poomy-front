@@ -121,7 +121,8 @@ const styles = StyleSheet.create({
     width: 380,
   },
   buttonText: {
-    ...fonts.Body1
+    ...fonts.Body1,
+    color: colors.Gray900,
   },
   buttonImage: {
     width: 20,
