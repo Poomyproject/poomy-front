@@ -184,7 +184,13 @@ const MainScreen = ({ navigation }) => {
             <ScrollView
                 style={styles.scrollView}
                 contentContainerStyle={styles.scrollContainer}
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                refreshControl={
+                    <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    tintColor="#1FAA67" 
+                />
+            }
             >
                 {/* 검색바 */}
                 <TouchableOpacity

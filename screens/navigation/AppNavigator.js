@@ -28,6 +28,7 @@ import UserReviewScreen2 from '../review/UserReviewScreen2';
 import UserReviewScreen3 from '../review/UserReviewScreen3';
 import UserReviewScreen4 from '../review/UserReviewScreen4';
 import ShopReviewScreen from '../shop/ShopReviewScreen';
+import ReviewPictureScreen from '../review/ReviewPictureScreen';
 
 
 import NewsLetterStackNavigator from './NewsLetterStackNavigator';
@@ -51,6 +52,14 @@ const AppNavigator = () => {
       <Stack.Screen name="MainTab" component={MainTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="MypageEdit" component={MypageEditScreen} options={{ headerShown: true }} />
+      <Stack.Screen name='ReviewPictures' component={ReviewPictureScreen} options={({ navigation }) => ({
+          headerTitle: '리뷰',
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
+            </TouchableOpacity>
+          ),
+          })}/>
       <Stack.Screen name="NameEdit" component={NameEditScreen} options={({ navigation }) => ({
           headerTitle: '닉네임 변경하기',
           headerLeft: () => (
