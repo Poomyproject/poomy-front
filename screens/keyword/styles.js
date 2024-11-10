@@ -5,9 +5,8 @@ import { fonts } from '../../config/fonts';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        // alignItems: 'center',
         backgroundColor: 'white',
-        padding: 20,
+        padding: 10,
     },
     down: {
         width: 14,
@@ -170,11 +169,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: colors.Gray900,
     },
-    storeImg: {
-        width: 95,
-        height: 95,
-        margin: '5%'
-    },
     heartImg: {
         width: 23,
         height: 23,
@@ -182,25 +176,12 @@ const styles = StyleSheet.create({
     pinImg: {
         width: 17,
         height: 17,
-    },
-    storeInfo: {
-        alignSelf: 'flex-start',
-        padding: 5, // 텍스트 주위의 여백
-        paddingHorizontal: 15,
-        borderWidth: 1, // 테두리 두께
-        borderColor: colors.Green500, // 테두리 색상
-        color: colors.Gray700,
-        borderRadius: 13, // 테두리 모서리 둥글게 하기
-        textAlign: 'center', // 텍스트 가운데 정렬 (필요시)
-        fontSize: 13,
-        marginTop: '2%',
+        borderRadius:2,
     },
     storeName: {
-        marginTop: '7%',
-        marginLeft: 2,
-        fontSize: 16,
-        fontWeight: 'bold',
-
+        marginTop: '11%',
+        fontSize: 15,
+        fontWeight: '500',
     },
     infoIcon: {
         width: 20,
@@ -211,7 +192,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         margin: 0,
     },
-
     modalContent: {
         backgroundColor: colors.Ivory100,
         marginTop: 20,
@@ -394,6 +374,48 @@ const styles = StyleSheet.create({
         top: 55,               // 버튼 아래로 드롭다운 이동 (버튼 높이에 따라 조정 필요)
         width: 'auto',         // 드롭다운 폭 조정
         zIndex: 1,             // 드롭다운을 다른 요소 위로 표시하기 위한 설정
+    },
+    ResultContainer:{
+        flexDirection:'row',
+    },
+    storeImg: {
+        width: 95,
+        height: 95,
+        margin: '4%',
+        borderRadius:5,
+    },
+    storeDetails: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: '3%',
+    },
+    storeInfo: {
+        padding: 5,
+        paddingHorizontal: 12,
+        borderWidth: 1,
+        borderColor: colors.Gray200,
+        color: colors.Gray700,
+        borderRadius: 13,
+        textAlign: 'center',
+        fontSize: 13,
+        marginTop: '2%',
+    },
+    interestInfo:{
+        borderColor: colors.Green900, 
+        color:colors.Green900
+    },
+    addressContainer: {
+        flexDirection: 'row',
+        marginTop: '5%',
+        width:'85%',
+    },
+    addressText:{
+        fontSize:13,
+        color:colors.Gray500,
+        marginLeft:'1%',
+    },
+    heartContainer: {
+        marginTop: '13%',
     },
 });
 

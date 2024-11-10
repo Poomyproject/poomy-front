@@ -5,7 +5,7 @@ import styles from './styles';
 const PlaceMoodButtons = ({ interestPlace, interestMood, toggleModal, setInterestPlace, setInterestMood }) => {
     return (
         <View style={styles.buttoncontainer}>
-            <View style={{ width: '80%', flexDirection: 'row' }}>
+            <View style={{ width: '80%', flexDirection: 'row',marginLeft:11, }}>
 
                 {/* 장소 모달 */}
                 <TouchableOpacity
