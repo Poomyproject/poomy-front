@@ -34,9 +34,10 @@ const NewsLetterDetailScreen = () => {
             try {
                 const response = await ApiClient.get(`/api/newsLetter/${selectedNewsLetterId}`); // shopId를 이용해 API 호출
                 setNewsletterData(response.data.response);  // API 응답 데이터를 상태에 저장
+                setUserFeedback(response.data.response.userFeedbackCount);
 
                 // 데이터 로그 출력
-                console.log('API 응답:', response.data);
+                // console.log('API 응답:', response.data);
 
             } catch (err) {
                 console.error('API 요청 중 에러 발생:', err);
@@ -128,6 +129,8 @@ const NewsLetterDetailScreen = () => {
                         newsletterData?.thirdShopImage4,
                     ],
                 }
+
+                
 
             ]);
         }

@@ -42,7 +42,9 @@ const SelectionModal = ({
                             style={[styles.moodButton, selectedMood === option ? styles.selectedMood : {}]}
                             onPress={() => handleSelectOption(option)}
                         >
-                            <Text style={styles.moodText}>{option}</Text>
+                            <Text style={[styles.moodText, selectedMood === option ? styles.selectedMoodText : {}]}>
+                                {option}
+                            </Text>
                         </TouchableOpacity>
                     ))}
                 </View>

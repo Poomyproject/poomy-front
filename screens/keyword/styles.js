@@ -220,13 +220,8 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
     },
 
-    moodButton: {
-        borderWidth: 1,
-        borderColor: colors.Gray100,
-        padding: 10,
-        marginRight: 10,
-        borderRadius: 20,
-        marginTop: 10,
+    selectedMoodText:{
+        color:colors.Ivory100,
     },
 
     selectStyle: {
@@ -257,7 +252,7 @@ const styles = StyleSheet.create({
 
     moodText: {
         fontSize: 16,
-        color: colors.Gray900,
+        color: colors.Gray700,
     },
 
     closeButton: {
@@ -315,6 +310,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: colors.Gray100,
         padding: 10,
+        paddingHorizontal:10,
         marginRight: 10,
         borderRadius: 20,
         marginTop: 10,
@@ -341,11 +337,6 @@ const styles = StyleSheet.create({
         justifyContent: 'left',
         marginRight: 100,
     },
-
-    selectedMood: {
-        backgroundColor: colors.Green900,
-    },
-
     closeButton: {
         width: 350,
         height: 48,
