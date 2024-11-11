@@ -28,33 +28,31 @@ const ReviewPictureScreen = ({ route }) => {
     fetchImages();
   }, [poomShopId]);
 
+  console.log('imgUrls data:', imgUrls);
+
   const renderItem = ({ item }) => (
     <View style={styles.imageContainer}>
-      <Image source={{ uri: item.imgUrl }} style={styles.image} />
+      <Image source={{ uri: item.url }} style={styles.image} />
     </View>
   );
-
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#000" />
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={imgUrls}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        numColumns={3} // 한 줄에 3개의 이미지를 표시
-      />
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#000" />
+        </View>
+      ) : (
+        <FlatList
+          data={imgUrls}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          numColumns={3} // 한 줄에 3개의 이미지를 표시
+        />
+      )}
     </View>
   );
 };
-
-export default ReviewPictureScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -79,3 +77,5 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
 });
+
+export default ReviewPictureScreen;

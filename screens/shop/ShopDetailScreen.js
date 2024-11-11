@@ -1,11 +1,11 @@
 import React , {useContext , useState , useEffect , useRef} from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ActivityIndicator,Dimensions } from 'react-native';
 import Swiper from 'react-native-swiper';
 import colors from '../../config/colors';
 import { useNavigation } from '@react-navigation/native';
 import { ShopContext } from './ShopContext';
 import ApiClient from '../auth/ApiClient';
-import { useFavorites } from '../like/FavoriteContext';
+import FavoriteProvider, { FavoriteContext } from '../like/FavoriteContext';
 import { fonts } from '../../config/fonts';
 import { NaverMapView, Marker } from '@mj-studio/react-native-naver-map';
 
@@ -83,11 +83,11 @@ const OpeningHoursComponent = ({ openingHours }) => {
 
 const ShopDetailScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { selectedShopId } = useContext(ShopContext);
+  const { selectedShopId, setSelectedShopId } = useContext(ShopContext);
   const [shopData, setShopData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { isFavorite, addFavorite, removeFavorite } = useFavorites();
+  const { isFavorite, addFavorite, removeFavorite } = useContext(FavoriteContext);
   const [reviewData, setReviewData] = useState(null);
   const [page, setPage] = useState(1);
   const limit = 3;
@@ -97,13 +97,14 @@ const ShopDetailScreen = ({ route }) => {
   const [spotId, setSpotId] = useState(null);
   const [totalImgUrl, setTotalImgUrl] = useState(0);
 
+  const { width, height } = Dimensions.get('window');
 
   useEffect(() => {
     const fetchAllData = async () => {
       try {
         setLoading(true);
 
-        // 병렬처리
+        // 병렬처리로 API 호출
         const fetchShopData = ApiClient.get(`/api/shop/${selectedShopId}`);
         const fetchMoodIds = ApiClient.get('/api/moods');
         const fetchSpotIds = ApiClient.get('/api/spots');
@@ -114,11 +115,11 @@ const ShopDetailScreen = ({ route }) => {
           fetchSpotIds,
         ]);
 
-        // Set shop data
+        // 상점 데이터 설정
         const shopDetails = shopResponse.data.response;
         setShopData(shopDetails);
 
-        // Map mood and spot IDs
+        // 무드 및 장소 ID 매핑
         const moodMap = moodResponse.data.response.reduce((acc, mood) => {
           acc[mood.name] = mood.id;
           return acc;
@@ -137,7 +138,7 @@ const ShopDetailScreen = ({ route }) => {
           setSpotId(spotMap[shopDetails.spot]);
         }
 
-        // Fetch recommendations if moodId and spotId are set
+        // 추천 상점 불러오기
         if (moodMap[shopDetails.mood] && spotMap[shopDetails.spot]) {
           const recommendationResponse = await ApiClient.get(`/api/keyword/mood/${moodMap[shopDetails.mood]}/spot/${spotMap[shopDetails.spot]}`);
           if (recommendationResponse.data && recommendationResponse.data.success) {
@@ -216,7 +217,11 @@ const ShopDetailScreen = ({ route }) => {
       )}
     </View>
   );
-  
+
+  const handleShopPress = (shopId) => {
+    setSelectedShopId(shopId); // or use directly from params if necessary
+    navigation.navigate('ShopDetail', { shopId });
+  };
 
   if (loading) return <ActivityIndicator size="large" color={colors.Green900} />;
   if (error) return <View><Text>에러 발생: {error.message}</Text></View>;
@@ -229,12 +234,12 @@ const ShopDetailScreen = ({ route }) => {
         <Swiper style={styles.swiper} showsPagination dotColor="#D4D4D4" activeDotColor="#666666" paginationStyle={{ bottom: -5 }} >
           {shopData.shopImageList.map((image, index) => (
             <View key={index} style={styles.slide}>
-              <Image source={{ uri: image.url }} style={styles.shopImage} />
+              <Image source={{ uri: image.url }} style={styles.mainshopImage} />
             </View>
           ))}
         </Swiper>
       ) : (
-        <Image source={require('../../assets/photo.png')} style={styles.shopImage} />
+        <Image source={require('../../assets/photo.png')} style={styles.mainshopImage} />
       )}
 
       <View style={styles.header}>
@@ -440,20 +445,22 @@ const ShopDetailScreen = ({ route }) => {
   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
     {renderMoodAndSpotTags()}
     <Text style={styles.subTitle}>소품샵 추천</Text>
-  </View>
+    </View>
   
-  <ScrollView 
-    horizontal 
-    showsHorizontalScrollIndicator={false} 
-    contentContainerStyle={styles.shopRecommendationRow}
-  >
-    {recommendations.map((shop) => (
-      <View key={shop.id} style={styles.shopRecommendation}>
-        <Image source={{ uri: shop.image }} style={styles.recommendImage} />
-        <Text style={styles.recommendshopName}>{shop.name}</Text>
-      </View>
-    ))}
-  </ScrollView>
+    <ScrollView 
+      horizontal 
+      showsHorizontalScrollIndicator={false} 
+      contentContainerStyle={styles.placeContainer4}
+    >
+      {recommendations.map((shop) => (
+        <TouchableOpacity key={shop.id} style={styles.lastView} onPress={() => handleShopPress(shop.id)}>
+          <Image source={{ uri: shop.image }} style={styles.shopImage} />
+          <Text style={styles.lastshoptext} numberOfLines={1} ellipsizeMode="tail">
+            {shop.name.length > 7 ? `${shop.name.substring(0, 7)}...` : shop.name}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
       </View>
 
     </ScrollView>
@@ -484,7 +491,7 @@ const ShopDetailScreen = ({ route }) => {
         justifyContent: 'center',
         alignItems: 'center',
       },
-      shopImage: {
+      mainshopImage: {
         width: '100%',  // 부모 너비에 맞춤 (match_parent)
         height: 168,    // 세로는 고정된 168
         resizeMode: 'cover',  // 이미지가 잘리지 않도록 커버
@@ -726,6 +733,38 @@ const ShopDetailScreen = ({ route }) => {
         marginTop: 10, // 이미지와 텍스트 사이의 간격
         ...fonts.Body3,
         color : colors.Gray400,
+      },
+      placeContainer4: {
+        flexDirection: 'row',
+        alignSelf: 'flex-start',
+        marginTop: 15,
+      },
+      lastView: {
+        marginTop: 0,
+        height: 188,
+        alignItems: 'flex-start',
+        marginLeft: 10,
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 0,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: colors.Gray100,
+      },
+      shopImage: {
+        width: 144,
+        height: 144,
+      },
+      lastshoptext: {
+        marginLeft: 10,
+        marginTop: 10,
+        color: colors.Gray900,
+        ...fonts.Body3,
       },
  })
 

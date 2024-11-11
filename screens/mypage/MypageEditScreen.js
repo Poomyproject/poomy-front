@@ -19,6 +19,9 @@ const MypageEditScreen = () => {
   const [loading, setLoading] = useState(true);
   const [initialMoods, setInitialMoods] = useState([]);
   const [initialPlaces, setInitialPlaces] = useState([]); 
+  const [isButtonActive, setIsButtonActive] = useState(false);
+  const [isApplyButtonActive, setIsApplyButtonActive] = useState(false);
+  
   
   const navigation = useNavigation();
 
@@ -111,22 +114,50 @@ const MypageEditScreen = () => {
     }
   };
 
-  const applyChanges = async () => {
-    try {
-      //console.log('Storing selectedMoods to local storage:', selectedMoods);
-      // console.log('Storing selectedPlaces to local storage:', selectedPlaces);
+// 상태 변경 감지용 useEffect
+useEffect(() => {
+  console.log('isButtonActive changed:', isButtonActive);
+}, [isButtonActive]);
 
-      await AsyncStorage.setItem('selectedMoods', JSON.stringify(selectedMoods));
-      await AsyncStorage.setItem('selectedPlaces', JSON.stringify(selectedPlaces)); 
+useEffect(() => {
+  console.log('isApplyButtonActive changed:', isApplyButtonActive);
+}, [isApplyButtonActive]);
 
-      console.log('Changes successfully applied to local storage');
-      setFirstModalVisible(false);
-      setSecondModalVisible(false);
+// "적용하기" 버튼 눌렀을 때 호출되는 함수
+const applyChanges = async () => {
+  try {
+    await AsyncStorage.setItem('selectedMoods', JSON.stringify(selectedMoods));
+    await AsyncStorage.setItem('selectedPlaces', JSON.stringify(selectedPlaces));
 
-    } catch (error) {
-      console.error('Error saving to local storage:', error);
-    }
-  };
+    console.log('Changes successfully applied to local storage');
+    
+    // 모달 닫기
+    setFirstModalVisible(false);
+    setSecondModalVisible(false);
+    
+    // 완료 버튼 활성화 및 적용하기 버튼 상태 변경
+    setIsButtonActive(true);
+    setIsApplyButtonActive(true);
+    
+  } catch (error) {
+    console.error('Error saving to local storage:', error);
+  }
+};
+
+  // 화면에 포커스가 돌아올 때마다 닉네임 변경 여부를 확인
+  useFocusEffect(
+    React.useCallback(() => {
+      const checkNicknameChange = async () => {
+        const nicknameChanged = await AsyncStorage.getItem('isNicknameChanged');
+        if (nicknameChanged === 'true') {
+          setIsButtonActive(true);
+          await AsyncStorage.removeItem('isNicknameChanged'); // 초기화하여 중복 활성화 방지
+        }
+      };
+
+      checkNicknameChange();
+    }, [])
+  );
 
   const handleSaveChanges = async () => {
     try {
@@ -185,9 +216,20 @@ const MypageEditScreen = () => {
           <Image source={require('../../assets/left.png')} style={styles.backButtonImage} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>마이페이지 수정</Text>
-        <TouchableOpacity onPress={handleSaveChanges}>
-          <Text style={styles.headerButtonText}>완료</Text>
-        </TouchableOpacity>
+        <TouchableOpacity
+        style={styles.completeButton}
+        disabled={!isButtonActive}
+        onPress={() => isButtonActive && navigation.navigate('MyPage')}
+      >
+        <Text
+          style={[
+            styles.headerButtonText,
+            isButtonActive ? styles.activeText : styles.inactiveText,
+          ]}
+        >
+          완료
+        </Text>
+      </TouchableOpacity>
       </View>
 
   
@@ -343,10 +385,20 @@ const styles = StyleSheet.create({
     color: colors.Gray900,
     textAlign: 'center',
   },
+  button: {
+    padding: 10,
+    borderRadius: 8,
+  },
+  activeText: {
+    color: colors.Green900, // 활성화 상태에서 텍스트 색상
+  },
+  inactiveText: {
+    color: colors.Gray300, // 비활성화 상태에서 텍스트 색상
+  },
   headerButtonText: {
-    color: colors.Gray700,
     padding: 5,
-  },  
+    ...fonts.Body2,
+  },
   contentContainer: {
     width: '90%',
     alignItems: 'flex-start',
