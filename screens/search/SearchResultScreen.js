@@ -4,7 +4,7 @@ import colors from '../../config/colors';
 import styles from './styles';
 import ApiClient from '../auth/ApiClient';
 import HighlightedText from './HighlightedText';
-import { useFavorites } from '../like/FavoriteContext';
+import FavoriteProvider, { FavoriteContext } from '../like/FavoriteContext';
 import { ShopContext } from '../shop/ShopContext';
 import NoResults from './NoResults';
 
@@ -15,7 +15,7 @@ const SearchResultScreen = ({ route, navigation }) => {
   const { setSelectedShopId } = useContext(ShopContext);
 
   // FavoriteContext에서 필요한 함수와 상태 불러오기
-  const { isFavorite, handleFavoriteToggle } = useFavorites();
+  const { isFavorite, handleFavoriteToggle } = useContext(FavoriteContext);
 
   // 검색 결과 api
   const fetchSearchResults = async (searchText) => {
