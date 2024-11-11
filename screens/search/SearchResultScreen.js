@@ -91,6 +91,7 @@ const SearchResultScreen = ({ route, navigation }) => {
       ) : ( <FlatList
         data={searchResults}
         keyExtractor={(item) => item.id.toString()}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <TouchableOpacity style={styles.ResultContainer} onPress={() => handleShopPress(item.id)}>
 

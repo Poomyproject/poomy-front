@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, Image, FlatList, ActivityIndicator } from 'react-native';
 import { Provider } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import { KeywordContext } from './KeywordContext';
@@ -24,11 +24,13 @@ const KeywardRecmdScreen = ({ navigation }) => {
     const [shopList, setShopList] = useState([]); // 샵 리스트 상태 추가
     const { setSelectedShopId } = useContext(ShopContext);
 
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
     const { isFavorite, handleFavoriteToggle } = useFavorites();
 
-
     const moodOptions = ['아기자기', '모던', '빈티지', '럭셔리', '테마별'];
-    const placeOptions = ['강남', '명동', '북촌 한옥마을', '성수', '송리단길', '영등포', '이태원', '종로', '혜화', '홍대'];
+    const placeOptions = ['홍대', '이태원', '송리단길', '영등포', '명동', '북촌 한옥마을', '성수', '강남', '종로', '혜화'];
 
     const moodMap = {
         "아기자기": 1,
@@ -61,9 +63,12 @@ const KeywardRecmdScreen = ({ navigation }) => {
         }
     }, [selectedSpotName, selectedMoodId]);
 
-    // api 호출
     useEffect(() => {
-        if (interestMood && interestPlace) {
+        setLoading(true); // 데이터 요청 전에 로딩 상태 설정
+    
+        if (!interestMood && !interestPlace) {
+            fetchAllShops(); // 무드와 장소가 모두 선택되지 않았을 경우 모든 샵 로드
+        } else if (interestMood && interestPlace) {
             fetchShopsByMoodAndSpot(interestMood, interestPlace); // 분위기와 장소가 모두 선택된 경우
         } else if (interestMood) {
             fetchShopsByMood(interestMood); // 분위기만 선택된 경우
@@ -71,7 +76,7 @@ const KeywardRecmdScreen = ({ navigation }) => {
             fetchShopsBySpot(interestPlace); // 장소만 선택된 경우
         }
     }, [interestMood, interestPlace]);
-
+    
     // 상세페이지로 네비게이션
     const handleShopPress = (shopId) => {
         setSelectedShopId(shopId);
@@ -90,11 +95,28 @@ const KeywardRecmdScreen = ({ navigation }) => {
         } else if (!isSelectingPlace && selectedMood) {
             setInterestMood(selectedMood);
         }
+        
         setSelectedMood('');
         setModalVisible(false);
     };
 
-    // 무드로 선택하기
+    // 무드X 장소X (모든 샵)
+    const fetchAllShops = async () => {
+        try {
+            const response = await ApiClient.get('/api/keyword'); // 모든 샵 데이터 요청
+            if (response.data.success) {
+                setShopList(response.data.response); // 샵 리스트 상태에 저장
+            } else {
+                console.error('모든 샵 리스트를 불러올 수 없습니다.');
+            }
+        } catch (error) {
+            console.error('API 요청 중 오류 발생:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // 무드O 장소X
     const fetchShopsByMood = async (mood) => {
         const moodId = moodMap[mood]; // mood 문자열을 ID로 변환
         if (!moodId) {
@@ -111,10 +133,12 @@ const KeywardRecmdScreen = ({ navigation }) => {
             }
         } catch (error) {
             console.error('API 요청 중 오류 발생:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
-    // 지역으로 호출
+    // 무드X 장소O
     const fetchShopsBySpot = async (place) => {
         const spotId = placeMap[place];
         if (!spotId) return;
@@ -126,10 +150,12 @@ const KeywardRecmdScreen = ({ navigation }) => {
             }
         } catch (error) {
             console.error('API 요청 중 오류 발생:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
-    // 둘다 호출
+    // 무드O 장소
     const fetchShopsByMoodAndSpot = async (mood, place) => {
         const moodId = moodMap[mood];
         const spotId = placeMap[place];
@@ -143,8 +169,28 @@ const KeywardRecmdScreen = ({ navigation }) => {
             }
         } catch (error) {
             console.error('API 요청 중 오류 발생:', error);
+        } finally {
+            setLoading(false);
         }
     };
+
+    // 로딩 시 ActivityIndicator
+    if (loading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color={colors.Green900} />
+                <Text style={styles.loadingText}>로딩 중...</Text>
+            </View>
+        );
+    }
+
+    if (error) {
+        return (
+            <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>{error}</Text>
+            </View>
+        );
+    }
 
     return (
         <Provider>
@@ -177,6 +223,7 @@ const KeywardRecmdScreen = ({ navigation }) => {
                 <FlatList
                     data={shopList}
                     keyExtractor={(item) => item.id.toString()}
+                    showsVerticalScrollIndicator={false}
                     renderItem={({ item }) => (
                         <TouchableOpacity style={styles.ResultContainer} onPress={() => handleShopPress(item.id)}>
 
@@ -234,7 +281,6 @@ const KeywardRecmdScreen = ({ navigation }) => {
                         </TouchableOpacity>
                     )}
                 />
-
             </View>
         </Provider>
     );
