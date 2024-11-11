@@ -35,6 +35,7 @@ const MainScreen = ({ navigation }) => {
     const [moods, setMoods] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [moodCount, setMoodCount] = useState(0); // moodCount를 저장할 state
 
     const fetchHomeSpotShop = async () => {
         try {
@@ -96,11 +97,27 @@ const MainScreen = ({ navigation }) => {
         }
     };
 
+    const fetchMoodCount = async () => {
+        try {
+            const response = await ApiClient.get('/api/users');
+            if (response.data.success) {
+                setMoodCount(response.data.response.moods.length);
+                // console.log(response.data.response.moods.length)
+                // console.log("moodcount:",moodCount)
+            } else {
+                throw new Error('MoodCount 데이터 로딩 실패');
+            }
+        } catch (err) {
+            console.error('API 요청 중 오류 발생:', err);
+            setError(err);
+        }
+    };
+
 
     const fetchData = async () => {
         setLoading(true);
         try {
-            await Promise.all([fetchHomeSpotShop(), fetchHomeSpot(), fetchNewsletters(), fetchMoodShops()]);
+            await Promise.all([fetchHomeSpotShop(), fetchHomeSpot(), fetchNewsletters(), fetchMoodShops(), fetchMoodCount()]);
             setError(null);
         } catch (err) {
             console.error('데이터 로딩 실패:', err);
@@ -110,6 +127,9 @@ const MainScreen = ({ navigation }) => {
         }
     };
 
+    useEffect(() => {
+        console.log("Updated moodCount:", moodCount);  // moodCount가 업데이트될 때마다 확인
+    }, [moodCount]);  // moodCount가 변경될 때마다 실행
 
     useFocusEffect(
         useCallback(() => {
@@ -186,11 +206,11 @@ const MainScreen = ({ navigation }) => {
                 contentContainerStyle={styles.scrollContainer}
                 refreshControl={
                     <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                    tintColor="#1FAA67" 
-                />
-            }
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                        tintColor="#1FAA67"
+                    />
+                }
             >
                 {/* 검색바 */}
                 <TouchableOpacity
@@ -216,7 +236,7 @@ const MainScreen = ({ navigation }) => {
                 </ScrollView>
 
                 {/* 소품샵 이미지 추천 */}
-                <TouchableOpacity style={styles.rightIconContainer}>
+                <TouchableOpacity style={styles.rightIconContainer} onPress={() => handleKeyword(homeSpotShop?.hashtag)}>
                     <View style={styles.sectionTitle_sec_view}>
                         <Text style={styles.sectionTitle_sec}>{homeSpotShop?.prefix} </Text>
                         <Text style={styles.sectionTitle_sec_color}>#{homeSpotShop?.hashtag}</Text>
@@ -298,16 +318,28 @@ const MainScreen = ({ navigation }) => {
                     ))}
                 </View>
 
-                <ShopRecommendation
-                    moodItem={moodItem1}
-                    onShopPress={handleShopPress}
-                />
+                {/* 조건에 맞춰 ShopRecommendation 렌더링 */}
+                {moodCount === 1 ? (
+                    <ShopRecommendation
+                        moodItem={moodItem1}
+                        onShopPress={handleShopPress}
+                        onMoodPress={handleMood}
+                    />
+                ) : moodCount === 2 ? (
+                    <>
+                        <ShopRecommendation
+                            moodItem={moodItem1}
+                            onShopPress={handleShopPress}
+                            onMoodPress={handleMood}
+                        />
+                        <ShopRecommendation
+                            moodItem={moodItem2}
+                            onShopPress={handleShopPress}
+                            onMoodPress={handleMood}
+                        />
+                    </>
+                ) : null}
 
-                <ShopRecommendation
-                    moodItem={moodItem2}
-                    onShopPress={handleShopPress}
-                />
-                
                 <View style={{ padding: '20%' }} />
             </ScrollView>
         </View>

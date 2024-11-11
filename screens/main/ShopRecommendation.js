@@ -2,11 +2,11 @@ import React from 'react';
 import { TouchableOpacity, Text, ScrollView, ImageBackground, Image, View } from 'react-native';
 import styles from './styles';
 
-const ShopRecommendation = ({ moodItem, onShopPress }) => {
+const ShopRecommendation = ({ moodItem, onShopPress, onMoodPress }) => {
   return (
     <View style={{flex:1}}>
       {/* 소품샵 추천 */}
-      <TouchableOpacity style={styles.rightIconContainer}>
+      <TouchableOpacity style={styles.rightIconContainer} onPress={() => onMoodPress(moodItem?.hashtag)}>
         <View style={styles.sectionTitle_sec_view}>
           <Text style={styles.sectionTitle_sec}>{moodItem?.prefix} </Text>
           <Text style={styles.sectionTitle_sec_color}>#{moodItem?.hashtag} </Text>
