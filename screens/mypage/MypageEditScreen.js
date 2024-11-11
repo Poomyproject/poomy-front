@@ -11,14 +11,14 @@ const MypageEditScreen = () => {
   const [nickname, setNickname] = useState('');
   const [googleEmail, setGoogleEmail] = useState('');
   const [selectedMoods, setSelectedMoods] = useState([]);
-  // const [selectedPlaces, setSelectedPlaces] = useState([]); // 장소 관련 부분 주석 처리
+  const [selectedPlaces, setSelectedPlaces] = useState([]);
   const [moodsList, setMoodsList] = useState([]);
-  // const [placesList, setPlacesList] = useState([]); // 장소 관련 부분 주석 처리
+  const [placesList, setPlacesList] = useState([]); 
   const [isFirstModalVisible, setFirstModalVisible] = useState(false);
   const [isSecondModalVisible, setSecondModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);
   const [initialMoods, setInitialMoods] = useState([]);
-  // const [initialPlaces, setInitialPlaces] = useState([]); // 장소 관련 부분 주석 처리
+  const [initialPlaces, setInitialPlaces] = useState([]); 
   
   const navigation = useNavigation();
 
@@ -31,12 +31,12 @@ const MypageEditScreen = () => {
         setGoogleEmail(userData.googleEmail);
         
         const moods = userData.moods.map(mood => ({ id: mood.id, name: mood.name }));
-        // const places = userData.spots.map(spot => ({ id: spot.id, name: spot.name })); // 장소 관련 부분 주석 처리
+        const places = userData.spots.map(spot => ({ id: spot.id, name: spot.name })); 
   
         setSelectedMoods(moods);
-        // setSelectedPlaces(places); // 장소 관련 부분 주석 처리
+        setSelectedPlaces(places); 
         setInitialMoods(moods);
-        // setInitialPlaces(places); // 장소 관련 부분 주석 처리
+        setInitialPlaces(places); 
       }
     } catch (error) {
       console.error('Failed to fetch user data:', error);
@@ -51,10 +51,10 @@ const MypageEditScreen = () => {
       if (moodsResponse.data.success) {
         setMoodsList(moodsResponse.data.response);
       }
-      // const placesResponse = await ApiClient.get('/api/spots'); // 장소 관련 부분 주석 처리
-      // if (placesResponse.data.success) {
-      //   setPlacesList(placesResponse.data.response);
-      // }
+      const placesResponse = await ApiClient.get('/api/spots'); 
+      if (placesResponse.data.success) {
+        setPlacesList(placesResponse.data.response);
+      }
     } catch (error) {
       console.error('Failed to fetch moods or places:', error);
     }
@@ -79,21 +79,21 @@ const MypageEditScreen = () => {
     });
   };
 
-  // const handleSelectPlace = (place) => { // 장소 관련 부분 주석 처리
-  //   setSelectedPlaces((prevPlaces) => {
-  //     if (prevPlaces.some(p => p.id === place.id)) {
-  //       return prevPlaces.filter(p => p.id !== place.id);
-  //     } else if (prevPlaces.length < 2) {
-  //       return [...prevPlaces, { ...place }];
-  //     }
-  //     return prevPlaces;
-  //   });
-  // };
+  const handleSelectPlace = (place) => { 
+    setSelectedPlaces((prevPlaces) => {
+      if (prevPlaces.some(p => p.id === place.id)) {
+        return prevPlaces.filter(p => p.id !== place.id);
+      } else if (prevPlaces.length < 2) {
+        return [...prevPlaces, { ...place }];
+      }
+      return prevPlaces;
+    });
+  };
 
   const loadSelectedDataFromStorage = async () => {
     try {
       const storedMoods = await AsyncStorage.getItem('selectedMoods');
-      // const storedPlaces = await AsyncStorage.getItem('selectedPlaces'); // 장소 관련 부분 주석 처리
+      const storedPlaces = await AsyncStorage.getItem('selectedPlaces'); 
 
       if (storedMoods) {
         const parsedMoods = JSON.parse(storedMoods);
@@ -101,11 +101,11 @@ const MypageEditScreen = () => {
         console.log('Loaded moods from storage:', parsedMoods);
       }
 
-      // if (storedPlaces) { // 장소 관련 부분 주석 처리
-      //   const parsedPlaces = JSON.parse(storedPlaces);
-      //   setSelectedPlaces(parsedPlaces);
-      //   console.log('Loaded places from storage:', parsedPlaces);
-      // }
+      if (storedPlaces) { 
+        const parsedPlaces = JSON.parse(storedPlaces);
+        setSelectedPlaces(parsedPlaces);
+        console.log('Loaded places from storage:', parsedPlaces);
+      }
     } catch (error) {
       console.error('Error loading data from storage:', error);
     }
@@ -113,15 +113,16 @@ const MypageEditScreen = () => {
 
   const applyChanges = async () => {
     try {
-      console.log('Storing selectedMoods to local storage:', selectedMoods);
-      // console.log('Storing selectedPlaces to local storage:', selectedPlaces); // 장소 관련 부분 주석 처리
+      //console.log('Storing selectedMoods to local storage:', selectedMoods);
+      // console.log('Storing selectedPlaces to local storage:', selectedPlaces);
 
       await AsyncStorage.setItem('selectedMoods', JSON.stringify(selectedMoods));
-      // await AsyncStorage.setItem('selectedPlaces', JSON.stringify(selectedPlaces)); // 장소 관련 부분 주석 처리
+      await AsyncStorage.setItem('selectedPlaces', JSON.stringify(selectedPlaces)); 
 
       console.log('Changes successfully applied to local storage');
       setFirstModalVisible(false);
       setSecondModalVisible(false);
+
     } catch (error) {
       console.error('Error saving to local storage:', error);
     }
@@ -130,23 +131,43 @@ const MypageEditScreen = () => {
   const handleSaveChanges = async () => {
     try {
       const moodIds = selectedMoods.map(mood => mood.id);
-      // const placeIds = selectedPlaces.map(place => place.id); // 장소 관련 부분 주석 처리
+      const placeIds = selectedPlaces.map(place => place.id); 
 
       console.log('Sending moodIds to server:', moodIds);
       await ApiClient.post('/api/users/moods', { moodIds });
 
-      // console.log('Sending placeIds to server:', placeIds); // 장소 관련 부분 주석 처리
-      // await ApiClient.post('/api/users/spots', { spotIds: placeIds }); // 장소 관련 부분 주석 처리
+      console.log('Sending placeIds to server:', placeIds); 
+      await ApiClient.post('/api/users/spots', { spotIds: placeIds }); 
 
       setInitialMoods(selectedMoods);
-      // setInitialPlaces(selectedPlaces); // 장소 관련 부분 주석 처리
+      setInitialPlaces(selectedPlaces); 
 
       console.log('Save changes completed, navigating back');
       navigation.goBack();
+      
     } catch (error) {
       console.error('Error saving changes:', error);
     }
   };
+
+  // 모달 열 때 현재 선택 상태 저장
+  const openFirstModal = () => {
+    setInitialPlaces([...selectedPlaces]);
+    setFirstModalVisible(true);
+  };
+
+  const openSecondModal = () => {
+    setInitialMoods([...selectedMoods]);
+    setSecondModalVisible(true);
+  };
+
+  const cancelSelection = () => {
+    setSelectedMoods(initialMoods); // 모달을 열기 전 상태로 되돌림
+    setSelectedPlaces(initialPlaces);
+    setFirstModalVisible(false);
+    setSecondModalVisible(false);
+  };
+
   
   // 로딩 상태 표시
   if (loading) {
@@ -159,7 +180,7 @@ const MypageEditScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }]}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Image source={require('../../assets/left.png')} style={styles.backButtonImage} />
         </TouchableOpacity>
@@ -168,6 +189,7 @@ const MypageEditScreen = () => {
           <Text style={styles.headerButtonText}>완료</Text>
         </TouchableOpacity>
       </View>
+
   
       <Image source={require('../../assets/defualt.png')} style={styles.profileImage} />
       <View style={styles.contentContainer}>
@@ -175,69 +197,78 @@ const MypageEditScreen = () => {
         <TouchableOpacity style={styles.nicknameContainer} onPress={() => navigation.navigate('NameEdit')}>
           <Text>{nickname ? nickname : 'N/A'}</Text>
         </TouchableOpacity>
-        <Text style={styles.textColor}>계정정보</Text>
-        <Text style={styles.nicknameContainer}>{googleEmail ? googleEmail : 'N/A'}</Text>
+        <Text style={[styles.textColor, {}]}>계정정보</Text>
+        <Text style={[styles.nicknameContainer,{ color : colors.Gray300 }]}>{googleEmail ? googleEmail : 'N/A'}</Text>
   
-        {/* <Text style={styles.textColor}>관심 장소</Text>
-        <TouchableOpacity onPress={() => setFirstModalVisible(true)} style={styles.moodTextContainer}>
-          {selectedPlaces.length === 0 ? (
-            <Text>장소 선택</Text>
-          ) : (
-            <View style={styles.selectedMoodsContainer}>
-              {selectedPlaces.map((place, index) => (
-                <View key={index} style={styles.moodTag}>
-                  <Text style={styles.moodTagText}>{place.name ? place.name : 'N/A'}</Text>
-                </View>
-              ))}
-            </View>
-          )}
-        </TouchableOpacity> */}
+        <Text style={styles.textColor}>관심 장소</Text>
+        <TouchableOpacity onPress={openFirstModal} style={styles.moodTextContainer}>
+        {selectedPlaces.length === 0 ? (
+          <Text>장소 선택</Text>
+        ) : (
+          <View style={styles.selectedMoodsContainer}>
+            {selectedPlaces.map((place, index) => (
+              <View key={index} style={styles.moodTag}>
+                <Text style={styles.moodTagText}>{place.name ? place.name : 'N/A'}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+      </TouchableOpacity>
 
         <Text style={styles.textColor}>관심 분위기</Text>
-        <TouchableOpacity onPress={() => setSecondModalVisible(true)} style={styles.moodTextContainer}>
-          {selectedMoods.length === 0 ? (
-            <Text>분위기 선택</Text>
-          ) : (
-            <View style={styles.selectedMoodsContainer}>
-              {selectedMoods.map((mood, index) => (
-                <View key={index} style={styles.moodTag}>
-                  <Text style={styles.moodTagText}>{mood.name ? mood.name : 'N/A'}</Text>
-                </View>
-              ))}
-            </View>
-          )}
-        </TouchableOpacity>
-  
-        {/* <Modal
+        <TouchableOpacity onPress={openSecondModal} style={styles.moodTextContainer}>
+        {selectedMoods.length === 0 ? (
+          <Text>분위기 선택</Text>
+        ) : (
+          <View style={styles.selectedMoodsContainer}>
+            {selectedMoods.map((mood, index) => (
+              <View key={index} style={styles.moodTag}>
+                <Text style={styles.moodTagText}>{mood.name ? mood.name : 'N/A'}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+      </TouchableOpacity>
+        
+        <Modal
           isVisible={isFirstModalVisible}
           onBackdropPress={() => setFirstModalVisible(false)}
           swipeDirection="down"
           style={styles.bottomModal}
         >
           <View style={styles.modalContent}>
-          <Text style={styles.text}>장소 선택</Text>
-          <View style={styles.moodContainer}>
-            {placesList.map((place) => (
-              <TouchableOpacity
-                key={place.id}
-                style={[
-                  styles.moodButton,
-                  selectedPlaces.some((p) => p.id === place.id) ? styles.selectedPlace : {}
-                ]}
-                onPress={() => handleSelectPlace(place)}
-              >
-                <Text style={styles.moodText}>{place.name ? place.name : 'N/A'}</Text>
-              </TouchableOpacity>
-            ))}
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
+            <Text style={styles.text}>장소 선택</Text>
+            <TouchableOpacity onPress={cancelSelection}>
+              <Image source={require('../../assets/close.png')} style={styles.image} />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={() => {
-            applyChanges();
-            setFirstModalVisible(false);
-          }} style={styles.closeButton}>
-            <Text style={styles.closeButtonText}>적용하기</Text>
-          </TouchableOpacity>
-        </View>
-        </Modal> */}
+            <View style={styles.moodContainer}>
+              {placesList.map((place) => (
+                <TouchableOpacity
+                  key={place.id}
+                  style={[
+                    styles.moodButton,
+                    selectedPlaces.some((p) => p.id === place.id) ? styles.selectedMood : {} // selectedPlace 스타일 적용
+                  ]}
+                  onPress={() => handleSelectPlace(place)}
+                >
+                  <Text
+                  style={[
+                    styles.moodText,
+                    selectedPlaces.some((p) => p.id === place.id) ? styles.selectedPlaceText : {}
+                  ]}
+                >
+                  {place.name ? place.name : 'N/A'}
+                </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+            <TouchableOpacity onPress={applyChanges} style={styles.closeButton}>
+              <Text style={styles.closeButtonText}>적용하기</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
 
         <Modal
           isVisible={isSecondModalVisible}
@@ -246,7 +277,12 @@ const MypageEditScreen = () => {
           style={styles.bottomModal}
         >
           <View style={styles.modalContent}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
             <Text style={styles.text}>분위기 선택</Text>
+            <TouchableOpacity onPress={cancelSelection}>
+              <Image source={require('../../assets/close.png')} style={styles.image} />
+            </TouchableOpacity>
+          </View>
             <View style={styles.moodContainer}>
               {moodsList.map((mood) => (
                 <TouchableOpacity
@@ -254,7 +290,14 @@ const MypageEditScreen = () => {
                   style={[styles.moodButton, selectedMoods.some(m => m.id === mood.id) ? styles.selectedMood : {}]}
                   onPress={() => handleSelectMood(mood)}
                 >
-                  <Text style={styles.moodText}>{mood.name ? mood.name : 'N/A'}</Text>
+                  <Text
+                  style={[
+                    styles.moodText,
+                    selectedMoods.some((m) => m.id === mood.id) ? styles.selectedMoodText : {}
+                  ]}
+                >
+                  {mood.name ? mood.name : 'N/A'}
+                </Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -279,11 +322,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
-    paddingVertical: 18,
+    marginTop : 40,
+    paddingVertical: 10,
     paddingHorizontal: 15,
     backgroundColor: colors.Ivory100,
     borderBottomWidth: 1,
-    borderBottomColor: colors.Gray300,
+    borderBottomColor: colors.Gray100,
   },
   backButton: {
     padding: 5,
@@ -294,15 +338,15 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   headerTitle: {
-    marginTop : 35, 
     fontSize: 18,
     fontWeight: 'bold',
     color: colors.Gray900,
+    textAlign: 'center',
   },
   headerButtonText: {
     color: colors.Gray700,
-    padding : 5, 
-  },
+    padding: 5,
+  },  
   contentContainer: {
     width: '90%',
     alignItems: 'flex-start',
@@ -320,7 +364,7 @@ const styles = StyleSheet.create({
   },
   nicknameContainer: {
     backgroundColor: colors.Ivory300,  
-    borderColor: colors.Gray300,        
+    borderColor: colors.Gray100,        
     borderWidth: 1,              
     borderRadius: 5,             
     padding: 15,                
@@ -329,7 +373,7 @@ const styles = StyleSheet.create({
   },
   moodTextContainer : {
     backgroundColor: colors.Ivory300,  
-    borderColor: colors.Gray300,        
+    borderColor: colors.Gray100,        
     borderWidth: 1,              
     borderRadius: 10,             
     padding: 10,                
@@ -399,6 +443,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  selectedPlaceText: {
+    color: colors.Ivory100, // 선택된 장소 텍스트 색상 흰색
+  },
+  selectedMoodText: {
+    color: colors.Ivory100, // 선택된 분위기 텍스트 색상 흰색
   },
 });
 

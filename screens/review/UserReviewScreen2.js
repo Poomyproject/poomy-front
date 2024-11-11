@@ -13,7 +13,8 @@ const UserReviewScreen2 = () => {
 
   const route = useRoute();
   const { selectedShopId } = route.params;
-  console.log('상점아이디',selectedShopId)
+  const { shopName } = route.params;
+  // console.log('상점아이디',selectedShopId)
 
   // 버튼 활성화 여부
   const isButtonDisabled = selectedOption === null;
@@ -46,7 +47,7 @@ const UserReviewScreen2 = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>
-        <Text style={styles.highlight}>선민이네 샵</Text>
+        <Text style={styles.highlight}>{shopName || '상점 이름 없음'}</Text>
         의 {'\n'}특징을 알려주세요
       </Text>
       <Text style={styles.subHeader}>자유롭게 선택해주세요.</Text>
