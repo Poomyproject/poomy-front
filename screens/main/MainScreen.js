@@ -6,7 +6,7 @@ import { ShopContext } from '../shop/ShopContext';
 import { KeywordContext } from '../keyword/KeywordContext';
 import { MoodContext } from '../keyword/MoodContext';
 import { NewsLetterContext } from '../context/NewsLetterContext';
-import { useFavorites } from '../like/FavoriteContext';
+import FavoriteProvider, { FavoriteContext } from '../like/FavoriteContext';
 import { useFocusEffect } from '@react-navigation/native';
 import styles from './styles';
 import ShopRecommendation from './ShopRecommendation';
@@ -26,7 +26,7 @@ const MainScreen = ({ navigation }) => {
     const { setSelectedSpotName } = useContext(KeywordContext);
     const { setSelectedMoodId } = useContext(MoodContext);
     const { setSelectedNewsLetterId } = useContext(NewsLetterContext);
-    const { favorites, addFavorite, removeFavorite, isFavorite } = useFavorites();
+    const { favorites, addFavorite, removeFavorite, isFavorite } = useContext(FavoriteContext);
 
     const [refreshing, setRefreshing] = useState(false);
     const [homeSpotShop, setHomeSpotShop] = useState(null);

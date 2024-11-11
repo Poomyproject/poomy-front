@@ -5,7 +5,7 @@ import colors from '../../config/colors';
 import { useNavigation } from '@react-navigation/native';
 import { ShopContext } from './ShopContext';
 import ApiClient from '../auth/ApiClient';
-import { useFavorites } from '../like/FavoriteContext';
+import FavoriteProvider, { FavoriteContext } from '../like/FavoriteContext';
 import { fonts } from '../../config/fonts';
 import { NaverMapView, Marker } from '@mj-studio/react-native-naver-map';
 
@@ -87,7 +87,7 @@ const ShopDetailScreen = ({ route }) => {
   const [shopData, setShopData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { isFavorite, addFavorite, removeFavorite } = useFavorites();
+  const { isFavorite, addFavorite, removeFavorite } = useContext(FavoriteContext);
   const [reviewData, setReviewData] = useState(null);
   const [page, setPage] = useState(1);
   const limit = 3;
