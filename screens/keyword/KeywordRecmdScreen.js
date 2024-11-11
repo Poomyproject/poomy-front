@@ -9,7 +9,7 @@ import PlaceMoodButtons from './PlaceMoodButtons';
 import SelectionModal from './SelectionModal';
 import ApiClient from '../auth/ApiClient';
 import NoResults from '../search/NoResults';
-import { useFavorites } from '../like/FavoriteContext';
+import FavoriteProvider, { FavoriteContext } from '../like/FavoriteContext';
 import { ShopContext } from '../shop/ShopContext';
 import colors from '../../config/colors';
 
@@ -27,7 +27,7 @@ const KeywardRecmdScreen = ({ navigation }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const { isFavorite, handleFavoriteToggle } = useFavorites();
+    const { isFavorite, handleFavoriteToggle } = useContext(FavoriteContext);
 
     const moodOptions = ['아기자기', '모던', '빈티지', '럭셔리', '테마별'];
     const placeOptions = ['홍대', '이태원', '송리단길', '영등포', '명동', '북촌 한옥마을', '성수', '강남', '종로', '혜화'];
