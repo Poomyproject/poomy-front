@@ -417,6 +417,17 @@ const styles = StyleSheet.create({
     heartContainer: {
         marginTop: '13%',
     },
+    loadingContainer:{
+        flex:1,
+        backgroundColor:'white',
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    loadingText:{
+        marginTop:15,
+        fontWeight:'500',
+        color:colors.Gray500
+    }
 });
 
 export default styles;
