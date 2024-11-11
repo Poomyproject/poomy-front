@@ -53,7 +53,7 @@ const FavoriteProvider = ({ children }) => {
         setFavorites(favoriteIds);
       }
     } catch (error) {
-      console.error('찜 리스트 불러오기 오류:', error);
+      //console.error('찜 리스트 불러오기 오류:', error);
     } finally {
       setLoading(false);
     }
