@@ -1,11 +1,11 @@
-// FavoriteContext.js
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import ApiClient from '../auth/ApiClient';
 
 const FavoriteContext = createContext();
 
 export const FavoriteProvider = ({ children }) => {
   const [favorites, setFavorites] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const isFavorite = (shopId) => favorites.includes(shopId);
 
@@ -31,7 +31,6 @@ export const FavoriteProvider = ({ children }) => {
     }
   };
 
-  // 찜 상태를 토글하는 함수 추가
   const handleFavoriteToggle = (shopId) => {
     if (isFavorite(shopId)) {
       removeFavorite(shopId);
@@ -40,24 +39,23 @@ export const FavoriteProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    const fetchFavorites = async () => {
-      try {
-        const response = await ApiClient.get('/api/favorite');
-        if (response.data && response.data.success) {
-          const favoriteIds = response.data.response.map((item) => item.shopId);
-          setFavorites(favoriteIds);
-        }
-      } catch (error) {
-        //console.error('찜 리스트 불러오기 오류:', error);
+  const fetchFavorites = async () => {
+    setLoading(true);
+    try {
+      const response = await ApiClient.get('/api/favorite');
+      if (response.data && response.data.success) {
+        const favoriteIds = response.data.response.map((item) => item.shopId);
+        setFavorites(favoriteIds);
       }
-    };
-
-    fetchFavorites();
-  }, []);
+    } catch (error) {
+      console.error('찜 리스트 불러오기 오류:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <FavoriteContext.Provider value={{ favorites, addFavorite, removeFavorite, isFavorite, handleFavoriteToggle }}>
+    <FavoriteContext.Provider value={{ favorites, addFavorite, removeFavorite, isFavorite, handleFavoriteToggle, fetchFavorites, loading }}>
       {children}
     </FavoriteContext.Provider>
   );

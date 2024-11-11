@@ -12,7 +12,7 @@ import { useFavorites } from '../like/FavoriteContext';
 const LikeScreen = () => {
     const navigation = useNavigation();
     const { setSelectedShopId } = useContext(ShopContext);
-    const { isFavorite, handleFavoriteToggle } = useFavorites();
+    // const {isFavorite , handleFavoriteToggle} = useFavorites();
 
     const [interestPlace, setInterestPlace] = useState('');
     const [interestMood, setInterestMood] = useState('');
@@ -53,6 +53,7 @@ const LikeScreen = () => {
         try {
             const response = await ApiClient.get('/api/favorite');
             if (response.data.success) setFavorites(response.data.response);
+            console.log(response.data.response)
         } catch (error) {
             console.error('Error fetching favorites:', error);
         }
@@ -129,41 +130,63 @@ const LikeScreen = () => {
         setTempSelectedPlace('');
         setTempSelectedMood('');
         setModalVisible(false);
-    };      
+    };  
+    
+    // 찜 상태를 토글하는 함수
+const handleFavoriteToggle = async (shopId) => {
+    const item = favorites.find((fav) => fav.shopId === shopId);
+    if (item) {
+        try {
+            // 현재 찜 상태를 확인하고 반대로 전송
+            const response = await ApiClient.post(`/api/favorite/${shopId}/${item.isFavorite ? 'unlike' : 'like'}`);
+            if (response.data.success) {
+                // 성공 시 해당 아이템의 찜 상태를 토글하여 업데이트
+                setFavorites((prev) =>
+                    prev.map((fav) =>
+                        fav.shopId === shopId ? { ...fav, isFavorite: !fav.isFavorite } : fav
+                    )
+                );
+            }
+        } catch (error) {
+            console.error('찜 상태 토글 중 오류 발생:', error);
+        }
+    }
+};
     
 
-    const renderItem = ({ item }) => {
-        const navigateToShopDetail = (shopId) => {
-            setSelectedShopId(shopId); // 선택된 shopId를 설정
-            navigation.navigate('ShopDetail'); // ShopDetailScreen으로 이동
-        };
-
-        return (
-            <TouchableOpacity onPress={() => navigateToShopDetail(item.shopId)} style={styles.favoriteItem}>
-                <Image source={{ uri: item.image }} style={styles.shopImage} />
-                <View style={styles.shopInfo}>
-                    <Text style={styles.shopName}>{item.shopName}</Text>
-                    <View style={styles.tagContainer}>
-                        <View style={styles.tag}><Text style={styles.tagText}>{item.spot}</Text></View>
-                        <View style={styles.tag}><Text style={styles.tagText}>{item.mood}</Text></View>
-                    </View>
-                    <View style={styles.locationContainer}>
-                        <Image source={require('../../assets/pin.png')} style={styles.locationIcon} />
-                        <Text style={styles.locationText}>{item.location}</Text>
-                    </View>
-                </View>
-                <TouchableOpacity onPress={() => handleFavoriteToggle(item.shopId)}>
-                    <Image 
-                        source={isFavorite(item.shopId) 
-                            ? require('../../assets/img_liked_heart.png') 
-                            : require('../../assets/heart.png')          
-                        }
-                        style={styles.favoriteIcon}
-                    />
-                </TouchableOpacity>
-            </TouchableOpacity>
-        );
+const renderItem = ({ item }) => {
+    const navigateToShopDetail = (shopId) => {
+        setSelectedShopId(shopId);
+        navigation.navigate('ShopDetail');
     };
+
+    return (
+        <TouchableOpacity onPress={() => navigateToShopDetail(item.shopId)} style={styles.favoriteItem}>
+            <Image source={{ uri: item.image }} style={styles.shopImage} />
+            <View style={styles.shopInfo}>
+                <Text style={styles.shopName}>{item.shopName}</Text>
+                <View style={styles.tagContainer}>
+                    <View style={styles.tag}><Text style={styles.tagText}>{item.spot}</Text></View>
+                    <View style={styles.tag}><Text style={styles.tagText}>{item.mood}</Text></View>
+                </View>
+                <View style={styles.locationContainer}>
+                    <Image source={require('../../assets/pin.png')} style={styles.locationIcon} />
+                    <Text style={styles.locationText}>{item.location}</Text>
+                </View>
+            </View>
+            <TouchableOpacity onPress={() => handleFavoriteToggle(item.shopId)}>
+                <Image 
+                    source={item.isFavorite 
+                        ? require('../../assets/img_liked_heart.png') 
+                        : require('../../assets/heart.png')          
+                    }
+                    style={styles.favoriteIcon}
+                />
+            </TouchableOpacity>
+        </TouchableOpacity>
+    );
+};
+
 
     // 필터를 초기화하고 전체 찜 리스트를 다시 로드하는 함수
     const clearFilter = async (type) => {
