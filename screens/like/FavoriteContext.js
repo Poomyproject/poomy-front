@@ -1,14 +1,16 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import ApiClient from '../auth/ApiClient';
 
-const FavoriteContext = createContext();
+export const FavoriteContext = createContext();
 
-export const FavoriteProvider = ({ children }) => {
+const FavoriteProvider = ({ children }) => {
   const [favorites, setFavorites] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
+  // 특정 shopId가 찜 목록에 있는지 확인하는 함수
   const isFavorite = (shopId) => favorites.includes(shopId);
 
+  // 찜 추가 함수
   const addFavorite = async (shopId) => {
     try {
       const response = await ApiClient.post(`/api/favorite/${shopId}/like`);
@@ -20,6 +22,7 @@ export const FavoriteProvider = ({ children }) => {
     }
   };
 
+  // 찜 삭제 함수
   const removeFavorite = async (shopId) => {
     try {
       const response = await ApiClient.post(`/api/favorite/${shopId}/unlike`);
@@ -31,6 +34,7 @@ export const FavoriteProvider = ({ children }) => {
     }
   };
 
+  // 찜 상태 토글 함수
   const handleFavoriteToggle = (shopId) => {
     if (isFavorite(shopId)) {
       removeFavorite(shopId);
@@ -39,6 +43,7 @@ export const FavoriteProvider = ({ children }) => {
     }
   };
 
+  // 전체 찜 목록을 API에서 가져오는 함수
   const fetchFavorites = async () => {
     setLoading(true);
     try {
@@ -54,11 +59,26 @@ export const FavoriteProvider = ({ children }) => {
     }
   };
 
+  // 컴포넌트가 마운트될 때 찜 목록 가져오기
+  useEffect(() => {
+    fetchFavorites();
+  }, []);
+
   return (
-    <FavoriteContext.Provider value={{ favorites, addFavorite, removeFavorite, isFavorite, handleFavoriteToggle, fetchFavorites, loading }}>
+    <FavoriteContext.Provider
+      value={{
+        favorites,
+        addFavorite,
+        removeFavorite,
+        isFavorite,
+        handleFavoriteToggle,
+        fetchFavorites,
+        loading
+      }}
+    >
       {children}
     </FavoriteContext.Provider>
   );
 };
 
-export const useFavorites = () => useContext(FavoriteContext);
+export default FavoriteProvider;
