@@ -222,7 +222,9 @@ const ShopDetailScreen = ({ route }) => {
   if (error) return <View><Text>에러 발생: {error.message}</Text></View>;
 
   return (
-    <ScrollView contentContainerStyle={{ backgroundColor: colors.Ivory100, alignItems: 'left', flexGrow: 1, padding: 20 , }}>
+    <ScrollView 
+    contentContainerStyle={{ backgroundColor: colors.Ivory100, alignItems: 'left', flexGrow: 1, padding: 20 , }}
+    showsVerticalScrollIndicator={false}>
       {shopData && shopData.shopImageList && shopData.shopImageList.length > 0 ? (
         <Swiper style={styles.swiper} showsPagination dotColor="#D4D4D4" activeDotColor="#666666" paginationStyle={{ bottom: -5 }} >
           {shopData.shopImageList.map((image, index) => (
