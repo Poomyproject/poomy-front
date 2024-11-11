@@ -223,6 +223,11 @@ const ShopDetailScreen = ({ route }) => {
     navigation.navigate('ShopDetail', { shopId });
   };
 
+  const navigateToOneReview = (reviewId) => {
+    navigation.navigate('OneReview', { reviewId });
+  };
+
+
   if (loading) return <ActivityIndicator size="large" color={colors.Green900} />;
   if (error) return <View><Text>에러 발생: {error.message}</Text></View>;
 
@@ -408,24 +413,48 @@ const ShopDetailScreen = ({ route }) => {
       ))}
     </View>
 
-      {reviewData.reviews.map(review => (
-        <View key={review.id} style={styles.reviewBox}>
-          <View style={styles.reviewItem}>
-            <Image source={require('../../assets/profile.png')} style={{ width: 40, height: 40, marginRight: 10 }} />
-            <View style={styles.reviewContent}>
-              <View style={styles.headerRow}>
-                <Text style={styles.reviewUser}>{review.userNickName}</Text>
-                <Text style={styles.reviewDate}>{review.date}</Text>
-              </View>
-              <Text style={styles.reviewText}>{review.content}</Text>
-            </View>
-            <Image 
-              source={review.isRecommend ? require('../../assets/img_thumbs_up.png') : require('../../assets/img_thumbs_down.png')} 
-              style={styles.like} 
-            />
-          </View>
+    {reviewData.reviews.map((review) => (
+  <TouchableOpacity 
+    key={review.id} 
+    style={styles.reviewBox}
+    onPress={() => navigateToOneReview(review.id)} // 전체 리뷰 뷰를 누르면 이동
+  >
+    <View style={styles.reviewItem}>
+      <Image source={require('../../assets/profile.png')} style={{ width: 40, height: 40, marginRight: 10 }} />
+      <View style={styles.reviewContent}>
+        <View style={styles.headerRow}>
+          <Text style={styles.reviewUser}>{review.userNickName}</Text>
+          <Text style={styles.reviewDate}>{review.date}</Text>
         </View>
-      ))}
+        <Text style={styles.reviewText}>{review.content}</Text>
+      </View>
+      <Image 
+        source={review.isRecommend ? require('../../assets/img_thumbs_up.png') : require('../../assets/img_thumbs_down.png')} 
+        style={styles.like} 
+      />
+    </View>
+
+    {/* 리뷰 이미지가 있을 경우 표시 */}
+    {review.imgUrls && review.imgUrls.length > 0 && (
+      <View style={styles.imageContainer}>
+        {review.imgUrls.slice(0, 3).map((img, index) => (
+          index === 2 && review.imgUrls.length > 3 ? (
+            <View key={img.id} style={styles.overlayContainer}>
+              <Image source={{ uri: img.url }} style={styles.bigReviewImage} />
+              <View style={styles.overlay}>
+                <Text style={styles.overlayText}>+{review.imgUrls.length - 2}</Text>
+              </View>
+            </View>
+          ) : (
+            <Image key={img.id} source={{ uri: img.url }} style={styles.bigReviewImage} />
+          )
+        ))}
+      </View>
+    )}
+  </TouchableOpacity>
+))}
+
+
 
       <TouchableOpacity style={styles.viewAllButton} onPress={() => navigation.navigate('ShopReview')}>
         <Text style={styles.viewAllText}>리뷰 전체보기</Text>
@@ -605,6 +634,16 @@ const ShopDetailScreen = ({ route }) => {
         width: 108,
         height: 108,
         marginRight: 10,
+        borderRadius: 4,
+      },
+      imageContainer: {
+        flexDirection: 'row',
+        marginTop: 8,
+      },
+      bigReviewImage: {
+        width: 167,
+        height: 167,
+        marginRight: 5,
         borderRadius: 4,
       },
 
