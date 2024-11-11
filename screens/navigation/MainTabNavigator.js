@@ -11,7 +11,6 @@ import { fonts } from '../../config/fonts';
 import { Text } from 'react-native-paper';
 import LikeStackNavigator from './LikeStackNavigator';
 
-
 const Tab = createBottomTabNavigator();
 
 const MainTabNavigator = () => {
@@ -19,16 +18,22 @@ const MainTabNavigator = () => {
     <Tab.Navigator initialRouteName="Main">
       <Tab.Screen
         name="찜"
-        component={LikeStackNavigator} 
+        component={LikeStackNavigator}
         options={{
-          tabBarLabel: '찜',
-          tabBarIcon: ({ color, size }) => (
-            <Image source={require('../../assets/ic_todo.png')} style={{ width: size, height: size, tintColor: color }} />
+          tabBarLabel: ({ focused }) => (
+            <Text style={{ color: focused ? colors.Green900 : colors.Gray500 }}>찜</Text>
           ),
-          headerShown: false, 
+          tabBarIcon: ({ size, focused }) => (
+            <Image
+              source={focused ? require('../../assets/ic_todo_active.png') : require('../../assets/ic_todo.png')}
+              style={{ width: 20, height: 20, marginRight:2, }}
+            />
+          ),
+          headerShown: false,
           headerTitleStyle: {
             ...fonts.Body1,
             color: colors.Gray900,
+            fontSize:13
           },
         }}
       />
@@ -36,21 +41,30 @@ const MainTabNavigator = () => {
         name="Main"
         component={ShopNavigatior}
         options={{
-        tabBarLabel: '홈',
-        tabBarIcon: ({ color, size }) => (
-        <Image source={require('../../assets/ic_home.png')} style={{ width: size, height: size, tintColor: color }} />
-        ),
-        headerShown: false, 
+          tabBarLabel: ({ focused }) => (
+            <Text style={{ color: focused ? colors.Green900 : colors.Gray500, fontSize:13 }}>홈</Text>
+          ),
+          tabBarIcon: ({ size, focused }) => (
+            <Image
+              source={focused ? require('../../assets/ic_home_active.png') : require('../../assets/ic_home.png')}
+              style={{ width: 20, height: 20, marginRight:1 }}
+            />
+          ),
+          headerShown: false,
         }}
       />
-
       <Tab.Screen
         name="마이페이지"
         component={MypageStackNavigator}
         options={{
-          tabBarLabel: '마이페이지',
-          tabBarIcon: ({ color, size }) => (
-            <Image source={require('../../assets/ic_mypage.png')} style={{ width: size, height: size, tintColor: color }} />
+          tabBarLabel: ({ focused }) => (
+            <Text style={{ color: focused ? colors.Green900 : colors.Gray500, fontSize:13 }}>마이페이지</Text>
+          ),
+          tabBarIcon: ({ size, focused }) => (
+            <Image
+              source={focused ? require('../../assets/ic_mypage_active.png') : require('../../assets/ic_mypage.png')}
+              style={{ width: 20, height: 20, marginRight:2, }}
+            />
           ),
           headerShown: false,
           headerTitleStyle: {
@@ -62,5 +76,7 @@ const MainTabNavigator = () => {
     </Tab.Navigator>
   );
 };
+
+
 
 export default MainTabNavigator;
