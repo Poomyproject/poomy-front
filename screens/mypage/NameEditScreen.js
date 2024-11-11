@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert , Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, Image } from 'react-native';
 import colors from '../../config/colors';
-import { fonts } from '../../config/fonts'; 
+import { fonts } from '../../config/fonts';
 import ApiClient from '../auth/ApiClient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -16,12 +16,17 @@ const NameEditScreen = ({ navigation }) => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={handleSaveNickname}>
-          <Text style={{ marginRight: 20, color: colors.Green900, ...fonts.Body2 }}>완료</Text>
+        <TouchableOpacity
+          onPress={handleSaveNickname}
+          disabled={!isValidForSave()}
+        >
+          <Text style={[styles.headerButtonText, isValidForSave() ? styles.activeText : styles.inactiveText]}>
+            완료
+          </Text>
         </TouchableOpacity>
       ),
     });
-  }, [name]);
+  }, [name, isDuplicateChecked, isLengthValid, isContentValid]);
 
   const validateName = (input) => {
     const lengthValid = input.length <= 5 && input.length > 0;
@@ -31,15 +36,17 @@ const NameEditScreen = ({ navigation }) => {
     setIsContentValid(contentValid);
     setName(input);
     setIsTouched(true);
-    setIsDuplicateChecked(false); // 중복 확인 초기화
+    setIsDuplicateChecked(false);
   };
+
+  const isValidForSave = () => isLengthValid && isContentValid && isDuplicateChecked && !isDuplicate;
 
   const checkDuplicate = async () => {
     if (name === '') {
       Alert.alert('오류', '닉네임을 입력해주세요.');
       return;
     }
-  
+
     try {
       const response = await ApiClient.post('/api/users/check/nickname', { nickname: name });
       if (response.data.isDuplicate) {
@@ -49,35 +56,30 @@ const NameEditScreen = ({ navigation }) => {
         setIsDuplicate(false);
         Alert.alert('사용 가능한 닉네임', '해당 닉네임을 사용할 수 있습니다.');
       }
-      setIsDuplicateChecked(true); // 중복 확인이 완료되었음을 표시
+      setIsDuplicateChecked(true);
     } catch (error) {
       console.error('Error during nickname check:', error);
       Alert.alert('오류', '닉네임 중복 확인 중 오류가 발생했습니다.');
     }
   };
-  
+
   const handleSaveNickname = async () => {
+    if (!isValidForSave()) return;
+
     try {
       const response = await ApiClient.post('/api/users/nickname', { nickname: name });
       if (response.data.success) {
-        console.log('Nickname saved successfully');
-        
-        // 로컬 스토리지에 닉네임 저장
         await AsyncStorage.setItem('nickname', name);
-        
-        // 저장 후 이전 화면으로 이동
-        Alert.alert('성공', '닉네임이 성공적으로 저장되었습니다.');
+        await AsyncStorage.setItem('isNicknameChanged', 'true');
         navigation.goBack();
       } else {
-        console.error('Error saving nickname');
         Alert.alert('오류', '닉네임 저장 중 문제가 발생했습니다.');
       }
     } catch (error) {
-      console.error('Error during nickname save:', error);
       Alert.alert('오류', '닉네임 저장 중 문제가 발생했습니다.');
     }
   };
-  
+
   const getIcon = (valid) => {
     if (!isTouched) return require('../../assets/check_gray.png');
     return valid ? require('../../assets/check_green.png') : require('../../assets/check_red.png');
@@ -90,19 +92,17 @@ const NameEditScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputRow}>
-        <TextInput
-          style={[
-            styles.input,
-            !isTouched ? styles.default : (isLengthValid && isContentValid ? styles.valid : styles.invalid),
-          ]}
-          value={name}
-          onChangeText={validateName}
-          placeholder="5자 이내로 입력해 주세요"
-          placeholderTextColor={isTouched ? colors.Gray400 : colors.Gray400}
-          onBlur={() => setIsTouched(true)}
-        />
-
+      <View style={styles.rowContainer}>
+        <View style={[styles.inputContainer, isTouched ? (isLengthValid && isContentValid ? styles.validBorder : styles.invalidBorder) : styles.defaultBorder]}>
+          <TextInput
+            style={styles.input}
+            value={name}
+            onChangeText={validateName}
+            placeholder="5자 이내로 입력해 주세요"
+            placeholderTextColor={colors.Gray400}
+            onBlur={() => setIsTouched(true)}
+          />
+        </View>
         <TouchableOpacity 
           style={styles.duplicateCheckButton}
           onPress={checkDuplicate}
@@ -147,37 +147,56 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    paddingTop: 60, 
+    paddingTop: 60,
     backgroundColor: colors.Ivory100,
   },
-  inputRow: {
-    flexDirection: 'row',
+  rowContainer: {
+    flexDirection: 'row', // 가로로 정렬
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderColor: colors.Gray300,
     marginBottom: 20,
-    marginTop: 20,
+  },
+  inputContainer: {
+    borderRadius: 8,
+    paddingHorizontal: 5,
+    paddingVertical : 5, 
+    width : 250,
+    height : 50,
+    backgroundColor: colors.Ivory300,
   },
   input: {
-    flex: 1,
     height: 40,
-    paddingLeft: 10,
-    fontSize: 16,
-    fontWeight: '500',
+    ...fonts.Body2,
+    color: colors.Gray900,
+    paddingHorizontal: 5, // 양쪽 여백을 없앰
+    paddingVertical: 10,  // 세로 중앙에 텍스트 배치
   },
   duplicateCheckButton: {
-    borderColor: colors.Gray200,
-    borderWidth: 1,
     paddingVertical: 10,
     paddingHorizontal: 15,
+    height : 50,
     borderRadius: 8,
-    color: colors.Gray900,
+    borderColor: colors.Gray300,
+    borderWidth: 1,
     alignItems: 'center',
     marginLeft: 10,
   },
   duplicateCheckButtonText: {
-    color: colors.Gray900,
+    color: colors.Gray300,
     fontSize: 15,
+    marginTop : 6,
+    alignItems: 'center',
+  },
+  defaultBorder: {
+    borderColor: colors.Gray300,
+    borderWidth: 1,
+  },
+  validBorder: {
+    borderColor: colors.Green900,
+    borderWidth: 1,
+  },
+  invalidBorder: {
+    borderColor: colors.Error,
+    borderWidth: 1,
   },
   validationContainer: {
     flexDirection: 'row',
@@ -207,6 +226,16 @@ const styles = StyleSheet.create({
   },
   duplicateInvalidText: {
     color: colors.Error,
+  },
+  headerButtonText: {
+    marginRight: 20,
+    ...fonts.Body2,
+  },
+  activeText: {
+    color: colors.Green900,
+  },
+  inactiveText: {
+    color: colors.Gray400,
   },
 });
 
