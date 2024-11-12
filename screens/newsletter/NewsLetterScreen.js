@@ -26,7 +26,7 @@ const NewsLetterScreen = ({ navigation }) => {
       if (response.data.success) {
         setNewsletters(response.data.response);
       }
-      console.log('API 응답:', response.data);
+      // console.log('API 응답:', response.data);
     } catch (error) {
       console.error('Error fetching newsletters:', error);
     }

@@ -23,7 +23,7 @@ const SearchResultScreen = ({ route, navigation }) => {
       const response = await ApiClient.get(`/api/search?word=${encodeURIComponent(SearchWord)}`);
       if (response.data.success) {
         setSearchResults(response.data.response); // 검색 결과를 상태에 저장
-        console.log(response.data.response);
+        // console.log(response.data.response);
       } else {
         console.error('검색 결과를 불러올 수 없습니다.');
       }
@@ -42,7 +42,7 @@ const SearchResultScreen = ({ route, navigation }) => {
     try {
       const response = await ApiClient.post(`/api/search/${shopId}`);
       if (response.data.success) {
-        console.log(`Search count incremented for shopId: ${shopId}`);
+        // console.log(`Search count incremented for shopId: ${shopId}`);
       } else {
         console.error('카운트를 증가시킬 수 없습니다.');
       }
@@ -51,11 +51,11 @@ const SearchResultScreen = ({ route, navigation }) => {
     }
   };
 
-    // 상세페이지로 네비게이션
-    const handleShopPress = (shopId) => {
-      incrementSearchCount(shopId); // shopId에 대한 count 증가
-      setSelectedShopId(shopId);
-      navigation.navigate('ShopDetail', { shopId });
+  // 상세페이지로 네비게이션
+  const handleShopPress = (shopId) => {
+    incrementSearchCount(shopId); // shopId에 대한 count 증가
+    setSelectedShopId(shopId);
+    navigation.navigate('ShopDetail', { shopId });
   };
 
 
@@ -68,13 +68,11 @@ const SearchResultScreen = ({ route, navigation }) => {
         </TouchableOpacity>
 
         {/* 검색바 */}
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.SearchWord}
-            value={text} // 상태로 관리되는 값 설정
-            onChangeText={setText} // 텍스트 변경 시 상태 업데이트
-            placeholderTextColor={colors.Gray900}
-          />
+        <TouchableOpacity style={styles.inputContainer} onPress={() => navigation.goBack()}>
+          <View style={styles.SearchWord} >
+            <Text>{text}</Text>
+          </View>
+
           {/* X버튼 */}
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.imageContainer}>
             <Image
@@ -82,13 +80,13 @@ const SearchResultScreen = ({ route, navigation }) => {
               style={styles.XImg}
             />
           </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       </View>
 
       {/* 검색 결과 리스트 */}
       {searchResults.length === 0 ? (
-         <NoResults />
-      ) : ( <FlatList
+        <NoResults />
+      ) : (<FlatList
         data={searchResults}
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}

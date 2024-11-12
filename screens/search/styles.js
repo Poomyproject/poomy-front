@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
         height: 50,
         paddingHorizontal: 15,
         color: colors.Gray900,
+        justifyContent: 'center',
     },
     inputContainer: {
         flexDirection: 'row',
