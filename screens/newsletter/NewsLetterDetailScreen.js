@@ -72,7 +72,7 @@ const NewsLetterDetailScreen = () => {
             setIsLike(response.data.response.isLike);
             setUserFeedback(response.data.response.user_feedback); // 유용해요 개수 업데이트
 
-            console.log('API 좋아요 응답:', response.data);
+            // console.log('API 좋아요 응답:', response.data);
 
         } catch (err) {
             console.error('API 요청 중 에러 발생:', err);
