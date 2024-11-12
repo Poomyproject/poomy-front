@@ -87,6 +87,7 @@ const MainScreen = ({ navigation }) => {
             const response = await ApiClient.get('/api/home/mood/shop');
             if (response.data.success) {
                 setMoods(response.data.response);
+                console.log(response.data.response)
             } else {
                 throw new Error('분위기 데이터 로딩 실패');
             }
@@ -102,8 +103,6 @@ const MainScreen = ({ navigation }) => {
             const response = await ApiClient.get('/api/users');
             if (response.data.success) {
                 setMoodCount(response.data.response.moods.length);
-                // console.log(response.data.response.moods.length)
-                // console.log("moodcount:",moodCount)
             } else {
                 throw new Error('MoodCount 데이터 로딩 실패');
             }
@@ -126,10 +125,17 @@ const MainScreen = ({ navigation }) => {
             setLoading(false);
         }
     };
+    
+
+    useFocusEffect(
+        useCallback(() => {
+            fetchMoodCount();  // 화면에 들어올 때마다 moodCount를 가져옴
+        }, [])
+    );
 
     useEffect(() => {
         console.log("Updated moodCount:", moodCount);  // moodCount가 업데이트될 때마다 확인
-    }, [moodCount]);  // moodCount가 변경될 때마다 실행
+    }, [moodCount]);
 
     useFocusEffect(
         useCallback(() => {
@@ -194,8 +200,8 @@ const MainScreen = ({ navigation }) => {
         );
     }
 
-    const moodItem1 = moods.find((item) => item.id === 1);
-    const moodItem2 = moods.find((item) => item.id === 2);
+    const moodItem1 = moods[0];
+    const moodItem2 = moods[1];
 
     return (
         <View style={{ backgroundColor: 'white', marginTop: 10 }}>

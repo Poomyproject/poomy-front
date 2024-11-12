@@ -31,7 +31,7 @@ const LikeScreen = () => {
         const fetchPlaces = async () => {
             try {
                 const response = await ApiClient.get('/api/spots');
-                if (response.data.success) setPlaces(response.data.response); 
+                if (response.data.success) setPlaces(response.data.response);
             } catch (error) {
                 console.error('Error fetching places:', error);
             }
@@ -130,91 +130,91 @@ const LikeScreen = () => {
         setTempSelectedPlace('');
         setTempSelectedMood('');
         setModalVisible(false);
-    };  
-    
-    // 찜 상태를 토글하는 함수
-const handleFavoriteToggle = async (shopId) => {
-    const item = favorites.find((fav) => fav.shopId === shopId);
-    if (item) {
-        try {
-            // 현재 찜 상태를 확인하고 반대로 전송
-            const response = await ApiClient.post(`/api/favorite/${shopId}/${item.isFavorite ? 'unlike' : 'like'}`);
-            if (response.data.success) {
-                // 성공 시 해당 아이템의 찜 상태를 토글하여 업데이트
-                setFavorites((prev) =>
-                    prev.map((fav) =>
-                        fav.shopId === shopId ? { ...fav, isFavorite: !fav.isFavorite } : fav
-                    )
-                );
-            }
-        } catch (error) {
-            console.error('찜 상태 토글 중 오류 발생:', error);
-        }
-    }
-};
-    
-
-const renderItem = ({ item }) => {
-    const navigateToShopDetail = (shopId) => {
-        setSelectedShopId(shopId);
-        navigation.navigate('ShopDetail');
     };
 
-    return (
-        <TouchableOpacity onPress={() => navigateToShopDetail(item.shopId)} style={styles.favoriteItem}>
-            <Image source={{ uri: item.image }} style={styles.shopImage} />
-            <View style={styles.shopInfo}>
-                <Text style={styles.shopName}>{item.shopName}</Text>
-                <View style={styles.tagContainer}>
-    <View 
-        style={[
-            styles.tag, 
-            item.spot === interestPlace && styles.selectedTag // 선택된 장소와 같으면 초록색 스타일 적용
-        ]}
-    >
-        <Text 
-            style={[
-                styles.tagText, 
-                item.spot === interestPlace && styles.selectedTagText // 선택된 장소와 같으면 텍스트 색상 변경
-            ]}
-        >
-            {item.spot}
-        </Text>
-    </View>
-    <View 
-        style={[
-            styles.tag, 
-            item.mood === interestMood && styles.selectedTag // 선택된 분위기와 같으면 초록색 스타일 적용
-        ]}
-    >
-        <Text 
-            style={[
-                styles.tagText, 
-                item.mood === interestMood && styles.selectedTagText // 선택된 분위기와 같으면 텍스트 색상 변경
-            ]}
-        >
-            {item.mood}
-        </Text>
-    </View>
-</View>
+    // 찜 상태를 토글하는 함수
+    const handleFavoriteToggle = async (shopId) => {
+        const item = favorites.find((fav) => fav.shopId === shopId);
+        if (item) {
+            try {
+                // 현재 찜 상태를 확인하고 반대로 전송
+                const response = await ApiClient.post(`/api/favorite/${shopId}/${item.isFavorite ? 'unlike' : 'like'}`);
+                if (response.data.success) {
+                    // 성공 시 해당 아이템의 찜 상태를 토글하여 업데이트
+                    setFavorites((prev) =>
+                        prev.map((fav) =>
+                            fav.shopId === shopId ? { ...fav, isFavorite: !fav.isFavorite } : fav
+                        )
+                    );
+                }
+            } catch (error) {
+                console.error('찜 상태 토글 중 오류 발생:', error);
+            }
+        }
+    };
 
-                <View style={styles.locationContainer}>
-                    <Image source={require('../../assets/pin.png')} style={styles.locationIcon} />
-                    <Text style={styles.locationText}>{item.location}</Text>
+
+    const renderItem = ({ item }) => {
+        const navigateToShopDetail = (shopId) => {
+            setSelectedShopId(shopId);
+            navigation.navigate('ShopDetail');
+        };
+
+        return (
+            <TouchableOpacity onPress={() => navigateToShopDetail(item.shopId)} style={styles.favoriteItem}>
+                <Image source={{ uri: item.image }} style={styles.shopImage} />
+                <View style={styles.shopInfo}>
+                    <Text style={styles.shopName}>{item.shopName}</Text>
+                    <View style={styles.tagContainer}>
+                        <View
+                            style={[
+                                styles.tag,
+                                item.spot === interestPlace && styles.selectedTag // 선택된 장소와 같으면 초록색 스타일 적용
+                            ]}
+                        >
+                            <Text
+                                style={[
+                                    styles.tagText,
+                                    item.spot === interestPlace && styles.selectedTagText // 선택된 장소와 같으면 텍스트 색상 변경
+                                ]}
+                            >
+                                {item.spot}
+                            </Text>
+                        </View>
+                        <View
+                            style={[
+                                styles.tag,
+                                item.mood === interestMood && styles.selectedTag // 선택된 분위기와 같으면 초록색 스타일 적용
+                            ]}
+                        >
+                            <Text
+                                style={[
+                                    styles.tagText,
+                                    item.mood === interestMood && styles.selectedTagText // 선택된 분위기와 같으면 텍스트 색상 변경
+                                ]}
+                            >
+                                {item.mood}
+                            </Text>
+                        </View>
+                    </View>
+
+                    <View style={styles.locationContainer}>
+                        <Image source={require('../../assets/pin.png')} style={styles.locationIcon} />
+                        <Text numberOfLines={1} ellipsizeMode="tail" style={styles.locationText}>{item.location}</Text>
+                    </View>
                 </View>
-            </View>
-            <TouchableOpacity onPress={() => handleFavoriteToggle(item.shopId)}>
-                <Image 
-                    source={item.isFavorite 
-                        ? require('../../assets/img_liked_heart.png') 
-                        : require('../../assets/heart.png')          
-                    }
-                    style={styles.favoriteIcon}
-                />
+                <TouchableOpacity onPress={() => handleFavoriteToggle(item.shopId)}>
+                    <Image
+                        source={item.isFavorite
+                            ? require('../../assets/img_liked_heart.png')
+                            : require('../../assets/heart.png')
+                        }
+                        style={styles.favoriteIcon}
+                    />
+                </TouchableOpacity>
             </TouchableOpacity>
-        </TouchableOpacity>
-    );
-};
+        );
+    };
 
 
     // 필터를 초기화하고 전체 찜 리스트를 다시 로드하는 함수
@@ -232,7 +232,7 @@ const renderItem = ({ item }) => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-            <Text style={styles.headerText}>찜</Text>
+                <Text style={styles.headerText}>찜</Text>
             </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity onPress={() => toggleModal(true)} style={[styles.textInput, interestPlace ? styles.selectedButton : {}]}>
@@ -271,24 +271,24 @@ const renderItem = ({ item }) => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.moodContainer}>
-                    {(isSelectingPlace ? places : moods).map((option) => {
-                        const isSelected = (isSelectingPlace ? tempSelectedPlace : tempSelectedMood) === option.name;
-                        return (
-                            <TouchableOpacity
-                                key={option.id}
-                                style={[
-                                    styles.moodButton,
-                                    isSelected && styles.selectedMood
-                                ]}
-                                onPress={() => handleSelectOption(option.name)}
-                            >
-                                <Text style={[styles.moodText, isSelected && styles.selectedText]}>
-                                    {option.name}
-                                </Text>
-                            </TouchableOpacity>
-                        );
-                    })}
-                </View>
+                        {(isSelectingPlace ? places : moods).map((option) => {
+                            const isSelected = (isSelectingPlace ? tempSelectedPlace : tempSelectedMood) === option.name;
+                            return (
+                                <TouchableOpacity
+                                    key={option.id}
+                                    style={[
+                                        styles.moodButton,
+                                        isSelected && styles.selectedMood
+                                    ]}
+                                    onPress={() => handleSelectOption(option.name)}
+                                >
+                                    <Text style={[styles.moodText, isSelected && styles.selectedText]}>
+                                        {option.name}
+                                    </Text>
+                                </TouchableOpacity>
+                            );
+                        })}
+                    </View>
 
                     <TouchableOpacity onPress={applySelection} style={styles.closeButton}>
                         <Text style={styles.closeButtonText}>적용하기</Text>
@@ -301,15 +301,15 @@ const renderItem = ({ item }) => {
                 keyExtractor={(item) => item.shopId.toString()}
                 refreshControl={
                     <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                    tintColor="#1FAA67" 
-                />
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                        tintColor="#1FAA67"
+                    />
                 }
                 ListEmptyComponent={
                     <View style={styles.emptyContainer}>
                         <Image
-                            source={require('../../assets/img_empty_like.png')} 
+                            source={require('../../assets/img_empty_like.png')}
                             style={styles.emptyImage}
                         />
                         <Text style={styles.emptyText}>아직 찜한 소품샵이 없어요</Text>
@@ -330,12 +330,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingTop: 55,
         paddingBottom: 5,
-      },
-      headerText: {
+    },
+    headerText: {
         ...fonts.Body1,
-        fontWeight : '600',
-        color : colors.Gray900,
-      },
+        fontWeight: '600',
+        color: colors.Gray900,
+    },
     downIcon: {
         width: 14,
         height: 8,
@@ -500,6 +500,7 @@ const styles = StyleSheet.create({
     locationText: {
         color: colors.Gray700,
         fontSize: 12,
+        width:'85%'
     },
     favoriteIcon: {
         width: 24,
