@@ -129,7 +129,7 @@ const applyChanges = async () => {
     await AsyncStorage.setItem('selectedMoods', JSON.stringify(selectedMoods));
     await AsyncStorage.setItem('selectedPlaces', JSON.stringify(selectedPlaces));
 
-    console.log('Changes successfully applied to local storage');
+   // console.log('Changes successfully applied to local storage');
     
     // 모달 닫기
     setFirstModalVisible(false);
@@ -140,7 +140,7 @@ const applyChanges = async () => {
     setIsApplyButtonActive(true);
     
   } catch (error) {
-    console.error('Error saving to local storage:', error);
+    //console.error('Error saving to local storage:', error);
   }
 };
 
@@ -162,22 +162,23 @@ const applyChanges = async () => {
   const handleSaveChanges = async () => {
     try {
       const moodIds = selectedMoods.map(mood => mood.id);
-      const placeIds = selectedPlaces.map(place => place.id); 
+      const placeIds = selectedPlaces.map(place => place.id);
 
       console.log('Sending moodIds to server:', moodIds);
       await ApiClient.post('/api/users/moods', { moodIds });
 
-      console.log('Sending placeIds to server:', placeIds); 
-      await ApiClient.post('/api/users/spots', { spotIds: placeIds }); 
+      console.log('Sending placeIds to server:', placeIds);
+      await ApiClient.post('/api/users/spots', { spotIds: placeIds });
 
       setInitialMoods(selectedMoods);
-      setInitialPlaces(selectedPlaces); 
+      setInitialPlaces(selectedPlaces);
 
-      console.log('Save changes completed, navigating back');
-      navigation.goBack();
-      
+      console.log('Save changes completed, navigating to MyPage');
+      navigation.navigate('MyPage'); // MyPage로 이동
+
     } catch (error) {
       console.error('Error saving changes:', error);
+      Alert.alert('오류', '변경사항 저장 중 문제가 발생했습니다.');
     }
   };
 
@@ -200,6 +201,8 @@ const applyChanges = async () => {
   };
 
   
+
+  
   // 로딩 상태 표시
   if (loading) {
     return (
@@ -219,7 +222,7 @@ const applyChanges = async () => {
         <TouchableOpacity
         style={styles.completeButton}
         disabled={!isButtonActive}
-        onPress={() => isButtonActive && navigation.navigate('MyPage')}
+        onPress={handleSaveChanges}
       >
         <Text
           style={[

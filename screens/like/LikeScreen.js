@@ -166,9 +166,38 @@ const renderItem = ({ item }) => {
             <View style={styles.shopInfo}>
                 <Text style={styles.shopName}>{item.shopName}</Text>
                 <View style={styles.tagContainer}>
-                    <View style={styles.tag}><Text style={styles.tagText}>{item.spot}</Text></View>
-                    <View style={styles.tag}><Text style={styles.tagText}>{item.mood}</Text></View>
-                </View>
+    <View 
+        style={[
+            styles.tag, 
+            item.spot === interestPlace && styles.selectedTag // 선택된 장소와 같으면 초록색 스타일 적용
+        ]}
+    >
+        <Text 
+            style={[
+                styles.tagText, 
+                item.spot === interestPlace && styles.selectedTagText // 선택된 장소와 같으면 텍스트 색상 변경
+            ]}
+        >
+            {item.spot}
+        </Text>
+    </View>
+    <View 
+        style={[
+            styles.tag, 
+            item.mood === interestMood && styles.selectedTag // 선택된 분위기와 같으면 초록색 스타일 적용
+        ]}
+    >
+        <Text 
+            style={[
+                styles.tagText, 
+                item.mood === interestMood && styles.selectedTagText // 선택된 분위기와 같으면 텍스트 색상 변경
+            ]}
+        >
+            {item.mood}
+        </Text>
+    </View>
+</View>
+
                 <View style={styles.locationContainer}>
                     <Image source={require('../../assets/pin.png')} style={styles.locationIcon} />
                     <Text style={styles.locationText}>{item.location}</Text>
@@ -359,8 +388,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.Green900,
     },
     moodText: {
-        fontSize: 16,
-        color: colors.Gray900,
+        ...fonts.Body3,
+        color: colors.Gray700,
     },
     closeButton: {
         width: 350,
@@ -449,8 +478,15 @@ const styles = StyleSheet.create({
         marginRight: 8,
     },
     tagText: {
-        color: colors.Gray900,
-        ...fonts.Body3,
+        color: colors.Gray700,
+        ...fonts.Caption1,
+    },
+    selectedTag: {
+        backgroundColor: colors.Green50, // 선택된 태그의 배경색을 초록색으로
+        borderColor: colors.Green900,     // 선택된 태그의 테두리도 초록색으로 변경
+    },
+    selectedTagText: {
+        color: colors.Gray700, // 선택된 태그의 텍스트 색상을 흰색으로 설정
     },
     locationContainer: {
         flexDirection: 'row',
