@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { View, TouchableOpacity, Image, Modal, Text, Button, StyleSheet, Pressable } from 'react-native';
+import { View, TouchableOpacity, Image, Modal, Text, StyleSheet, Pressable, Alert } from 'react-native';
 import { Share } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 import colors from '../../config/colors';
 import ShopDetailScreen from '../shop/ShopDetailScreen';
 import MainScreen from '../main/MainScreen';
@@ -18,11 +19,18 @@ const ShopNavigator = () => {
   const shareMessage = async () => {
     try {
       await Share.share({
-        message: '공유할 메세지', // 실제 공유할 메시지나 링크를 여기 넣습니다.
+        message: '공유할 메세지', // 실제 공유할 메시지나 링크를 여기에 입력
       });
     } catch (error) {
       console.error('공유 오류:', error);
     }
+  };
+
+  const copyLink = () => {
+    const appLink = 'https://example.com/shop/detail'; // 공유할 링크 (여기에 실제 링크 삽입)
+    Clipboard.setString(appLink);
+    Alert.alert('링크가 복사되었습니다.', '클립보드에 저장되었습니다.');
+    toggleModal();
   };
 
   return (
@@ -54,13 +62,13 @@ const ShopNavigator = () => {
               >
                 <View style={styles.modalBackground}>
                   <View style={styles.modalContent}>
-                    <Text style={styles.modalText}>공유 및 닫기</Text>
+                    <Text style={styles.modalText}>공유 및 링크 복사</Text>
                     <View style={styles.buttonContainer}>
                       <Pressable style={styles.shareButton} onPress={shareMessage}>
                         <Text style={styles.buttonText}>공유하기</Text>
                       </Pressable>
-                      <Pressable style={styles.closeButton} onPress={toggleModal}>
-                        <Text style={styles.buttonText}>닫기</Text>
+                      <Pressable style={styles.copyButton} onPress={copyLink}>
+                        <Text style={styles.buttonText}>링크 복사</Text>
                       </Pressable>
                     </View>
                   </View>
@@ -79,7 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // 모달 외부의 반투명 배경
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     backgroundColor: colors.Ivory100,
@@ -106,7 +114,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
   },
-  closeButton: {
+  copyButton: {
     flex: 1,
     paddingVertical: 12,
     marginHorizontal: 5,
