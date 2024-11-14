@@ -74,7 +74,7 @@ const MyPageScreen = () => {
         await AsyncStorage.setItem('selectedMoods', JSON.stringify(userData.moods));
         await AsyncStorage.setItem('selectedPlaces', JSON.stringify(userData.spots));
 
-        console.log(userData.spots)
+        //console.log(userData.spots)
       }
     } catch (error) {
       // console.error('데이터 가져오기 실패:', error);

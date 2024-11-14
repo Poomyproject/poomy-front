@@ -21,7 +21,7 @@ const LoginScreen = ({ navigation }) => {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       setUserInfo(userInfo);
-      console.log(userInfo);
+      //console.log(userInfo);
 
       const postResponse = await handlePostRequest(userInfo.idToken);
       if (postResponse) {
@@ -78,7 +78,7 @@ const LoginScreen = ({ navigation }) => {
       const response = await ApiClient.get('/api/users'); // '/api/users' API 호출
       const { nickname, moods, spots } = response.data.response;
 
-      console.log(response.data.response);
+      //console.log(response.data.response);
 
       // 조건에 따른 분기 처리
       if (!nickname) {

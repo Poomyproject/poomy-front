@@ -53,7 +53,7 @@ const LikeScreen = () => {
         try {
             const response = await ApiClient.get('/api/favorite');
             if (response.data.success) setFavorites(response.data.response);
-            console.log(response.data.response)
+            //console.log(response.data.response)
         } catch (error) {
             console.error('Error fetching favorites:', error);
         }

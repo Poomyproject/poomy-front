@@ -101,26 +101,26 @@ const MypageEditScreen = () => {
       if (storedMoods) {
         const parsedMoods = JSON.parse(storedMoods);
         setSelectedMoods(parsedMoods);
-        console.log('Loaded moods from storage:', parsedMoods);
+        //console.log('Loaded moods from storage:', parsedMoods);
       }
 
       if (storedPlaces) { 
         const parsedPlaces = JSON.parse(storedPlaces);
         setSelectedPlaces(parsedPlaces);
-        console.log('Loaded places from storage:', parsedPlaces);
+        //console.log('Loaded places from storage:', parsedPlaces);
       }
     } catch (error) {
-      console.error('Error loading data from storage:', error);
+      //console.error('Error loading data from storage:', error);
     }
   };
 
 // 상태 변경 감지용 useEffect
 useEffect(() => {
-  console.log('isButtonActive changed:', isButtonActive);
+  //onsole.log('isButtonActive changed:', isButtonActive);
 }, [isButtonActive]);
 
 useEffect(() => {
-  console.log('isApplyButtonActive changed:', isApplyButtonActive);
+  //console.log('isApplyButtonActive changed:', isApplyButtonActive);
 }, [isApplyButtonActive]);
 
 // "적용하기" 버튼 눌렀을 때 호출되는 함수
@@ -164,20 +164,20 @@ const applyChanges = async () => {
       const moodIds = selectedMoods.map(mood => mood.id);
       const placeIds = selectedPlaces.map(place => place.id);
 
-      console.log('Sending moodIds to server:', moodIds);
+      //console.log('Sending moodIds to server:', moodIds);
       await ApiClient.post('/api/users/moods', { moodIds });
 
-      console.log('Sending placeIds to server:', placeIds);
+      //console.log('Sending placeIds to server:', placeIds);
       await ApiClient.post('/api/users/spots', { spotIds: placeIds });
 
       setInitialMoods(selectedMoods);
       setInitialPlaces(selectedPlaces);
 
-      console.log('Save changes completed, navigating to MyPage');
+      //console.log('Save changes completed, navigating to MyPage');
       navigation.navigate('MyPage'); // MyPage로 이동
 
     } catch (error) {
-      console.error('Error saving changes:', error);
+      //console.error('Error saving changes:', error);
       Alert.alert('오류', '변경사항 저장 중 문제가 발생했습니다.');
     }
   };
