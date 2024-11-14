@@ -45,7 +45,7 @@ const NamesetScreen = ({ navigation }) => {
       setIsDuplicateChecked(true);
     } catch (error) {
       console.error('Error during nickname check:', error);
-      Alert.alert('오류', '닉네임 중복 확인 중 오류가 발생했습니다.');
+      Alert.alert('오류', '닉네임을 설정할 수 없습니다.');
     }
   };
 

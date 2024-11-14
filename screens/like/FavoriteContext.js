@@ -19,7 +19,7 @@ const FavoriteProvider = ({ children }) => {
         setFavorites((prev) => new Set(prev).add(shopId));
       }
     } catch (error) {
-      console.error('찜 추가 중 오류 발생:', error);
+      //console.error('찜 추가 중 오류 발생:', error);
     }
   };
 
@@ -60,7 +60,7 @@ const FavoriteProvider = ({ children }) => {
         setFavorites(new Set(favoriteIds));
       }
     } catch (error) {
-      console.error('찜 리스트 불러오기 오류:', error);
+      //console.error('찜 리스트 불러오기 오류:', error);
     } finally {
       setLoading(false);
       isFetching.current = false;

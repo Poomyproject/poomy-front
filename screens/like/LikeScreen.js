@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 8,
-        marginTop: 110,
+        marginTop: 80,
         marginBottom: 20,
     },
     closeButtonText: {

@@ -481,15 +481,18 @@ const ShopDetailScreen = ({ route }) => {
       showsHorizontalScrollIndicator={false} 
       contentContainerStyle={styles.placeContainer4}
     >
-      {recommendations.map((shop) => (
-        <TouchableOpacity key={shop.id} style={styles.lastView} onPress={() => handleShopPress(shop.id)}>
-          <Image source={{ uri: shop.image }} style={styles.shopImage} />
-          <Text style={styles.lastshoptext} numberOfLines={1} ellipsizeMode="tail">
-            {shop.name.length > 7 ? `${shop.name.substring(0, 7)}...` : shop.name}
-          </Text>
-        </TouchableOpacity>
-      ))}
+      {recommendations
+        .filter((shop) => shop.id !== selectedShopId) // selectedShopId와 다른 샵만 표시
+        .map((shop) => (
+          <TouchableOpacity key={shop.id} style={styles.lastView} onPress={() => handleShopPress(shop.id)}>
+            <Image source={{ uri: shop.image }} style={styles.shopImage} />
+            <Text style={styles.lastshoptext} numberOfLines={1} ellipsizeMode="tail">
+              {shop.name.length > 7 ? `${shop.name.substring(0, 7)}...` : shop.name}
+            </Text>
+          </TouchableOpacity>
+        ))}
     </ScrollView>
+
       </View>
 
     </ScrollView>
