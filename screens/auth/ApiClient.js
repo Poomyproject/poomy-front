@@ -1,10 +1,12 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native'; // Alert 추가
+import { API_BASE_URL } from '@env'; // API_BASE_URL 가져오기
+
 
 // Axios 인스턴스 생성
 const ApiClient = axios.create({
-  baseURL: '54.180.202.93', // API base URL
+  baseURL: 'http://54.180.202.93:8080', // API base URL
   timeout: 8000, // 요청 제한 시간 설정 (밀리초)
   headers: {
   },
@@ -19,7 +21,7 @@ ApiClient.interceptors.request.use(
         //console.log('Access Token:', token); 
         config.headers.accessToken = `Bearer ${token}`; 
       } else {
-        console.log('No access token found');
+        //console.log('No access token found');
       }
 
       // 기본 Accept 헤더 제거

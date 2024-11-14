@@ -263,7 +263,7 @@ const applyChanges = async () => {
         <Text style={styles.textColor}>관심 분위기</Text>
         <TouchableOpacity onPress={openSecondModal} style={styles.moodTextContainer}>
         {selectedMoods.length === 0 ? (
-          <Text>분위기 선택</Text>
+          <Text>분위기</Text>
         ) : (
           <View style={styles.selectedMoodsContainer}>
             {selectedMoods.map((mood, index) => (
@@ -283,7 +283,7 @@ const applyChanges = async () => {
         >
           <View style={styles.modalContent}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
-            <Text style={styles.text}>장소 선택</Text>
+            <Text style={styles.text}>장소</Text>
             <TouchableOpacity onPress={cancelSelection}>
               <Image source={require('../../assets/close.png')} style={styles.image} />
             </TouchableOpacity>
@@ -309,8 +309,22 @@ const applyChanges = async () => {
                 </TouchableOpacity>
               ))}
             </View>
-            <TouchableOpacity onPress={applyChanges} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>적용하기</Text>
+            <TouchableOpacity
+            onPress={applyChanges}
+            style={[
+              styles.closeButton,
+              selectedPlaces.length === 0 ? styles.disabledButton : {}
+            ]}
+            disabled={selectedPlaces.length === 0}
+          >
+            <Text
+              style={[
+                styles.closeButtonText,
+                selectedPlaces.length === 0 ? styles.disabledButtonText : {}
+              ]}
+            >
+              적용하기
+            </Text>
             </TouchableOpacity>
           </View>
         </Modal>
@@ -346,8 +360,22 @@ const applyChanges = async () => {
                 </TouchableOpacity>
               ))}
             </View>
-            <TouchableOpacity onPress={applyChanges} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>적용하기</Text>
+            <TouchableOpacity
+            onPress={applyChanges}
+            style={[
+              styles.closeButton,
+              selectedMoods.length === 0 ? styles.disabledButton : {}
+            ]}
+            disabled={selectedMoods.length === 0}
+          >
+            <Text
+              style={[
+                styles.closeButtonText,
+                selectedMoods.length === 0 ? styles.disabledButtonText : {}
+              ]}
+            >
+              적용하기
+            </Text>
             </TouchableOpacity>
           </View>
         </Modal>
@@ -488,7 +516,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    marginTop: 20,
+    marginTop: 80,
   },
   closeButtonText: {
     color: colors.Ivory100,
@@ -505,6 +533,16 @@ const styles = StyleSheet.create({
   selectedMoodText: {
     color: colors.Ivory100, // 선택된 분위기 텍스트 색상 흰색
   },
+  disabledButton: {
+    backgroundColor: colors.Gray100,
+    textColor : colors.Gray400,
+  },
+  disabledButtonText: {
+    color: colors.Gray400, // 비활성화된 텍스트 색상
+  },
+  text : {
+    ...fonts.Body1,
+  }
 });
 
 export default MypageEditScreen;

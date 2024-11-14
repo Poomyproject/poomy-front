@@ -18,6 +18,11 @@ const UserReviewScreen1 = () => {
   // console.log('상점아이디', selectedShopId);
   // console.log(shopName);
 
+  useEffect(() => {
+    setSelectedMoods([]);
+  }, []);
+
+
   // 서버에서 moods 데이터를 가져옴
   useEffect(() => {
     const fetchMoods = async () => {
