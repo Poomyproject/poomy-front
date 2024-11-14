@@ -87,7 +87,7 @@ const MainScreen = ({ navigation }) => {
             const response = await ApiClient.get('/api/home/mood/shop');
             if (response.data.success) {
                 setMoods(response.data.response);
-                console.log(response.data.response)
+                // console.log(response.data.response)
             } else {
                 throw new Error('분위기 데이터 로딩 실패');
             }
@@ -134,7 +134,7 @@ const MainScreen = ({ navigation }) => {
     );
 
     useEffect(() => {
-        console.log("Updated moodCount:", moodCount);  // moodCount가 업데이트될 때마다 확인
+        // console.log("Updated moodCount:", moodCount);  // moodCount가 업데이트될 때마다 확인
     }, [moodCount]);
 
     useFocusEffect(

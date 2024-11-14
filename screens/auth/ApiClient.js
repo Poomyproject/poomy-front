@@ -68,7 +68,7 @@ export const setAxiosInterceptors = (navigation) => {
         if (navigation && typeof navigation.replace === 'function') {
           navigation.navigate('Splash');  // 로그아웃 처리
         } else {
-          console.error('Navigation object is not properly defined.');
+          //console.error('Navigation object is not properly defined.');
         }
       }
       return Promise.reject(error); // 오류가 발생하면 에러 반환

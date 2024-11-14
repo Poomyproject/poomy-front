@@ -27,7 +27,7 @@ const ShopNavigator = () => {
   };
 
   const copyLink = () => {
-    cㅁㅃ
+    const appLink = 'https://example.com/shop/detail'; // 공유할 링크 (여기에 실제 링크 삽입)
     Clipboard.setString(appLink);
     Alert.alert('링크가 복사되었습니다.', '클립보드에 저장되었습니다.');
     toggleModal();
