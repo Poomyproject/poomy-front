@@ -21,7 +21,13 @@ const UserReviewScreen3 = () => {
 
 
   // 버튼 활성화 여부 확인 (리뷰 텍스트가 20자 이상인 경우)
-  const isButtonDisabled = reviewText.length < 20;
+  const isButtonDisabled = reviewText.length < 20 || photos.length === 0;
+
+  // 이미지 삭제 함수
+  const removePhoto = (index) => {
+    setPhotos((prevPhotos) => prevPhotos.filter((_, i) => i !== index));
+  };
+
 
   // 다중 이미지 선택 핸들러
   const pickMultipleImages = () => {
@@ -107,7 +113,7 @@ const UserReviewScreen3 = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>상세한 후기를 남겨 주세요!</Text>
-      <Text style={styles.subTitle}>건전하고 예의 바른 언어를 사용해 주세요.</Text>
+      <Text style={styles.subTitle}>건전하고 예의 바른 언어를 사용해 주세요.{'\n'}(사진 포함 필수)</Text>
 
       {/* 리뷰 텍스트 입력란 */}
       <View style={styles.textAreaContainer}>
@@ -129,14 +135,19 @@ const UserReviewScreen3 = () => {
         horizontal
         data={[...photos, { isPlaceholder: true }]} // 마지막 항목에 사진 첨부 버튼을 포함
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => item.isPlaceholder ? (
+        renderItem={({ item, index }) => item.isPlaceholder ? (
           <TouchableOpacity style={styles.photoButton} onPress={pickMultipleImages}>
             <Image source={require('../../assets/img_image.png')} style={styles.photoIcon} />
             <Text style={styles.photoText}>사진 첨부</Text>
-          </TouchableOpacity> 
+          </TouchableOpacity>
         ) : (
-          <Image source={{ uri: item.path }} style={styles.selectedImage} />
-        )}
+          <View style={styles.imageWrapper}>
+            <Image source={{ uri: item.path }} style={styles.selectedImage} />
+            <TouchableOpacity style={styles.removeButton} onPress={() => removePhoto(index)}>
+              <Text style={styles.removeButtonText}>X</Text>
+            </TouchableOpacity>
+          </View>
+        )}        
         style={{ marginBottom: 20 }}
       />
 
@@ -242,6 +253,24 @@ const styles = StyleSheet.create({
   },
   buttonTextInactive: {
     color: colors.Gray500,
+  },
+  imageWrapper: {
+    position: 'relative',
+  },
+  removeButton: {
+    position: 'absolute',
+    top: 5,
+    right: 15,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  removeButtonText: {
+    color : colors.Gray700,
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });
 

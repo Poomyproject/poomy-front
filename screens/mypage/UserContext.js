@@ -18,7 +18,7 @@ const UserProvider = ({ children }) => {
       const response = await ApiClient.get('/api/users');
       if (response.data.success) {
         const userData = response.data.response;
-        console.log('User data:', userData);
+        //console.log('User data:', userData);
         setNickname(userData.nickname);
         setgoogleEmail(userData.googleEmail);
         setImgUrl(userData.imgUrl); // 이미지 URL 설정
