@@ -33,31 +33,30 @@ const SearchStackNavigator = () => {
             <Image source={require('../../assets/left.png')} style={{ height: 24, width: 24, marginLeft: 16, }} />
           </TouchableOpacity>
         ),
-        headerRight: () => (
-          <View>
-            <TouchableOpacity onPress={toggleModal}>
-              <Image source={require('../../assets/share.png')} style={{ height: 24, width: 24, marginRight: 16, }} />
-            </TouchableOpacity>
-            <Modal
-              swipeDirection="down"
-              animationType="slide"
-              style={styles.bottomModal}
-              transparent={true}
-              visible={isModalVisible}
-              animationIn="slideInUp"
-              animationOut="slideOutDown"
-            >
-              <View style={styles.modalBackground}>
-                <View style={styles.modalContent}>
-                  <Text>모달 창입니다!</Text>
-                  <Button title="닫기" onPress={toggleModal} />
-                </View>
-              </View>
-            </Modal>
+        // headerRight: () => (
+        //   <View>
+        //     <TouchableOpacity onPress={toggleModal}>
+        //       <Image source={require('../../assets/share.png')} style={{ height: 24, width: 24, marginRight: 16, }} />
+        //     </TouchableOpacity>
+        //     {/* <Modal
+        //       swipeDirection="down"
+        //       animationType="slide"
+        //       style={styles.bottomModal}
+        //       transparent={true}
+        //       visible={isModalVisible}
+        //       animationIn="slideInUp"
+        //       animationOut="slideOutDown"
+        //     >
+        //       <View style={styles.modalBackground}>
+        //         <View style={styles.modalContent}>
+        //           <Text>모달 창입니다!</Text>
+        //           <Button title="닫기" onPress={toggleModal} />
+        //         </View>
+        //       </View>
+        //     </Modal> */}
 
-
-          </View>
-        ),
+        //   </View>
+        // ),
       })} />
     </SearchStack.Navigator>
   );
