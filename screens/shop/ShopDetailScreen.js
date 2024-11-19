@@ -374,10 +374,12 @@ const ShopDetailScreen = ({ route }) => {
       <Text style={styles.shopName}>리뷰</Text>
       <TouchableOpacity
         style={{ flexDirection: 'row', alignItems: 'center' }}
-        onPress={() => navigation.navigate('UserReview1', { 
+        onPress={() => navigation.navigate('ReviewStack', { 
           screen: 'UserReview1', 
-          selectedShopId, 
-          shopName: shopData.name
+          params: { 
+            selectedShopId, 
+            shopName: shopData.name 
+          } 
         })}
       >
         <Image source={require('../../assets/icon_edit.png')} style={{ height: 20, width: 20, marginRight: 8 }} />
