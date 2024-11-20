@@ -30,7 +30,7 @@ const NameEditScreen = ({ navigation }) => {
 
   const validateName = (input) => {
     const lengthValid = input.length <= 5 && input.length > 0;
-    const contentValid = /^[가-힣a-zA-Z]+$/.test(input);
+    const contentValid = /^[가-힣]+$/.test(input);
 
     setIsLengthValid(lengthValid);
     setIsContentValid(contentValid);
