@@ -82,7 +82,7 @@ const LoginScreen = ({ navigation }) => {
 
       // 조건에 따른 분기 처리
       if (!nickname) {
-        navigation.replace('Nameset'); // 닉네임 설정 화면으로 이동
+        navigation.replace('Terms'); // 닉네임 설정 화면으로 이동
       } else if (!moods || moods.length === 0) {
         navigation.replace('PreferSelect'); // 선호 분위기 설정 화면으로 이동
       } else if (!spots || spots.length === 0) {
