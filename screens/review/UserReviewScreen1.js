@@ -97,7 +97,7 @@ const UserReviewScreen1 = () => {
           </TouchableOpacity>
         ))}
       </View>
-      <View style={{ marginTop: 460 }}>
+      <View>
         <TouchableOpacity
           style={[styles.button, isButtonDisabled ? styles.buttonDisabled : styles.buttonEnabled]}
           disabled={isButtonDisabled}
@@ -114,6 +114,7 @@ const UserReviewScreen1 = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex : 1,
     padding: 20,
     backgroundColor: colors.Ivory100,
   },
@@ -161,8 +162,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    position: 'absolute',
-    bottom: 72,
+    marginTop : 320 ,
     alignSelf: 'center',
   },
   buttonEnabled: {
