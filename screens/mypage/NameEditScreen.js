@@ -151,40 +151,37 @@ const styles = StyleSheet.create({
     backgroundColor: colors.Ivory100,
   },
   rowContainer: {
-    flexDirection: 'row', // 가로로 정렬
+    flexDirection: 'row', // 가로 정렬
     alignItems: 'center',
     marginBottom: 20,
   },
   inputContainer: {
     borderRadius: 8,
     paddingHorizontal: 5,
-    paddingVertical : 5, 
-    width : 250,
-    height : 50,
+    paddingVertical: 5,
+    flex: 1, // 입력창이 버튼을 제외한 나머지 공간 차지
     backgroundColor: colors.Ivory300,
   },
   input: {
     height: 40,
     ...fonts.Body2,
     color: colors.Gray900,
-    paddingHorizontal: 5, // 양쪽 여백을 없앰
-    paddingVertical: 10,  // 세로 중앙에 텍스트 배치
+    paddingHorizontal: 10,
   },
   duplicateCheckButton: {
+    marginLeft: 10,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    height : 50,
     borderRadius: 8,
     borderColor: colors.Gray300,
     borderWidth: 1,
     alignItems: 'center',
-    marginLeft: 10,
+    justifyContent: 'center',
+    backgroundColor: colors.Ivory100,
   },
   duplicateCheckButtonText: {
     color: colors.Gray300,
     fontSize: 15,
-    marginTop : 6,
-    alignItems: 'center',
   },
   defaultBorder: {
     borderColor: colors.Gray300,

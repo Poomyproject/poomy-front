@@ -17,9 +17,39 @@ const UserReviewScreen3 = () => {
   const route = useRoute();
   const { selectedShopId } = route.params;
   //console.log('상점아이디',selectedShopId)
-
-
-
+  const prohibitedWords = ['개새끼', '새끼', '존나', '씨발', '닥쳐', '꺼져', '지랄', '호구', '장애', '좆까', 'fuck', '씨브랄', '좆같네']; // 금지어 리스트
+  
+  const handleTextChange = (text) => {
+    // 금지어를 **로 마스킹
+    const maskedText = maskProhibitedWords(text);
+    setReviewText(maskedText);
+  
+    // 금지어가 포함된 경우 경고 팝업
+    const containsProhibitedWord = prohibitedWords.some((word) => maskedText.includes('**'));
+    if (containsProhibitedWord) {
+      showAlert();
+    }
+  };
+  
+  const maskProhibitedWords = (text) => {
+    // 금지어를 정규식으로 찾아서 **로 대체
+    let result = text;
+    prohibitedWords.forEach((word) => {
+      const regex = new RegExp(`(${word})`, 'gi'); // 금지어 감지
+      result = result.replace(regex, '**'); // 금지어를 **로 대체
+    });
+    return result;
+  };
+  
+  const showAlert = () => {
+    Alert.alert(
+      '경고',
+      '“욕설은 자제해 주세요!”',
+      [{ text: '확인', onPress: () => console.log('확인 버튼 클릭됨') }],
+      { cancelable: true }
+    );
+  };
+  
   // 버튼 활성화 여부 확인 (리뷰 텍스트가 20자 이상인 경우)
   const isButtonDisabled = reviewText.length < 20 || photos.length === 0;
 
@@ -106,10 +136,6 @@ const UserReviewScreen3 = () => {
     }
   };
   
-  
-  
-  
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>상세한 후기를 남겨 주세요!</Text>
@@ -117,18 +143,18 @@ const UserReviewScreen3 = () => {
 
       {/* 리뷰 텍스트 입력란 */}
       <View style={styles.textAreaContainer}>
-        <TextInput
-          style={styles.textArea}
-          placeholder="후기를 자유롭게 작성해 보세요."
-          placeholderTextColor={colors.Gray300}
-          multiline
-          value={reviewText}
-          onChangeText={setReviewText}
-          maxLength={500}
-        />
-        <Text style={styles.charCount}>{`${reviewText.length}/500`}</Text>
-        <Text style={styles.minChars}>최소 20자 이상</Text>
-      </View>
+      <TextInput
+        style={styles.textArea}
+        placeholder="후기를 자유롭게 작성해 보세요."
+        placeholderTextColor={colors.Gray300}
+        multiline
+        value={reviewText}
+        onChangeText={handleTextChange}
+        maxLength={500}
+      />
+      <Text style={styles.charCount}>{`${reviewText.length}/500`}</Text>
+      <Text style={styles.minChars}>최소 20자 이상</Text>
+    </View>
 
       {/* 이미지 선택 */}
       <FlatList
@@ -151,7 +177,6 @@ const UserReviewScreen3 = () => {
         style={{ marginBottom: 20 }}
       />
 
-      {/* 다음 버튼 */}
       <TouchableOpacity
         style={[styles.button, isButtonDisabled ? styles.buttonDisabled : styles.buttonEnabled]}
         disabled={isButtonDisabled}
@@ -231,12 +256,13 @@ const styles = StyleSheet.create({
     marginTop : 3,
   },
   button: {
-    width: '100%',
+    width: 350,
     height: 48,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    marginBottom : 54 ,
+    marginBottom : 90 ,
+    alignSelf: 'center',
   },
   buttonEnabled: {
     backgroundColor: colors.Green900,
@@ -272,6 +298,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
   },
+  
 });
 
 export default UserReviewScreen3;

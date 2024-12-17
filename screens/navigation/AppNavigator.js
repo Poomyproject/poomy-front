@@ -117,72 +117,7 @@ const AppNavigator = () => {
       <Stack.Screen name="TermsDetail3" component={TermsDetailScreen3} />
       <Stack.Screen name="ShopDetail" component={ShopDetailScreen} />
 
-      <Stack.Screen 
-        name="UserReview1" 
-        component={UserReviewScreen1} 
-        options={({ navigation }) => ({
-          headerTitle: '리뷰 작성하기',
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
-            </TouchableOpacity>
-          ),
-          headerTitleAlign: 'center',
-          headerStyle: { backgroundColor: colors.Ivory100 }, 
-          headerTintColor: colors.Gray900, 
-          ...fonts.Body1
-        })}
-      />
-      <Stack.Screen 
-        name="UserReview2" 
-        component={UserReviewScreen2} 
-        options={({ navigation }) => ({
-          headerTitle: '리뷰 작성하기',
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image source={require('../../assets/left.png')} style={{marginLeft : 10, height: 24, width: 24 }} />
-            </TouchableOpacity>
-          ),
-          headerTitleAlign: 'center',
-          headerStyle: { backgroundColor: colors.Ivory100 },
-          headerTintColor: colors.Gray900,
-          ...fonts.Body1
-        })}
-      />
-      <Stack.Screen 
-        name="UserReview3" 
-        component={UserReviewScreen3} 
-        options={({ navigation }) => ({
-          headerTitle: '리뷰 작성하기',
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
-            </TouchableOpacity>
-          ),
-          headerTitleAlign: 'center',
-          headerStyle: { backgroundColor: colors.Ivory100 },
-          headerTintColor: colors.Gray900,
-          ...fonts.Body1
-        })}
-      />
-      <Stack.Screen 
-        name="UserReview4" 
-        component={UserReviewScreen4} 
-        options={({ navigation }) => ({
-          headerTitle: '리뷰 작성하기',
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
-            </TouchableOpacity>
-          ),
-          headerTitleAlign: 'center',
-          headerStyle: { backgroundColor: colors.Ivory100 },
-          headerTintColor: colors.Gray900,
-          ...fonts.Body1
-        })}
-      />
-
-      <Stack.Screen name="ShopReview" component={ShopReviewScreen} options={({ navigation }) => ({
+        <Stack.Screen name="ShopReview" component={ShopReviewScreen} options={({ navigation }) => ({
           headerTitle: '리뷰',
           headerLeft: () => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -193,7 +128,13 @@ const AppNavigator = () => {
           headerStyle: { backgroundColor: colors.Ivory100 },
           headerTintColor: colors.Gray900,
           ...fonts.Body1
-        })}/>
+         })}/>
+
+        <Stack.Screen 
+          name="ReviewStack" 
+          component={ReviewStackNavigator} 
+          options={{ headerShown: false }} 
+        />
 
           <Stack.Screen name="OneReview" component={OneReviewScreen} options={({ navigation }) => ({
           headerTitle: '리뷰 상세',
@@ -210,7 +151,6 @@ const AppNavigator = () => {
 
       <Stack.Screen name="KeywordStack" component={KeywordStackNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NewsLetterStack" component={NewsLetterStackNavigator} options={{ headerShown: false }} />
-      {/* <Stack.Screen name="ReviewStack" component={ReviewStackNavigator} options={{ headerShown: false }} /> */}
       <Stack.Screen name="SearchStack" component={SearchStackNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="Keyword" component={KeywordList} options={{ headerShown: false }} />
     </Stack.Navigator>

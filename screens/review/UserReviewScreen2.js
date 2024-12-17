@@ -125,8 +125,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 8,
-    position: 'absolute',
-    bottom: 72,
+    marginTop : 250 ,
     alignSelf: 'center',
   },
   buttonEnabled: {

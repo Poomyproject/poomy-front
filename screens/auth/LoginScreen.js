@@ -3,8 +3,10 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-na
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { GOOGLE_IOS_CLIENT_ID } from '@env';
 import colors from '../../config/colors';
-import fonts from '../../config/fonts';
+import { fonts } from '../../config/fonts'; 
 import ApiClient, { setAccessToken } from './ApiClient'; // ApiClient와 setAccessToken 가져오기
+import AppleLogin from './component/Applelogin';
+import { handleGuestLogin } from './component/Guestlogin';
 
 const LoginScreen = ({ navigation }) => {
   const [userInfo, setUserInfo] = useState(null);
@@ -21,7 +23,6 @@ const LoginScreen = ({ navigation }) => {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       setUserInfo(userInfo);
-      console.log(userInfo);
 
       const postResponse = await handlePostRequest(userInfo.idToken);
       if (postResponse) {
@@ -72,29 +73,26 @@ const LoginScreen = ({ navigation }) => {
     }
   };
 
-  // 사용자 정보 상태 확인
   const checkUserInfoStatus = async () => {
     try {
-      const response = await ApiClient.get('/api/users'); // '/api/users' API 호출
+      const response = await ApiClient.get('/api/users');
       const { nickname, moods, spots } = response.data.response;
 
-      console.log(response.data.response);
-
-      // 조건에 따른 분기 처리
       if (!nickname) {
-        navigation.replace('Nameset'); // 닉네임 설정 화면으로 이동
+        navigation.replace('Terms');
       } else if (!moods || moods.length === 0) {
-        navigation.replace('PreferSelect'); // 선호 분위기 설정 화면으로 이동
+        navigation.replace('PreferSelect');
       } else if (!spots || spots.length === 0) {
-        navigation.replace('PreferPlace'); // 선호 장소 설정 화면으로 이동
+        navigation.replace('PreferPlace');
       } else {
-        navigation.replace('MainTab'); // 모든 정보가 있으면 메인 화면으로 이동
+        navigation.replace('MainTab');
       }
     } catch (error) {
       console.error('Error fetching user info:', error);
       Alert.alert('Error', '사용자 정보를 확인할 수 없습니다.');
     }
   };
+
 
   return (
     <View style={styles.container}>
@@ -103,7 +101,11 @@ const LoginScreen = ({ navigation }) => {
         <Image source={require('../../assets/icon_google.png')} style={styles.googleIcon} />
         <Text style={styles.buttonText}>구글 계정으로 로그인</Text>
       </TouchableOpacity>
-    </View>
+      <AppleLogin />
+      <Text style={styles.guest} onPress={() => handleGuestLogin(navigation)}>
+        로그인 없이 둘러보기
+      </Text>
+      </View>
   );
 };
 
@@ -138,6 +140,11 @@ const styles = StyleSheet.create({
     color: colors.Gray900,
     fontSize: 15,
     fontFamily: 'Pretendard-Medium',
+  },
+  guest : {
+    color:colors.Ivory100,
+    marginTop : 15, 
+    ...fonts.Caption1,
   },
 });
 
