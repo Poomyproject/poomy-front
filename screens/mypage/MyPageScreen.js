@@ -5,6 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../../config/colors';
 import ApiClient from '../auth/ApiClient';
 import { fonts } from '../../config/fonts';
+import { checkGuestStatus, handleGuestLogout } from '../auth/component/Guestlogin';
+
+
 
 const MyPageScreen = () => {
   const navigation = useNavigation(); 
@@ -14,6 +17,9 @@ const MyPageScreen = () => {
   const [selectedMoods, setSelectedMoods] = useState([]);
   const [selectedPlaces, setSelectedPlaces] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isGuest, setIsGuest] = useState(false);
+
+
 
   // useFocusEffect(
   //   React.useCallback(() => {
@@ -45,19 +51,30 @@ const MyPageScreen = () => {
   //   }, [])
   // );
 
+  // 게스트 여부와 사용자 데이터 로드
   useFocusEffect(
     React.useCallback(() => {
       const loadUserData = async () => {
         try {
-          await fetchUserData(); // 서버에서 사용자 데이터 가져오기
+          const guestUser = await checkGuestStatus(); // 게스트 여부 확인
+          setIsGuest(guestUser);
+
+          if (guestUser) {
+            const guestId = await AsyncStorage.getItem('guestId');
+            console.log('Guest Login Detected:', guestId);
+            setNickname(guestId); // 게스트 ID를 닉네임으로 설정
+          } else {
+            await fetchUserData(); // 일반 사용자 데이터 불러오기
+          }
         } catch (error) {
           console.error('데이터 가져오기 실패:', error);
+        } finally {
+          setLoading(false);
         }
       };
       loadUserData();
     }, [])
   );
-  
 
   // API에서 사용자 데이터를 가져오는 함수
   const fetchUserData = async () => {
@@ -86,9 +103,23 @@ const MyPageScreen = () => {
   // useEffect(() => {
   //   fetchUserData();
   // }, []);
-
-  const goToMypageEdit = () => {
-    navigation.navigate('MypageEdit');
+  
+  
+   // 마이페이지 편집 화면 접근 제어
+   const goToMypageEdit = () => {
+    if (isGuest) {
+      Alert.alert(
+        '로그인이 필요한 서비스입니다.',
+        '로그인 하시겠습니까?',
+        [
+          { text: '네', onPress: () => navigation.replace('Login') },
+          { text: '아니오', style: 'cancel' },
+        ],
+        { cancelable: false }
+      );
+    } else {
+      navigation.navigate('MypageEdit');
+    }
   };
 
   const goToSetting = () => {
@@ -104,13 +135,9 @@ const MyPageScreen = () => {
   };
 
   const handleLogout = async () => {
-    try {
-      await AsyncStorage.removeItem('accessToken');
-      navigation.replace('Splash');
-    } catch (error) {
-      console.error('로그아웃 오류:', error);
-      Alert.alert('로그아웃 오류', '로그아웃 중 문제가 발생했습니다.');
-    }
+    await AsyncStorage.removeItem('accessToken');
+    await AsyncStorage.removeItem('guestId');
+    navigation.replace('Splash');
   };
 
   const confirmLogout = () => {
