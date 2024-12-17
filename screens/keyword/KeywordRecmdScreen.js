@@ -53,7 +53,7 @@ const KeywardRecmdScreen = ({ navigation }) => {
         "혜화": 12,
     };
 
-    // 토글 관련
+    // useEffect, 이화면에 들어오면 실행됨 (토글 관련)
     useEffect(() => {
         if (selectedSpotName && placeOptions.includes(selectedSpotName)) {
             setInterestPlace(selectedSpotName);
@@ -63,26 +63,30 @@ const KeywardRecmdScreen = ({ navigation }) => {
         }
     }, [selectedSpotName, selectedMoodId]);
 
+    // useEffect, 이화면에 들어오면 실행됨 (shoplist를 설정하는 api 호출)
     useEffect(() => {
         setLoading(true); // 데이터 요청 전에 로딩 상태 설정
     
-        if (!interestMood && !interestPlace) {
-            fetchAllShops(); // 무드와 장소가 모두 선택되지 않았을 경우 모든 샵 로드
-        } else if (interestMood && interestPlace) {
-            fetchShopsByMoodAndSpot(interestMood, interestPlace); // 분위기와 장소가 모두 선택된 경우
-        } else if (interestMood) {
-            fetchShopsByMood(interestMood); // 분위기만 선택된 경우
-        } else if (interestPlace) {
-            fetchShopsBySpot(interestPlace); // 장소만 선택된 경우
+        // 상태 값들이 둘 다 변경된 후에만 API 요청
+        if (interestMood !== null && interestPlace !== null) {
+            if (interestMood && interestPlace) {
+                fetchShopsByMoodAndSpot(interestMood, interestPlace); // 무드와 장소 모두 선택된 경우
+            } else if (interestMood) {
+                fetchShopsByMood(interestMood); // 무드만 선택된 경우
+            } else if (interestPlace) {
+                fetchShopsBySpot(interestPlace); // 장소만 선택된 경우
+            }
+        } else {
+            fetchAllShops(); // 기본적으로 모든 샵 로드
         }
     }, [interestMood, interestPlace]);
     
+
     // 상세페이지로 네비게이션
     const handleShopPress = (shopId) => {
         setSelectedShopId(shopId);
         navigation.navigate('ShopDetail', { shopId });
     };
-
 
     const toggleModal = (isPlace = false) => {
         setIsSelectingPlace(isPlace);
@@ -155,7 +159,7 @@ const KeywardRecmdScreen = ({ navigation }) => {
         }
     };
 
-    // 무드O 장소
+    // 무드O 장소O
     const fetchShopsByMoodAndSpot = async (mood, place) => {
         const moodId = moodMap[mood];
         const spotId = placeMap[place];

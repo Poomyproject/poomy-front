@@ -9,7 +9,7 @@ import appleAuth from '@invertase/react-native-apple-authentication';
 // Axios 인스턴스 생성
 const ApiClient = axios.create({
   baseURL: 'http://54.180.202.93:8080', // API base URL
-  timeout: 8000, // 요청 제한 시간 설정 (밀리초)
+  timeout: 10000, // 요청 제한 시간 설정 (밀리초)
   headers: {
   },
 });
