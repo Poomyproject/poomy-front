@@ -8,6 +8,7 @@ import ApiClient, { setAccessToken } from './ApiClient'; // ApiClient와 setAcce
 import AppleLogin from './component/Applelogin';
 import { handleGuestLogin } from './component/Guestlogin';
 
+
 const LoginScreen = ({ navigation }) => {
   const [userInfo, setUserInfo] = useState(null);
 

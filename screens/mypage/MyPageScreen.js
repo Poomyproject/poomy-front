@@ -109,10 +109,13 @@ const MyPageScreen = () => {
    const goToMypageEdit = () => {
     if (isGuest) {
       Alert.alert(
-        '로그인이 필요한 서비스입니다.',
-        '로그인 하시겠습니까?',
+        '로그인이 필요한 서비스입니다.로그인 하시겠습니까?',
+        '게스트로 로그인한 정보는 삭제됩니다.',
         [
-          { text: '네', onPress: () => navigation.replace('Login') },
+          { text: '네', onPress: () => {
+            handleLogout(); 
+            navigation.replace('Login'); 
+          } },
           { text: '아니오', style: 'cancel' },
         ],
         { cancelable: false }
