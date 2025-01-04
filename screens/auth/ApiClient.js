@@ -8,60 +8,11 @@ import appleAuth from '@invertase/react-native-apple-authentication';
 
 // Axios 인스턴스 생성
 const ApiClient = axios.create({
-  baseURL: 'http://54.180.202.93:8080',// API base URL , 'http://localhost:8080'
+  baseURL: 'http://localhost:8080',// API base URL , 'http://localhost:8080' , 'http://54.180.202.93:8080'
   timeout: 8000, // 요청 제한 시간 설정 (밀리초)
   headers: {
   },
 });
-
-
-export const handleSignInApple = async (navigation) => {
-  try {
-    // Apple 로그인 요청
-    const appleAuthRequestResponse = await appleAuth.performRequest({
-      requestedOperation: appleAuth.Operation.LOGIN,
-      requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
-    });
-
-    const { identityToken } = appleAuthRequestResponse;
-
-    if (!identityToken) {
-      throw new Error('Apple identity token is missing');
-    }
-
-    // 서버로 identityToken 전송
-    const response = await ApiClient.post('/api/users/login/google', { idToken: identityToken });
-    let accessToken = response.headers['accesstoken'] || response.data.accessToken;
-
-    if (accessToken && accessToken.startsWith('Bearer ')) {
-      accessToken = accessToken.substring(7);
-    }
-
-    if (accessToken) {
-      await AsyncStorage.setItem('accessToken', accessToken); // accessToken 저장
-      console.log('Apple Login Successful:', accessToken);
-
-      // 사용자 정보 확인
-      const userResponse = await ApiClient.get('/api/users');
-      const { nickname, moods, spots } = userResponse.data.response;
-
-      if (!nickname) {
-        navigation.replace('Terms');
-      } else if (!moods || moods.length === 0) {
-        navigation.replace('PreferSelect');
-      } else if (!spots || spots.length === 0) {
-        navigation.replace('PreferPlace');
-      } else {
-        navigation.replace('MainTab');
-      }
-    } else {
-      throw new Error('Failed to receive access token from server');
-    }
-  } catch (error) {
-    console.error('Apple Login Error:', error);
-    Alert.alert('Error', 'Apple 로그인 실패. 다시 시도해 주세요.');
-  }
-};
 
 
 ApiClient.interceptors.request.use(
