@@ -13,10 +13,10 @@ const ApiClient = axios.create({
 export const checkGuestStatus = async () => {
   try {
     const guestId = await AsyncStorage.getItem('guestId');
-    console.log('checkGuestStatus - guestId:', guestId); // 로그 추가
+    //console.log('checkGuestStatus - guestId:', guestId); // 로그 추가
     return guestId ? true : false;
   } catch (error) {
-    console.error('Error checking guest status:', error);
+    //console.error('Error checking guest status:', error);
     return false;
   }
 };
