@@ -8,7 +8,7 @@ import appleAuth from '@invertase/react-native-apple-authentication';
 
 // Axios 인스턴스 생성
 const ApiClient = axios.create({
-  baseURL: 'http://localhost:8080', // API base URL
+  baseURL: 'http://54.180.202.93:8080', // API base URL
   timeout: 8000, // 요청 제한 시간 설정 (밀리초)
   headers: {},
 });
@@ -17,7 +17,7 @@ const ApiClient = axios.create({
 const setAccessToken = async (token) => {
   try {
     await AsyncStorage.setItem('accessToken', token);
-    console.log('Access Token saved:', token);
+    //console.log('Access Token saved:', token);
   } catch (error) {
     console.error('Error saving access token:', error);
   }
@@ -57,7 +57,7 @@ const checkUserInfoStatus = async (navigation) => {
   try {
     // 사용자 데이터 가져오기
     const response = await ApiClient.get('/api/users');
-    console.log('User info fetched:', response.data.response); // 디버깅용 로그 추가
+    //console.log('User info fetched:', response.data.response); // 디버깅용 로그 추가
 
     // 조건부 확인 없이 무조건 Terms 화면으로 이동
     navigation.replace('MainTab');
@@ -110,7 +110,7 @@ const handleSignInApple = async (navigation) => {
 
     if (accessToken) {
       await setAccessToken(accessToken);
-      console.log('Apple Login Successful:', accessToken);
+      //console.log('Apple Login Successful:', accessToken);
 
       // 사용자 정보 확인 및 화면 전환
       await checkUserInfoStatus(navigation);
