@@ -28,6 +28,7 @@
     "react-native-dotenv": "^3.4.11",
     "react-native-gesture-handler": "^2.16.2",
     "react-native-image-crop-picker": "^0.41.4",
+    "react-native-mail": "^6.1.1",
     "react-native-modal": "^13.0.1",
     "react-native-paper": "^5.12.5",
     "react-native-push-notification": "^8.1.1",

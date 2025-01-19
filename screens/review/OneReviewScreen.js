@@ -4,6 +4,7 @@ import ApiClient from '../auth/ApiClient';
 import Swiper from 'react-native-swiper';
 import colors from '../../config/colors';
 import {fonts} from '../../config/fonts';
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
@@ -11,6 +12,13 @@ const OneReviewScreen = ({ route }) => {
   const { reviewId } = route.params; // 전달된 reviewId 가져오기
   const [reviewData, setReviewData] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const navigation = useNavigation(); // navigation 객체 가져오기
+
+
+  useEffect(() => {
+    navigation.setParams({ reviewId }); // reviewId를 상단바로 전달
+  }, [reviewId]);
 
   useEffect(() => {
     const fetchReview = async () => {
