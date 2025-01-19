@@ -18,42 +18,39 @@ const ReportModal = ({ visible, onClose, reviewId }) => {
     ];
   
     const handleSendMail = (reason) => {
-      Mailer.mail(
-        {
-          subject: '신고 접수',
-          recipients: ['poomydeveloper@gmail.com'],
-          body: `
-            <p>리뷰 ID: <b>${reviewId}</b></p>
-            <p>신고 사유: <b>${reason}</b></p>
-          `,
-          isHTML: true,
-        },
-        (error, event) => {
-          if (error) {
-            console.log('Error sending email:', error);
-          } else {
-            console.log('Email sent successfully');
+        Mailer.mail(
+          {
+            subject: '신고 접수',
+            recipients: ['poomydeveloper@gmail.com'],
+            body: `
+              <p>리뷰 ID: <b>${reviewId}</b></p>
+              <p>신고 사유: <b>${reason}</b></p>
+            `,
+            isHTML: true,
+          },
+          (error, event) => {
+            if (error) {
+              console.log('Error sending email:', error);
+            } else {
+              console.log('Email sent successfully');
+      
+              // 메일 전송 성공 후에 모달 닫기 및 알림 표시
+              onClose();
+              Alert.alert(
+                '신고가 접수되었습니다.',
+                '검토는 최대 24시간이 걸립니다.',
+                [{ text: '확인' }]
+              );
+            }
           }
-    
-          onClose(); // 모달 닫기
-    
-          // 신고 접수 알림창 표시
-          Alert.alert(
-            '신고가 접수되었습니다.',
-            '검토는 최대 24시간이 걸립니다.',
-            [{ text: '확인' }]
-          );
-        }
-      );
-    };
-    
-  
-    const handleSelectReason = (reason) => {
-      setSelectedReason(reason);
-      handleSendMail(reason); // 선택된 이유와 함께 이메일 전송
-      onClose(); // 모달 닫기
-    };
-  
+        );
+      };
+      
+      const handleSelectReason = (reason) => {
+        setSelectedReason(reason);
+        handleSendMail(reason); // 이메일 전송 호출
+      };
+      
     return (
       <Modal
         animationType="slide"
