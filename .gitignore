@@ -35,6 +35,33 @@ yarn-error.*
 *.tsbuildinfo
 
 /android
-/ios
 /.env
+ios/GoogleService-Info.plist
 API_BASE_URL=http://3.37.42.138:8080
+
+# Build artifacts and intermediate files
+ios/build/
+ios/DerivedData/
+ios/*.xcworkspace/
+ios/poomy/Info.plist
+ios/poomy/PrivacyInfo.xcprivacy
+
+
+# CocoaPods
+ios/Pods/
+
+# Xcode specific
+ios/*.xcuserdata/
+ios/*.xccheckout/
+
+# Environment files
+.env
+.env.*
+
+# Temporary files
+.DS_Store
+*.swp
+*.lock
+*.log
+.idea/
+.vscode/

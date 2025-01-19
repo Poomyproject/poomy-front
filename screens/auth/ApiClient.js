@@ -46,38 +46,49 @@ ApiClient.interceptors.request.use(
 );
 
 
-// 응답 인터셉터 설정 (에러 처리)
 export const setAxiosInterceptors = (navigation) => {
-  // ApiClient.interceptors.response.use(
-  //   (response) => {
-  //     return response;
-  //   },
-  //   async (error) => {
-  //     const status = error.response ? error.response.status : null;
-      
-  //     if (status === 401 || status === 500) {
+  ApiClient.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    async (error) => {
+      const status = error.response ? error.response.status : null;
 
-  //       // 엑세스 토큰 삭제
-  //       await AsyncStorage.removeItem('accessToken');
+      if (status === 401 || status === 500) {
+        try {
+          // 게스트 로그인 여부 확인
+          const isGuest = await AsyncStorage.getItem('isGuest');
 
-  //       // 로그아웃 알림을 사용자에게 표시_활성화 X
-  //       // Alert.alert(
-  //       //   "로그아웃 되었습니다",
-  //       //   "다시 로그인해 주세요",
-  //       //   [{ text: "확인" }] // 확인 버튼만 있는 간단한 알림
-  //       // );
+          if (isGuest === 'true') {
+            // 게스트 로그인이면 로그아웃 처리하지 않고 바로 반환
+            return Promise.reject(error);
+          }
 
-  //       // 401 또는 500 에러 발생 시 Splash 화면으로 이동
-  //       if (navigation && typeof navigation.replace === 'function') {
-  //         navigation.navigate('Splash');  // 로그아웃 처리
-  //       } else {
-  //         //console.error('Navigation object is not properly defined.');
-  //       }
-  //     }
-  //     return Promise.reject(error); // 오류가 발생하면 에러 반환
-  //   }
-  // );
+          // 엑세스 토큰 삭제
+          await AsyncStorage.removeItem('accessToken');
+
+          // 로그아웃 알림을 사용자에게 표시 (활성화 X)
+          // Alert.alert(
+          //   "로그아웃 되었습니다",
+          //   "다시 로그인해 주세요",
+          //   [{ text: "확인" }] // 확인 버튼만 있는 간단한 알림
+          // );
+
+          // 401 또는 500 에러 발생 시 Splash 화면으로 이동
+          if (navigation && typeof navigation.replace === 'function') {
+            navigation.navigate('Splash'); // 로그아웃 처리
+          } else {
+            console.error('Navigation object is not properly defined.');
+          }
+        } catch (err) {
+          console.error('Error handling interceptor logic:', err);
+        }
+      }
+      return Promise.reject(error); // 오류가 발생하면 에러 반환
+    }
+  );
 };
+
 
  
 // 토큰을 AsyncStorage에 저장하는 함수

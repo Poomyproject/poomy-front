@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { TouchableOpacity, Image, Text } from 'react-native';
 import colors from '../../config/colors';
 import { fonts } from '../../config/fonts';
+import ReportModal from './modal/ReportModal';
+import { useNavigation } from '@react-navigation/native';
+
 
 import SplashScreen from '../auth/SplashScreen';
 import OnboardingScreen from '../auth/OnboardingScreen';
@@ -41,7 +44,13 @@ import ReviewStackNavigator from './ReviewStackNavigator';
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const [currentReviewId, setCurrentReviewId] = useState(null); 
+  const navigation = useNavigation(); // navigation 객체 가져오기
+
   return (
+    <>
     <Stack.Navigator initialRouteName="Splash">
       <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Onboarding" component={OnboardingScreen} options={{ headerShown: false }} />
@@ -136,24 +145,49 @@ const AppNavigator = () => {
           options={{ headerShown: false }} 
         />
 
-          <Stack.Screen name="OneReview" component={OneReviewScreen} options={({ navigation }) => ({
-          headerTitle: '리뷰 상세',
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
-            </TouchableOpacity>
-          ),
-          headerTitleAlign: 'center',
+<Stack.Screen
+            name="OneReview"
+            component={OneReviewScreen}
+            options={({ route }) => ({
+              headerTitle: '리뷰 상세',
+              headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Image source={require('../../assets/left.png')} style={{ marginLeft : 10, height: 24, width: 24 }} />
+                </TouchableOpacity>
+              ),
+              headerRight: () => (
+                <TouchableOpacity
+                  onPress={() => {
+                    setCurrentReviewId(route.params?.reviewId || null); // reviewId 가져오기
+                    setModalVisible(true);
+                  }}
+                >
+                  <Image
+                    source={require('../../assets/ic_more.png')}
+                    style={{ marginRight: 10, height: 24, width: 24 }}
+                  />
+                </TouchableOpacity>
+              ),
+              headerTitleAlign: 'center',
           headerStyle: { backgroundColor: colors.Ivory100 },
           headerTintColor: colors.Gray900,
           ...fonts.Body1
-        })}/>
+            })}
+          />
 
       <Stack.Screen name="KeywordStack" component={KeywordStackNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NewsLetterStack" component={NewsLetterStackNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="SearchStack" component={SearchStackNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="Keyword" component={KeywordList} options={{ headerShown: false }} />
     </Stack.Navigator>
+
+    <ReportModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        reviewId={currentReviewId} // 모달에 reviewId 전달
+      />
+
+    </>
   );
 };
 
